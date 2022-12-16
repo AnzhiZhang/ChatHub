@@ -11,8 +11,8 @@ import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.Config;
 
 public class VelocitySender implements ISender {
-    private final ProxyServer proxyServer;
     private final Config config = Config.getInstance();
+    private final ProxyServer proxyServer;
 
     public VelocitySender(ChatHub chatHub) {
         proxyServer = chatHub.getServer();
