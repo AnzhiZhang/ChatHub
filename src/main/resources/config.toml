@@ -1,0 +1,32 @@
+[servername]
+lobby = '§f§l大厅服'
+survival = '§2§l生存服'
+creative = '§6§l创造服'
+kook = '§a§lKOOK'
+qq = '§5§l群聊天'
+
+[minecraft]
+completeTakeoverMode = false
+
+[minecraft.message]
+chat = '§7[{server}§7]§e{name}§r: {message}'
+join = '§8[§a+§8] §7[{server}§7] §e{name}'
+leave = '§8[§c-§8] §e{name}'
+switch = '§8[§b❖§8] §e{name}§r: §7«{serverFrom}§7» §6➟ §7«{serverTo}§7»'
+msgSender = '§7§o你悄悄地对{target}说: {message}'
+msgTarget = '§7§o{sender}悄悄地对你说: {message}'
+list = '§8§l» §7[{server}§7]当前共有§6{count}§7名玩家在线: §e{playerList}'
+
+[kook]
+enable = false
+token = ''
+channelId = ''
+
+[kook.message]
+chat = '[{server}] <{name}>'
+join = '<{name}> 加入了 [{server}]'
+leave = '<{name}> 退出了游戏'
+switch = '<{name}>: [{serverFrom}] ➟ [{serverTo}]'
+
+[qq]
+enable = false
