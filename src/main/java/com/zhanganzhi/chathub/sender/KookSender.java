@@ -9,20 +9,19 @@ import com.zhanganzhi.chathub.core.Config;
 import com.zhanganzhi.chathub.kook.MessageCardGenerator;
 
 public class KookSender implements ISender {
-    private final ProxyServer proxyServer;
-    private final KaiheilaBot kaiheilaBot;
+    private final ChatHub chatHub;
 
     public KookSender(ChatHub chatHub) {
-        proxyServer = chatHub.getServer();
-        kaiheilaBot = chatHub.getKaiheilaBot();
+        this.chatHub = chatHub;
     }
 
     private String getAvatarUrl(String name) {
-        return proxyServer.getPlayer(name).map(player -> "https://mc-heads.net/avatar/" + player.getUniqueId().toString() + "/nohelm").orElse(null);
+        return chatHub.getServer().getPlayer(name).map(player -> "https://mc-heads.net/avatar/" + player.getUniqueId().toString() + "/nohelm").orElse(null);
     }
 
     private void sendMessage(CardMessage cardMessage) {
-        kaiheilaBot.getChannel(Config.getInstance().getKookChannelId()).sendMessage(cardMessage);
+        chatHub.getLogger().info("Sending card " + cardMessage.asJson() + " to kook");
+        chatHub.getKaiheilaBot().getChannel(Config.getInstance().getKookChannelId()).sendMessage(cardMessage);
     }
 
     @Override

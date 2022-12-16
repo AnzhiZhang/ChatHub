@@ -33,17 +33,23 @@ import com.zhanganzhi.chathub.receiver.KookReceiver;
 )
 public class ChatHub {
     private final ProxyServer server;
+    private final Logger logger;
     private final Path dataDirectory;
     private KaiheilaBot kaiheilaBot;
 
     @Inject
     public ChatHub(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
         this.server = server;
+        this.logger = logger;
         this.dataDirectory = dataDirectory;
     }
 
     public ProxyServer getServer() {
         return server;
+    }
+
+    public Logger getLogger() {
+        return logger;
     }
 
     public KaiheilaBot getKaiheilaBot() {
