@@ -11,6 +11,7 @@ import com.moandjiezana.toml.Toml;
 public class Config {
     private static final Config config = new Config();
     private Toml configToml;
+    private boolean tempIsKookEnabled;
 
     private Config() {
     }
@@ -31,11 +32,16 @@ public class Config {
             try {
                 Files.copy(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("config.toml")), configFile.toPath());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
 
         configToml = new Toml().read(configFile);
+        tempIsKookEnabled = configToml.getBoolean("kook.enable");
+    }
+
+    public void setIsKookEnabled(boolean isKookEnabled) {
+        this.tempIsKookEnabled = isKookEnabled;
     }
 
     public boolean isCompleteTakeoverMode() {
@@ -103,7 +109,7 @@ public class Config {
     }
 
     public boolean isKookEnabled() {
-        return configToml.getBoolean("kook.enable");
+        return tempIsKookEnabled;
     }
 
     public String getKookToken() {
@@ -114,11 +120,12 @@ public class Config {
         return configToml.getString("kook.channelId");
     }
 
-    public String getKookChatMessage(String server, String name) {
+    public String getKookChatMessage(String server, String name, String message) {
         return configToml
                 .getString("kook.message.chat")
                 .replace("{server}", getPlainServername(server))
-                .replace("{name}", name);
+                .replace("{name}", name)
+                .replace("{message}", message);
     }
 
     public String getKookJoinMessage(String server, String name) {
@@ -140,5 +147,13 @@ public class Config {
                 .replace("{name}", name)
                 .replace("{serverFrom}", getPlainServername(serverFrom))
                 .replace("{serverTo}", getPlainServername(serverTo));
+    }
+
+    public String getKookListMessage(String server, int count, String[] playerList) {
+        return configToml
+                .getString("kook.message.list")
+                .replace("{server}", getPlainServername(server))
+                .replace("{count}", String.valueOf(count))
+                .replace("{playerList}", String.join(", ", playerList));
     }
 }

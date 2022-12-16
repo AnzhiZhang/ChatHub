@@ -9,14 +9,15 @@ import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 
+import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.Config;
 import com.zhanganzhi.chathub.core.EventHub;
 
 public class VelocityReceiver {
     private final EventHub eventHub;
 
-    public VelocityReceiver(EventHub eventHub) {
-        this.eventHub = eventHub;
+    public VelocityReceiver(ChatHub chatHub) {
+        this.eventHub = chatHub.getEventHub();
     }
 
     @Subscribe

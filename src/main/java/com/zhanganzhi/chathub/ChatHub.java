@@ -1,9 +1,6 @@
 package com.zhanganzhi.chathub;
 
-import java.io.File;
-import java.util.HashSet;
 import java.nio.file.Path;
-import java.lang.reflect.Field;
 
 import org.slf4j.Logger;
 import com.google.inject.Inject;
@@ -13,9 +10,6 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
-import net.deechael.khl.bot.KaiheilaBot;
-import net.deechael.khl.bot.KaiheilaBotBuilder;
-import net.deechael.khl.event.MessageHandler;
 
 import com.zhanganzhi.chathub.core.Config;
 import com.zhanganzhi.chathub.core.EventHub;
@@ -32,70 +26,58 @@ import com.zhanganzhi.chathub.receiver.KookReceiver;
         authors = {"Andy Zhang", "ZhuRuoLing"}
 )
 public class ChatHub {
-    private final ProxyServer server;
+    private final ProxyServer proxyServer;
     private final Logger logger;
     private final Path dataDirectory;
-    private KaiheilaBot kaiheilaBot;
+    private EventHub eventHub;
+    private KookReceiver kookReceiver;
 
     @Inject
-    public ChatHub(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
-        this.server = server;
+    public ChatHub(ProxyServer proxyServer, Logger logger, @DataDirectory Path dataDirectory) {
+        this.proxyServer = proxyServer;
         this.logger = logger;
         this.dataDirectory = dataDirectory;
     }
 
-    public ProxyServer getServer() {
-        return server;
+    public ProxyServer getProxyServer() {
+        return proxyServer;
     }
 
     public Logger getLogger() {
         return logger;
     }
 
-    public KaiheilaBot getKaiheilaBot() {
-        return kaiheilaBot;
+    public EventHub getEventHub() {
+        return eventHub;
     }
 
     @Subscribe
     public void onInitialize(ProxyInitializeEvent event) {
         // core
         Config.getInstance().loadConfig(dataDirectory);
-        kaiheilaBot = (KaiheilaBot) KaiheilaBotBuilder.builder().createDefault(Config.getInstance().getKookToken()).build();
-        EventHub eventHub = new EventHub(this);
+        eventHub = new EventHub(this);
 
         // command
-        server.getCommandManager().register(
-                server.getCommandManager().metaBuilder("chathub").plugin(this).build(),
-                new Command(server)
+        proxyServer.getCommandManager().register(
+                proxyServer.getCommandManager().metaBuilder("chathub").plugin(this).build(),
+                new Command(proxyServer)
         );
 
         // velocity receiver
-        server.getEventManager().register(this, new VelocityReceiver(eventHub));
+        proxyServer.getEventManager().register(this, new VelocityReceiver(this));
 
         // kook receiver
         if (Config.getInstance().isKookEnabled()) {
-            new Thread(() -> {
-                try {
-                    Field messageHandlersField = ChatHub.this.kaiheilaBot.getEventManager().getClass().getDeclaredField("messageHandlers");
-                    messageHandlersField.setAccessible(true);
-                    messageHandlersField.set(ChatHub.this.kaiheilaBot.getEventManager(), new HashSet<MessageHandler>());
-                } catch (Exception exception) {
-                    throw new RuntimeException(exception);
-                }
-                ChatHub.this.kaiheilaBot.getEventManager().registerMessageHandler(new KookReceiver(eventHub));
-                ChatHub.this.kaiheilaBot.start();
-            }).start();
+            logger.info("Kook enabled");
+            kookReceiver = new KookReceiver(this);
+            kookReceiver.start();
         }
     }
 
     @Subscribe
     public void onProxyShutdown(ProxyShutdownEvent event) {
         if (Config.getInstance().isKookEnabled()) {
-            kaiheilaBot.shutdown();
-            File sessionFile = new File("session.dat");
-            if (sessionFile.exists()) {
-                sessionFile.delete();
-            }
+            kookReceiver.shutdown();
         }
     }
 }

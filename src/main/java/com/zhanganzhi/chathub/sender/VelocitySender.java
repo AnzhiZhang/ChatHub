@@ -15,7 +15,7 @@ public class VelocitySender implements ISender {
     private final ProxyServer proxyServer;
 
     public VelocitySender(ChatHub chatHub) {
-        proxyServer = chatHub.getServer();
+        proxyServer = chatHub.getProxyServer();
     }
 
     private void sendMessage(Component component, String... ignoredServers) {
