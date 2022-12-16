@@ -1,7 +1,5 @@
 package com.zhanganzhi.chathub.sender;
 
-import com.velocitypowered.api.proxy.ProxyServer;
-import net.deechael.khl.bot.KaiheilaBot;
 import net.deechael.khl.message.cardmessage.CardMessage;
 
 import com.zhanganzhi.chathub.ChatHub;
