@@ -1,6 +1,7 @@
 package com.zhanganzhi.chathub.command;
 
 import java.util.List;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -38,12 +39,13 @@ public final class Command implements SimpleCommand {
                     ));
                 }
             }
-        } else if (args.length == 3 && args[0].equals("msg")) {
+        } else if (args.length >= 3 && args[0].equals("msg")) {
             Optional<Player> optionalPlayer = server.getPlayer(args[1]);
             if (optionalPlayer.isPresent()) {
                 String senderName = source instanceof Player ? ((Player) source).getUsername() : "Server";
-                source.sendMessage(Component.text(config.getMinecraftMsgSenderMessage(args[1], args[2])));
-                optionalPlayer.get().sendMessage(Component.text(config.getMinecraftMsgTargetMessage(senderName, args[2])));
+                String message = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
+                source.sendMessage(Component.text(config.getMinecraftMsgSenderMessage(args[1], message)));
+                optionalPlayer.get().sendMessage(Component.text(config.getMinecraftMsgTargetMessage(senderName, message)));
             } else {
                 source.sendMessage(Component.text("Player \"" + args[1] + "\" does not online!"));
             }
