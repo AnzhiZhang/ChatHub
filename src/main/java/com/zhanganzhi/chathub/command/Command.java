@@ -28,13 +28,15 @@ public final class Command implements SimpleCommand {
 
         if (args.length == 1 && args[0].equals("list")) {
             for (RegisteredServer registeredServer : server.getAllServers()) {
-                source.sendMessage(Component.text(
-                        config.getMinecraftListMessage(
-                                registeredServer.getServerInfo().getName(),
-                                registeredServer.getPlayersConnected().size(),
-                                registeredServer.getPlayersConnected().stream().map(Player::getUsername).toArray(String[]::new)
-                        )
-                ));
+                if (registeredServer.getPlayersConnected().size() > 0) {
+                    source.sendMessage(Component.text(
+                            config.getMinecraftListMessage(
+                                    registeredServer.getServerInfo().getName(),
+                                    registeredServer.getPlayersConnected().size(),
+                                    registeredServer.getPlayersConnected().stream().map(Player::getUsername).toArray(String[]::new)
+                            )
+                    ));
+                }
             }
         } else if (args.length == 3 && args[0].equals("msg")) {
             Optional<Player> optionalPlayer = server.getPlayer(args[1]);

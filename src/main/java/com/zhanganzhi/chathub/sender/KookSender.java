@@ -82,12 +82,14 @@ public class KookSender implements ISender {
     public void sendListMessage() {
         StringBuilder stringBuilder = new StringBuilder();
         for (RegisteredServer registeredServer : chatHub.getProxyServer().getAllServers()) {
-            stringBuilder.append(config.getKookListMessage(
-                    registeredServer.getServerInfo().getName(),
-                    registeredServer.getPlayersConnected().size(),
-                    registeredServer.getPlayersConnected().stream().map(Player::getUsername).toArray(String[]::new)
-            ));
-            stringBuilder.append("\n");
+            if (registeredServer.getPlayersConnected().size() > 0) {
+                stringBuilder.append(config.getKookListMessage(
+                        registeredServer.getServerInfo().getName(),
+                        registeredServer.getPlayersConnected().size(),
+                        registeredServer.getPlayersConnected().stream().map(Player::getUsername).toArray(String[]::new)
+                ));
+                stringBuilder.append("\n");
+            }
         }
         sendMessage(stringBuilder.toString());
     }
