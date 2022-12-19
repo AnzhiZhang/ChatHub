@@ -61,6 +61,7 @@ public class Config {
         return configToml
                 .getString("minecraft.message.chat")
                 .replace("{server}", getServername(server))
+                .replace("{plainServer}", getPlainServername(server))
                 .replace("{name}", name)
                 .replace("{message}", message);
     }
@@ -69,6 +70,7 @@ public class Config {
         return configToml
                 .getString("minecraft.message.join")
                 .replace("{server}", getServername(server))
+                .replace("{plainServer}", getPlainServername(server))
                 .replace("{name}", name);
     }
 
@@ -83,7 +85,9 @@ public class Config {
                 .getString("minecraft.message.switch")
                 .replace("{name}", name)
                 .replace("{serverFrom}", getServername(serverFrom))
-                .replace("{serverTo}", getServername(serverTo));
+                .replace("{plainServerTo}", getPlainServername(serverFrom))
+                .replace("{serverTo}", getServername(serverTo))
+                .replace("{plainServerTo}", getPlainServername(serverTo));
     }
 
     public String getMinecraftMsgSenderMessage(String target, String message) {

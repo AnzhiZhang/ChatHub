@@ -41,7 +41,16 @@ MC 相关配置。
 
 ### minecraft.message
 
-MC 消息的格式化文本。
+MC 消息的格式化文本，占位符含义请参考下表：
+
+| 占位符 | 含义 | 变形 |
+| - | - | - |
+| server | 服务器名称 | serverFrom, serverTo |
+| plainServer | 没有颜色代码的服务器名称 | plainServerFrom, plainServerTo |
+| name | 玩家名称 | sender, target |
+| message | 消息文本 | |
+| count | 玩家数量 | |
+| playerList | 玩家列表 | |
 
 #### chat
 
@@ -105,7 +114,7 @@ Kook 机器人 token。
 
 ### kook.message
 
-Kook 消息的格式化文本。
+Kook 消息的格式化文本，占位符与上文同理。
 
 #### chat
 
