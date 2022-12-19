@@ -85,7 +85,7 @@ public class Config {
                 .getString("minecraft.message.switch")
                 .replace("{name}", name)
                 .replace("{serverFrom}", getServername(serverFrom))
-                .replace("{plainServerTo}", getPlainServername(serverFrom))
+                .replace("{plainServerFrom}", getPlainServername(serverFrom))
                 .replace("{serverTo}", getServername(serverTo))
                 .replace("{plainServerTo}", getPlainServername(serverTo));
     }

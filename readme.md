@@ -114,7 +114,7 @@ Kook 机器人 token。
 
 ### kook.message
 
-Kook 消息的格式化文本，占位符与上文同理。
+Kook 消息的格式化文本。占位符与上文同理，所有的服务器名称会自动转为 plain 格式，您无需使用 plain 格式的占位符。
 
 #### chat
 
