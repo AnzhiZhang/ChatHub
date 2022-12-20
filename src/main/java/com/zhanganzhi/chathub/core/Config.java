@@ -108,6 +108,7 @@ public class Config {
         return configToml
                 .getString("minecraft.message.list")
                 .replace("{server}", getServername(server))
+                .replace("{plainServer}", getPlainServername(server))
                 .replace("{count}", String.valueOf(count))
                 .replace("{playerList}", String.join(", ", playerList));
     }
