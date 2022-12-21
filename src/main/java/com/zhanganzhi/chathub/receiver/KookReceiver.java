@@ -59,7 +59,7 @@ public class KookReceiver extends WebSocketListener {
         okHttpClient.dispatcher().executorService().shutdown();
     }
 
-    private void restart() {
+    public void restart() {
         shutdown();
         start();
     }

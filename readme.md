@@ -28,6 +28,12 @@
 
 向玩家发送私聊消息，即使不在同一个子服。
 
+## reloadKook
+
+例子：`/chathub reloadKook`
+
+重载 Kook 连接，仅限控制台执行。
+
 ## 配置文件
 
 ### servername

@@ -6,19 +6,23 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
+import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.Config;
 
 public final class Command implements SimpleCommand {
+    ChatHub chatHub;
     ProxyServer proxyServer;
 
     public Command(ChatHub chatHub) {
+        this.chatHub = chatHub;
         proxyServer = chatHub.getProxyServer();
     }
 
@@ -39,6 +43,16 @@ public final class Command implements SimpleCommand {
                             )
                     ));
                 }
+            }
+        } else if (args.length == 1 && args[0].equals("reloadKook")) {
+            if (source instanceof ConsoleCommandSource) {
+                if (Config.getInstance().isKookEnabled()) {
+                    chatHub.getKookReceiver().restart();
+                } else {
+                    source.sendMessage(Component.text("Kook is not enabled!").color(NamedTextColor.RED));
+                }
+            } else {
+                source.sendMessage(Component.text("You do not have permission to run this command!").color(NamedTextColor.RED));
             }
         } else if (args.length >= 3 && args[0].equals("msg")) {
             Optional<Player> optionalPlayer = proxyServer.getPlayer(args[1]);

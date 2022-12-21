@@ -51,6 +51,10 @@ public class ChatHub {
         return eventHub;
     }
 
+    public KookReceiver getKookReceiver() {
+        return kookReceiver;
+    }
+
     @Subscribe
     public void onInitialize(ProxyInitializeEvent event) {
         // core
