@@ -60,7 +60,7 @@ public class ChatHub {
         // command
         proxyServer.getCommandManager().register(
                 proxyServer.getCommandManager().metaBuilder("chathub").plugin(this).build(),
-                new Command(proxyServer)
+                new Command(this)
         );
 
         // velocity receiver

@@ -12,13 +12,14 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
+import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.Config;
 
 public final class Command implements SimpleCommand {
-    ProxyServer server;
+    ProxyServer proxyServer;
 
-    public Command(ProxyServer proxyServer) {
-        server = proxyServer;
+    public Command(ChatHub chatHub) {
+        proxyServer = chatHub.getProxyServer();
     }
 
     @Override
@@ -28,7 +29,7 @@ public final class Command implements SimpleCommand {
         Config config = Config.getInstance();
 
         if (args.length == 1 && args[0].equals("list")) {
-            for (RegisteredServer registeredServer : server.getAllServers()) {
+            for (RegisteredServer registeredServer : proxyServer.getAllServers()) {
                 if (registeredServer.getPlayersConnected().size() > 0) {
                     source.sendMessage(Component.text(
                             config.getMinecraftListMessage(
@@ -40,7 +41,7 @@ public final class Command implements SimpleCommand {
                 }
             }
         } else if (args.length >= 3 && args[0].equals("msg")) {
-            Optional<Player> optionalPlayer = server.getPlayer(args[1]);
+            Optional<Player> optionalPlayer = proxyServer.getPlayer(args[1]);
             if (optionalPlayer.isPresent()) {
                 String senderName = source instanceof Player ? ((Player) source).getUsername() : "Server";
                 String message = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
@@ -58,7 +59,7 @@ public final class Command implements SimpleCommand {
         if (args.length <= 1) {
             return Stream.of("list", "msg").filter(s -> s.startsWith(args.length > 0 ? args[0] : "")).toList();
         } else if (args.length == 2 && args[0].equals("msg")) {
-            return server.getAllPlayers().stream().map(Player::getUsername).filter(s -> s.startsWith(args[1])).toList();
+            return proxyServer.getAllPlayers().stream().map(Player::getUsername).filter(s -> s.startsWith(args[1])).toList();
         } else {
             return List.of();
         }
