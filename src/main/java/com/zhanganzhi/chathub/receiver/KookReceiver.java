@@ -1,5 +1,6 @@
 package com.zhanganzhi.chathub.receiver;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -21,6 +22,7 @@ public class KookReceiver extends WebSocketListener {
     private OkHttpClient okHttpClient;
     private WebSocket websocket;
     private ScheduledExecutorService scheduledExecutorService;
+    private boolean pingFinished;
     private int sn;
 
     public KookReceiver(ChatHub chatHub) {
@@ -29,7 +31,16 @@ public class KookReceiver extends WebSocketListener {
     }
 
     public void start() {
-        JSONObject getGatewayResponse = eventHub.getKookSender().getGateway();
+        sn = 0;
+        JSONObject getGatewayResponse = null;
+        do {
+            try {
+                getGatewayResponse = eventHub.getKookSender().getGateway();
+            } catch (IOException e) {
+                logger.error("Kook get websocket gateway error, retry in 10s...");
+                sleep(10000);
+            }
+        } while (getGatewayResponse == null);
         if (getGatewayResponse.getInteger("code") == 0) {
             okHttpClient = new OkHttpClient();
             Request websocketRequest = new Request.Builder().url(getGatewayResponse.getJSONObject("data").getString("url")).build();
@@ -48,19 +59,26 @@ public class KookReceiver extends WebSocketListener {
         okHttpClient.dispatcher().executorService().shutdown();
     }
 
+    private void restart() {
+        shutdown();
+        start();
+    }
+
+    private void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException ignored) {
+        }
+    }
+
     private void handleMessage(String text) {
         JSONObject signaling = JSON.parseObject(text);
-        logger.info("Kook websocket message: " + signaling.toJSONString(JSONWriter.Feature.PrettyFormat));
+        logger.info("Kook websocket message received: " + signaling.toJSONString(JSONWriter.Feature.PrettyFormat));
         // 信令
-        if (signaling.getInteger("s") == 1) {
-            logger.info("Kook websocket session connected");
-            scheduledExecutorService.scheduleAtFixedRate(
-                    () -> KookReceiver.this.websocket.send("{\"s\":2,\"sn\":" + KookReceiver.this.sn + "}"),
-                    0, 30, TimeUnit.SECONDS
-            );
-        } else if (signaling.getInteger("s") == 0) {
+        int type = signaling.getInteger("s");
+        if (type == 0) {
             // update sn
-            sn = Math.max(sn, signaling.getInteger("sn"));
+            sn = signaling.getInteger("sn");
 
             // read data
             JSONObject eventData = signaling.getJSONObject("d");
@@ -84,6 +102,25 @@ public class KookReceiver extends WebSocketListener {
                     }
                 }
             }
+        } else if (type == 1) {
+            logger.info("Kook websocket session connected");
+            scheduledExecutorService.scheduleAtFixedRate(
+                    () -> {
+                        websocket.send("{\"s\":2,\"sn\":" + sn + "}");
+                        pingFinished = false;
+                        logger.info("Kook websocket ping sent, sn=" + sn);
+
+                        // check pong in 6 seconds
+                        sleep(6000);
+                        if (!pingFinished) {
+                            logger.error("Kook websocket pong not received! Reconnecting...");
+                            restart();
+                        }
+                    },
+                    0, 30, TimeUnit.SECONDS
+            );
+        } else if (type == 3) {
+            pingFinished = true;
         }
     }
 

@@ -38,25 +38,25 @@ public class KookSender implements ISender {
                 .url(BASE_URL + path);
     }
 
-    private JSONObject request(Request request) {
-        try (Response response = okHttpClient.newCall(request).execute()) {
-            ResponseBody responseBody = response.body();
-            assert responseBody != null;
-            return JSON.parseObject(responseBody.string());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return JSONObject.of();
-        }
+    private JSONObject request(Request request) throws IOException {
+        Response response = okHttpClient.newCall(request).execute();
+        ResponseBody responseBody = response.body();
+        assert responseBody != null;
+        return JSON.parseObject(responseBody.string());
     }
 
-    public JSONObject getGateway() {
+    public JSONObject getGateway() throws IOException {
         return request(getRequestBuilder("/api/v3/gateway/index?compress=0").build());
     }
 
     private void sendMessage(String message) {
         Create create = new Create(config.getKookChannelId(), message);
         RequestBody requestBody = RequestBody.create(JSON.toJSONString(create), MEDIA_TYPE_JSON);
-        request(getRequestBuilder("/api/v3/message/create").post(requestBody).build());
+        try {
+            request(getRequestBuilder("/api/v3/message/create").post(requestBody).build());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
