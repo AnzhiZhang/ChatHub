@@ -1,6 +1,11 @@
 <!-- markdownlint-disable MD024 -->
 # ChatHub
 
+[![License](https://shields.io/github/license/AnzhiZhang/ChatHub?label=License)](https://github.com/AnzhiZhang/ChatHub/blob/master/LICENSE)
+[![Downloads](https://shields.io/github/downloads/AnzhiZhang/ChatHub/total?label=Downloads)](https://github.com/AnzhiZhang/ChatHub/releases)
+[![Release](https://shields.io/github/v/release/AnzhiZhang/ChatHub?display_name=tag&include_prereleases&label=Release)](https://github.com/AnzhiZhang/ChatHub/releases/latest)
+[![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg)](https://gitmoji.dev/)
+
 > [Velocity](https://velocitypowered.com/) 跨服聊天插件
 
 ## 演示视频
