@@ -73,7 +73,6 @@ public class KookReceiver extends WebSocketListener {
 
     private void handleMessage(String text) {
         JSONObject signaling = JSON.parseObject(text);
-        logger.info("Kook websocket message received: " + signaling.toJSONString(JSONWriter.Feature.PrettyFormat));
         // 信令
         int type = signaling.getInteger("s");
         if (type == 0) {
@@ -83,13 +82,13 @@ public class KookReceiver extends WebSocketListener {
             // read data
             JSONObject eventData = signaling.getJSONObject("d");
 
-            // ignore bot message
-            if (eventData.getJSONObject("extra").getJSONObject("author").getBoolean("bot")) {
-                return;
-            }
-
             // Type 9: KMarkdown
             if (eventData.getInteger("type") == 9) {
+                // ignore bot message
+                if (eventData.getJSONObject("extra").getJSONObject("author").getBoolean("bot")) {
+                    return;
+                }
+
                 // check channel
                 if (eventData.getString("channel_type").equals("GROUP") && eventData.getString("target_id").equals(Config.getInstance().getKookChannelId())) {
                     if (eventData.getString("content").equals("/list")) {
@@ -108,7 +107,6 @@ public class KookReceiver extends WebSocketListener {
                     () -> {
                         websocket.send("{\"s\":2,\"sn\":" + sn + "}");
                         pingFinished = false;
-                        logger.info("Kook websocket ping sent, sn=" + sn);
 
                         // check pong in 6 seconds
                         sleep(6000);
