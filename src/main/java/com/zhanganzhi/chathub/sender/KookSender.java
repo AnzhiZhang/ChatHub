@@ -91,6 +91,7 @@ public class KookSender implements ISender {
                 stringBuilder.append("\n");
             }
         }
-        sendMessage(stringBuilder.toString());
+        String listMessage = stringBuilder.isEmpty() ? config.getKookListEmptyMessage() : stringBuilder.toString();
+        sendMessage(listMessage);
     }
 }

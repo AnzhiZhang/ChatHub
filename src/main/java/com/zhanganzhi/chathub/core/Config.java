@@ -113,6 +113,10 @@ public class Config {
                 .replace("{playerList}", String.join(", ", playerList));
     }
 
+    public String getMinecraftListEmptyMessage(){
+        return configToml.getString("minecraft.message.listEmpty");
+    }
+
     public boolean isKookEnabled() {
         return tempIsKookEnabled;
     }
@@ -160,5 +164,9 @@ public class Config {
                 .replace("{server}", getPlainServername(server))
                 .replace("{count}", String.valueOf(count))
                 .replace("{playerList}", String.join(", ", playerList));
+    }
+
+    public String getKookListEmptyMessage(){
+        return configToml.getString("kook.message.listEmpty");
     }
 }
