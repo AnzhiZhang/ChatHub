@@ -113,7 +113,7 @@ public class Config {
                 .replace("{playerList}", String.join(", ", playerList));
     }
 
-    public String getMinecraftListEmptyMessage(){
+    public String getMinecraftListEmptyMessage() {
         return configToml.getString("minecraft.message.listEmpty");
     }
 
@@ -166,7 +166,7 @@ public class Config {
                 .replace("{playerList}", String.join(", ", playerList));
     }
 
-    public String getKookListEmptyMessage(){
+    public String getKookListEmptyMessage() {
         return configToml.getString("kook.message.listEmpty");
     }
 }
