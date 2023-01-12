@@ -16,6 +16,7 @@ switch = '§8[§b❖§8] §e{name}§r: §7«{serverFrom}§7» §6➟ §7«{serve
 msgSender = '§7§o你悄悄地对{target}说: {message}'
 msgTarget = '§7§o{sender}悄悄地对你说: {message}'
 list = '§8§l» §7[{server}§7] 当前共有§6{count}§7名玩家在线: §e{playerList}'
+listEmpty='当前没有玩家在线'
 
 [kook]
 enable = false
@@ -28,6 +29,7 @@ join = '[+] [{server}] {name}'
 leave = '[-] {name}'
 switch = '<{name}>: [{serverFrom}] ➟ [{serverTo}]'
 list = '- [{server}] 当前共有{count}名玩家在线: {playerList}'
+listEmpty='当前没有玩家在线'
 
 [qq]
 enable = false

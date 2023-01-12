@@ -33,8 +33,10 @@ public final class Command implements SimpleCommand {
         Config config = Config.getInstance();
 
         if (args.length == 1 && args[0].equals("list")) {
+            Boolean isListEmpty = true;
             for (RegisteredServer registeredServer : proxyServer.getAllServers()) {
                 if (registeredServer.getPlayersConnected().size() > 0) {
+                   isListEmpty = false;
                     source.sendMessage(Component.text(
                             config.getMinecraftListMessage(
                                     registeredServer.getServerInfo().getName(),
@@ -43,6 +45,9 @@ public final class Command implements SimpleCommand {
                             )
                     ));
                 }
+            }
+            if(isListEmpty){
+                source.sendMessage(Component.text(config.getMinecraftListEmptyMessage()));
             }
         } else if (args.length == 1 && args[0].equals("reloadKook")) {
             if (source instanceof ConsoleCommandSource) {
