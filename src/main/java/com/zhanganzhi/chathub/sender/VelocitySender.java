@@ -34,13 +34,15 @@ public class VelocitySender implements ISender {
 
     @Override
     public void sendChatMessage(String server, String name, String message) {
-        Component component = Component.text(config.getMinecraftChatMessage(server, name, message));
-        // check complete takeover mode
-        if (config.isCompleteTakeoverMode()) {
-            sendMessage(component);
-        } else {
-            sendMessage(component, server);
-        }
+        Arrays.stream(message.split("\n")).forEach(msg -> {
+            Component component = Component.text(config.getMinecraftChatMessage(server, name, msg));
+            // check complete takeover mode
+            if (config.isCompleteTakeoverMode()) {
+                sendMessage(component);
+            } else {
+                sendMessage(component, server);
+            }
+        });
     }
 
     @Override
