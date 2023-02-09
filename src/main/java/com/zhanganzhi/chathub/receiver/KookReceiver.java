@@ -47,7 +47,7 @@ public class KookReceiver extends WebSocketListener {
             logger.info("Kook websocket session created");
         } else {
             Config.getInstance().setIsKookEnabled(false);
-            logger.error("Kook token unauthorized!");
+            logger.error("Kook get websocket gateway error, now it is disabled, response: " + getGatewayResponse);
         }
     }
 
