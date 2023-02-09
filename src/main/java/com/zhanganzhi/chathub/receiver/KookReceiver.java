@@ -56,7 +56,7 @@ public class KookReceiver extends WebSocketListener {
         websocket.close(1000, null);
     }
 
-    public void restart() {
+    synchronized public void restart() {
         shutdown();
         start();
     }
