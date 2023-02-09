@@ -20,7 +20,7 @@ import com.zhanganzhi.chathub.receiver.KookReceiver;
 @Plugin(
         id = "chathub",
         name = "ChatHub",
-        version = "1.4.1",
+        version = "1.4.2",
         url = "https://github.com/AnzhiZhang/ChatHub",
         description = "Chat hub for servers under velocity proxy",
         authors = {"Andy Zhang", "ZhuRuoLing", "YehowahLiu"}
