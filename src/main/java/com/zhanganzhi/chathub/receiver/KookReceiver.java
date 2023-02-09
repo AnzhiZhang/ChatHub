@@ -17,15 +17,16 @@ import com.zhanganzhi.chathub.core.EventHub;
 public class KookReceiver extends WebSocketListener {
     private final Logger logger;
     private final EventHub eventHub;
-    private OkHttpClient okHttpClient;
+    private final OkHttpClient okHttpClient;
     private WebSocket websocket;
     private Timer timer;
     private boolean pingFinished;
     private int sn;
 
     public KookReceiver(ChatHub chatHub) {
-        this.logger = chatHub.getLogger();
-        this.eventHub = chatHub.getEventHub();
+        logger = chatHub.getLogger();
+        eventHub = chatHub.getEventHub();
+        okHttpClient = new OkHttpClient();
     }
 
     public void start() {
@@ -40,7 +41,6 @@ public class KookReceiver extends WebSocketListener {
             }
         } while (getGatewayResponse == null);
         if (getGatewayResponse.getInteger("code") == 0) {
-            okHttpClient = new OkHttpClient();
             Request websocketRequest = new Request.Builder().url(getGatewayResponse.getJSONObject("data").getString("url")).build();
             websocket = okHttpClient.newWebSocket(websocketRequest, this);
             timer = new Timer();
@@ -54,7 +54,6 @@ public class KookReceiver extends WebSocketListener {
     public void shutdown() {
         timer.cancel();
         websocket.close(1000, null);
-        okHttpClient.dispatcher().executorService().shutdown();
     }
 
     public void restart() {
