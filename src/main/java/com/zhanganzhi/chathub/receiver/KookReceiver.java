@@ -1,9 +1,8 @@
 package com.zhanganzhi.chathub.receiver;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.*;
 import org.slf4j.Logger;
@@ -20,7 +19,7 @@ public class KookReceiver extends WebSocketListener {
     private final EventHub eventHub;
     private OkHttpClient okHttpClient;
     private WebSocket websocket;
-    private ScheduledExecutorService scheduledExecutorService;
+    private Timer timer;
     private boolean pingFinished;
     private int sn;
 
@@ -44,7 +43,7 @@ public class KookReceiver extends WebSocketListener {
             okHttpClient = new OkHttpClient();
             Request websocketRequest = new Request.Builder().url(getGatewayResponse.getJSONObject("data").getString("url")).build();
             websocket = okHttpClient.newWebSocket(websocketRequest, this);
-            scheduledExecutorService = Executors.newScheduledThreadPool(1);
+            timer = new Timer();
             logger.info("Kook websocket session created");
         } else {
             Config.getInstance().setIsKookEnabled(false);
@@ -53,7 +52,7 @@ public class KookReceiver extends WebSocketListener {
     }
 
     public void shutdown() {
-        scheduledExecutorService.shutdown();
+        timer.cancel();
         websocket.close(1000, null);
         okHttpClient.dispatcher().executorService().shutdown();
     }
@@ -102,20 +101,21 @@ public class KookReceiver extends WebSocketListener {
             }
         } else if (type == 1) {
             logger.info("Kook websocket session connected");
-            scheduledExecutorService.scheduleAtFixedRate(
-                    () -> {
-                        websocket.send("{\"s\":2,\"sn\":" + sn + "}");
-                        pingFinished = false;
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    websocket.send("{\"s\":2,\"sn\":" + sn + "}");
+                    pingFinished = false;
 
-                        // check pong in 6 seconds
-                        sleep(6000);
-                        if (!pingFinished) {
-                            logger.error("Kook websocket pong not received! Reconnecting...");
-                            restart();
-                        }
-                    },
-                    0, 30, TimeUnit.SECONDS
-            );
+                    // check pong in 6 seconds
+                    sleep(6000);
+                    if (!pingFinished) {
+                        logger.error("Kook websocket pong not received! Reconnecting...");
+                        restart();
+                    }
+                }
+            };
+            timer.scheduleAtFixedRate(timerTask, 0, 30000);
         } else if (type == 3) {
             pingFinished = true;
         }
