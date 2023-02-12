@@ -4,7 +4,7 @@
 [English](readme.md)
 
 [![License](https://shields.io/github/license/AnzhiZhang/ChatHub?label=License)](https://github.com/AnzhiZhang/ChatHub/blob/master/LICENSE)
-[![CurseForge](https://cf.way2muchnoise.eu/short_825077_downloads.svg)](https://www.curseforge.com/minecraft/bukkit-plugins/chathub)
+[![CurseForge](https://cf.way2muchnoise.eu/short_825508_downloads.svg)](https://www.curseforge.com/minecraft/bukkit-plugins/chathub)
 [![Release](https://shields.io/github/v/release/AnzhiZhang/ChatHub?display_name=tag&include_prereleases&label=Release)](https://github.com/AnzhiZhang/ChatHub/releases/latest)
 [![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg)](https://gitmoji.dev/)
 
