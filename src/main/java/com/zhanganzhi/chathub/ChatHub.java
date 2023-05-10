@@ -23,7 +23,7 @@ import com.zhanganzhi.chathub.receiver.KookReceiver;
         version = "1.4.2",
         url = "https://github.com/AnzhiZhang/ChatHub",
         description = "Chat hub for servers under velocity proxy",
-        authors = {"Andy Zhang", "ZhuRuoLing", "YehowahLiu"}
+        authors = {"Andy Zhang", "ZhuRuoLing", "401U"}
 )
 public class ChatHub {
     private final ProxyServer proxyServer;
