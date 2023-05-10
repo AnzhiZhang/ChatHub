@@ -23,6 +23,11 @@ enable = false
 token = ''
 channelId = ''
 
+[kook.daemon]
+enable = false
+interval = 10
+retry = 3
+
 [kook.message]
 chat = '[{server}] <{name}>: {message}'
 join = '[+] [{server}] {name}'
