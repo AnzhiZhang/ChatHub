@@ -3,6 +3,7 @@ package com.zhanganzhi.chathub.command;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import net.kyori.adventure.text.Component;
@@ -76,9 +77,14 @@ public final class Command implements SimpleCommand {
     public List<String> suggest(final Invocation invocation) {
         String[] args = invocation.arguments();
         if (args.length <= 1) {
-            return Stream.of("list", "msg").filter(s -> s.startsWith(args.length > 0 ? args[0] : "")).toList();
+            return Stream.of("list", "msg")
+                .filter(s -> s.startsWith(args.length > 0 ? args[0] : ""))
+                .collect(Collectors.toList());
         } else if (args.length == 2 && args[0].equals("msg")) {
-            return proxyServer.getAllPlayers().stream().map(Player::getUsername).filter(s -> s.startsWith(args[1])).toList();
+            return proxyServer.getAllPlayers()
+                .stream().map(Player::getUsername)
+                .filter(s -> s.startsWith(args[1]))
+                .collect(Collectors.toList());
         } else {
             return List.of();
         }
