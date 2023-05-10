@@ -1,16 +1,22 @@
 package com.zhanganzhi.chathub.core;
 
 import com.zhanganzhi.chathub.ChatHub;
+import com.zhanganzhi.chathub.daemon.KookDaemon;
 import com.zhanganzhi.chathub.sender.KookSender;
 import com.zhanganzhi.chathub.sender.VelocitySender;
 
 public class EventHub {
     private final VelocitySender velocitySender;
     private final KookSender kookSender;
+    private final KookDaemon kookDaemon;
 
     public EventHub(ChatHub chatHub) {
         velocitySender = new VelocitySender(chatHub);
         kookSender = new KookSender(chatHub);
+        kookDaemon = new KookDaemon(chatHub, kookSender);
+        if( kookDaemon.shouldRun() ) {
+            kookDaemon.start();
+        }
     }
 
     public KookSender getKookSender() {

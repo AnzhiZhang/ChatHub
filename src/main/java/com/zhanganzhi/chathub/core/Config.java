@@ -129,6 +129,18 @@ public class Config {
         return configToml.getString("kook.channelId");
     }
 
+    public boolean getKookDaemonEnabled() {
+        return configToml.getBoolean("kook.daemon.enable");
+    }
+
+    public Long getKookDaemonInterval() {
+        return configToml.getLong("kook.daemon.interval");
+    }
+
+    public Long getKookDaemonRetry() {
+        return configToml.getLong("kook.daemon.retry");
+    }
+
     public String getKookChatMessage(String server, String name, String message) {
         return configToml
                 .getString("kook.message.chat")

@@ -59,6 +59,19 @@ public class KookSender implements ISender {
         }
     }
 
+    public boolean checkBotOnline() {
+        try {
+            JSONObject response = request(getRequestBuilder("/api/v3/user/me").get().build());
+            if (response.getInteger("code") != 0) {
+                return false;
+            }
+            return response.getJSONObject("data").getBooleanValue("online", false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     @Override
     public void sendChatMessage(String server, String name, String message) {
         sendMessage(config.getKookChatMessage(server, name, message));

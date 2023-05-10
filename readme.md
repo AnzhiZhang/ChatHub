@@ -131,6 +131,28 @@ Kook bot token.
 
 Channel ID.
 
+### Kook.daemon
+
+Daemon thread configuration for kook bot, to make sure bot is online by requeseting Kook API intervally.
+
+#### enable
+
+Default: `false`
+
+Enable Kook daemon thread.
+
+#### interval
+
+Default: `60`
+
+Interval for Kook daemon thread to request Kook API, in seconds.
+
+#### retry
+
+Default: `3`
+
+Maximum retry times, if failure count exceeds this value, try to restart the bot.
+
 ### kook.message
 
 Kook message format sages. Placeholders are defined same as Miencraft, all server name will auto translate to plain format, you do not have to use plain placeholders.
