@@ -15,8 +15,8 @@ public class EventHub {
 
     public EventHub(ChatHub chatHub) {
         adaptors = List.of(
-            new KookAdaptor(chatHub, this), 
-            new VelocityAdaptor(chatHub, this)
+                new KookAdaptor(chatHub, this),
+                new VelocityAdaptor(chatHub, this)
         );
     }
 
@@ -26,28 +26,28 @@ public class EventHub {
 
     public void onUserChat(MessageEvent event) {
         // ignore messages from same platform, except velocity
-        adaptors.stream().filter(adaptor ->
-            event.platform == Platform.VELOCITY || event.platform != adaptor.getPlatform()
-        ).forEach(adaptor -> adaptor.onUserChat(event));
+        adaptors.stream()
+                .filter(adaptor -> event.platform() == Platform.VELOCITY || event.platform() != adaptor.getPlatform())
+                .forEach(adaptor -> adaptor.onUserChat(event));
     }
 
     public void onJoinServer(ServerChangeEvent event) {
-        adaptors.stream().forEach(adaptor -> adaptor.onJoinServer(event));
+        adaptors.forEach(adaptor -> adaptor.onJoinServer(event));
     }
 
     public void onLeaveServer(ServerChangeEvent event) {
-        adaptors.stream().forEach(adaptor -> adaptor.onLeaveServer(event));
+        adaptors.forEach(adaptor -> adaptor.onLeaveServer(event));
     }
 
     public void onSwitchServer(ServerChangeEvent event) {
-        adaptors.stream().forEach(adaptor -> adaptor.onSwitchServer(event));
+        adaptors.forEach(adaptor -> adaptor.onSwitchServer(event));
     }
 
-	public void shutdown() {
-        adaptors.forEach(adaptor -> adaptor.stop());
-	}
+    public void shutdown() {
+        adaptors.forEach(IAdaptor::stop);
+    }
 
     public void start() {
-        adaptors.forEach(adaptor -> adaptor.start());
+        adaptors.forEach(IAdaptor::start);
     }
 }

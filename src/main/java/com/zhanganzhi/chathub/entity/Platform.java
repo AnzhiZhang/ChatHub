@@ -5,7 +5,8 @@ public enum Platform {
     VELOCITY("velocity");
 
     private final String name;
-    private Platform(String name) {
+
+    Platform(String name) {
         this.name = name;
     }
 

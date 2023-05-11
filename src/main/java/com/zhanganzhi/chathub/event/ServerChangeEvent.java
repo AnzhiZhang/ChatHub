@@ -1,11 +1,11 @@
 package com.zhanganzhi.chathub.event;
 
+import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
-import com.velocitypowered.api.proxy.Player;
 
 public class ServerChangeEvent {
-    public static enum SwitchType {
+    public enum SwitchType {
         JOIN, LEAVE, SWITCH
     }
 
@@ -18,7 +18,7 @@ public class ServerChangeEvent {
         this.player = player;
         this.serverPrev = serverPrev;
         this.server = server;
-        if(serverPrev != null) {
+        if (serverPrev != null) {
             this.type = SwitchType.SWITCH;
         } else if (server != null) {
             this.type = SwitchType.JOIN;
@@ -29,9 +29,9 @@ public class ServerChangeEvent {
 
     public ServerChangeEvent(ServerConnectedEvent event) {
         this(
-            event.getPlayer(),
-            event.getPreviousServer().isPresent() ? event.getPreviousServer().get().getServerInfo().getName() : null,
-            event.getServer().getServerInfo().getName()
+                event.getPlayer(),
+                event.getPreviousServer().isPresent() ? event.getPreviousServer().get().getServerInfo().getName() : null,
+                event.getServer().getServerInfo().getName()
         );
     }
 

@@ -2,6 +2,7 @@ package com.zhanganzhi.chathub.adaptors.kook;
 
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
+
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.adaptors.IAdaptor;
 import com.zhanganzhi.chathub.core.Config;
@@ -14,7 +15,7 @@ public class KookAdaptor implements IAdaptor {
     private final Config config = Config.getInstance();
     private final KookAPI kookAPI = KookAPI.getInstance();
     private final ChatHub chatHub;
-    private static Platform platform = Platform.KOOK;
+    private final static Platform platform = Platform.KOOK;
     private final KookReceiver kookReceiver;
     private final KookDaemon kookDaemon;
 
@@ -31,30 +32,30 @@ public class KookAdaptor implements IAdaptor {
 
     @Override
     public void onUserChat(MessageEvent event) {
-        sendMessage(config.getKookChatMessage(event.getServerName(), event.user, event.content));
+        sendMessage(config.getKookChatMessage(event.getServerName(), event.user(), event.content()));
     }
 
     @Override
     public void onJoinServer(ServerChangeEvent event) {
         sendMessage(config.getKookJoinMessage(
-            event.server,
-            event.player.getUsername()
+                event.server,
+                event.player.getUsername()
         ));
     }
 
     @Override
     public void onLeaveServer(ServerChangeEvent event) {
         sendMessage(config.getKookLeaveMessage(
-            event.player.getUsername()
+                event.player.getUsername()
         ));
     }
 
     @Override
     public void onSwitchServer(ServerChangeEvent event) {
         sendMessage(config.getKookSwitchMessage(
-            event.player.getUsername(), 
-            event.serverPrev, 
-            event.server
+                event.player.getUsername(),
+                event.serverPrev,
+                event.server
         ));
     }
 
@@ -76,33 +77,33 @@ public class KookAdaptor implements IAdaptor {
     }
 
     void sendMessage(String message) {
-        if(config.isKookEnabled()) {
+        if (config.isKookEnabled()) {
             new Thread(() -> kookAPI.sendMessage(message)).start();
         }
     }
 
     @Override
     public void start() {
-        if(config.isKookEnabled()) {
+        if (config.isKookEnabled()) {
             chatHub.getLogger().info("Kook enabled");
             kookReceiver.start();
-            if(config.getKookDaemonEnabled())
+            if (config.getKookDaemonEnabled())
                 kookDaemon.start();
         }
     }
 
     @Override
     public void stop() {
-        if(config.isKookEnabled()) {
+        if (config.isKookEnabled()) {
             kookReceiver.shutdown();
-            if(config.getKookDaemonEnabled())
+            if (config.getKookDaemonEnabled())
                 kookDaemon.shutdown();
         }
     }
 
     @Override
     public void restart() {
-        if(config.isKookEnabled()) {
+        if (config.isKookEnabled()) {
             kookReceiver.restart();
         }
     }

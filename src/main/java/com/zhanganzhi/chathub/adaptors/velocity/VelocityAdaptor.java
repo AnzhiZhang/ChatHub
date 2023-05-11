@@ -2,6 +2,7 @@ package com.zhanganzhi.chathub.adaptors.velocity;
 
 import java.util.Arrays;
 
+import net.kyori.adventure.text.Component;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
@@ -9,6 +10,7 @@ import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
+
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.adaptors.IAdaptor;
 import com.zhanganzhi.chathub.core.Config;
@@ -17,9 +19,7 @@ import com.zhanganzhi.chathub.entity.Platform;
 import com.zhanganzhi.chathub.event.MessageEvent;
 import com.zhanganzhi.chathub.event.ServerChangeEvent;
 
-import net.kyori.adventure.text.Component;
-
-public class VelocityAdaptor implements IAdaptor{
+public class VelocityAdaptor implements IAdaptor {
     private static final Platform platform = Platform.VELOCITY;
     private final ProxyServer proxyServer;
     private final Config config = Config.getInstance();
@@ -53,15 +53,15 @@ public class VelocityAdaptor implements IAdaptor{
 
     @Override
     public void onUserChat(MessageEvent event) {
-        Arrays.stream(event.content.split("\n")).forEach(msg -> {
-            Component component = Component.text(config.getMinecraftChatMessage(event.getServerName(), event.user, msg));
+        Arrays.stream(event.content().split("\n")).forEach(msg -> {
+            Component component = Component.text(config.getMinecraftChatMessage(event.getServerName(), event.user(), msg));
             // check complete takeover mode for message from velocity
-            if(event.platform == Platform.VELOCITY && !config.isCompleteTakeoverMode()) {
-                sendMessage(component, event.server);
+            if (event.platform() == Platform.VELOCITY && !config.isCompleteTakeoverMode()) {
+                sendMessage(component, event.server());
                 return;
             }
             sendMessage(component);
-        });  
+        });
     }
 
     @Override
@@ -79,17 +79,16 @@ public class VelocityAdaptor implements IAdaptor{
         sendMessage(Component.text(config.getMinecraftSwitchMessage(event.player.getUsername(), event.serverPrev, event.server)));
     }
 
-
     @Subscribe
     public void onPlayerChatEvent(PlayerChatEvent event) {
         Player player = event.getPlayer();
         player.getCurrentServer().ifPresent(
                 serverConnection -> {
                     eventHub.onUserChat(new MessageEvent(
-                        platform,
-                        serverConnection.getServerInfo().getName(),
-                        player.getUsername(),
-                        event.getMessage())
+                            platform,
+                            serverConnection.getServerInfo().getName(),
+                            player.getUsername(),
+                            event.getMessage())
                     );
 
                     // denied message if complete takeover mode enabled
@@ -104,15 +103,9 @@ public class VelocityAdaptor implements IAdaptor{
     public void onServerConnectedEvent(ServerConnectedEvent event) {
         ServerChangeEvent message = new ServerChangeEvent(event);
         switch (message.type) {
-            case JOIN:
-                eventHub.onJoinServer(message);
-                break;
-            case LEAVE:
-                eventHub.onLeaveServer(message);
-                break;
-            case SWITCH:
-                eventHub.onSwitchServer(message);
-                break;
+            case JOIN -> eventHub.onJoinServer(message);
+            case LEAVE -> eventHub.onLeaveServer(message);
+            case SWITCH -> eventHub.onSwitchServer(message);
         }
     }
 
@@ -127,18 +120,21 @@ public class VelocityAdaptor implements IAdaptor{
         for (RegisteredServer registeredServer : proxyServer.getAllServers()) {
             if (registeredServer.getPlayersConnected().size() > 0) {
                 isListEmpty = false;
-                proxyServer.getPlayer(source)
-                    .ifPresent(player -> player.sendMessage(Component.text(
-                        config.getMinecraftListMessage(
-                                registeredServer.getServerInfo().getName(),
-                                registeredServer.getPlayersConnected().size(),
-                                registeredServer.getPlayersConnected().stream().map(Player::getUsername).toArray(String[]::new)
+                proxyServer.getPlayer(source).ifPresent(
+                        player -> player.sendMessage(
+                                Component.text(config.getMinecraftListMessage(
+                                        registeredServer.getServerInfo().getName(),
+                                        registeredServer.getPlayersConnected().size(),
+                                        registeredServer.getPlayersConnected().stream().map(Player::getUsername).toArray(String[]::new)
+                                ))
                         )
-                )));
+                );
             }
         }
         if (isListEmpty) {
-            proxyServer.getPlayer(source).ifPresent(player -> player.sendMessage(Component.text(config.getMinecraftListEmptyMessage())));
+            proxyServer.getPlayer(source).ifPresent(
+                    player -> player.sendMessage(Component.text(config.getMinecraftListEmptyMessage()))
+            );
         }
     }
 

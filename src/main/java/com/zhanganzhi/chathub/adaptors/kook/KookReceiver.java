@@ -35,7 +35,6 @@ public class KookReceiver extends WebSocketListener {
         this.logger = logger;
         this.eventHub = eventHub;
         this.okHttpClient = new OkHttpClient();
-        
     }
 
     public void start() {
@@ -101,10 +100,10 @@ public class KookReceiver extends WebSocketListener {
                         eventHub.getAdaptor(PLATFORM).sendListMessage("");
                     } else {
                         eventHub.onUserChat(new MessageEvent(
-                            PLATFORM,
-                            null,
-                            eventData.getJSONObject("extra").getJSONObject("author").getString("nickname"),
-                            eventData.getJSONObject("extra").getJSONObject("kmarkdown").getString("raw_content")
+                                PLATFORM,
+                                null,
+                                eventData.getJSONObject("extra").getJSONObject("author").getString("nickname"),
+                                eventData.getJSONObject("extra").getJSONObject("kmarkdown").getString("raw_content")
                         ));
                     }
                 }

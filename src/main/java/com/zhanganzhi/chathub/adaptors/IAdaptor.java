@@ -5,14 +5,21 @@ import com.zhanganzhi.chathub.event.MessageEvent;
 import com.zhanganzhi.chathub.event.ServerChangeEvent;
 
 public interface IAdaptor {
-    public Platform getPlatform();
-    public void onUserChat(MessageEvent event);
-    public void onJoinServer(ServerChangeEvent event);
-    public void onLeaveServer(ServerChangeEvent event);
-    public void onSwitchServer(ServerChangeEvent event);
-    public void sendListMessage(String source);
+    Platform getPlatform();
 
-    public void start();
-    public void stop();
-    public void restart();
+    void onUserChat(MessageEvent event);
+
+    void onJoinServer(ServerChangeEvent event);
+
+    void onLeaveServer(ServerChangeEvent event);
+
+    void onSwitchServer(ServerChangeEvent event);
+
+    void sendListMessage(String source);
+
+    void start();
+
+    void stop();
+
+    void restart();
 }

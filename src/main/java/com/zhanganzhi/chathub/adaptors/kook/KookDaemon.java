@@ -1,6 +1,5 @@
 package com.zhanganzhi.chathub.adaptors.kook;
 
-
 import org.slf4j.Logger;
 
 import com.zhanganzhi.chathub.core.Config;
@@ -11,7 +10,6 @@ public class KookDaemon extends Thread {
     private final Config config;
     private final KookReceiver kookReceiver;
     private boolean flag = true;
-
 
     public KookDaemon(Logger logger, Config config, KookReceiver kookReceiver) {
         this.logger = logger;
@@ -26,7 +24,7 @@ public class KookDaemon extends Thread {
             boolean isBotOnline = kookAPI.checkBotOnline();
             if (isBotOnline) {
                 retryCount = 0;
-            } else if(retryCount < config.getKookDaemonRetry()) {
+            } else if (retryCount < config.getKookDaemonRetry()) {
                 logger.info("Kook bot seems offline, re-check in " + config.getKookDaemonInterval() + " seconds...");
                 retryCount++;
             } else {

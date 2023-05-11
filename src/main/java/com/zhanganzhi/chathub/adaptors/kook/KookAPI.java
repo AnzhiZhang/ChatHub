@@ -2,16 +2,11 @@ package com.zhanganzhi.chathub.adaptors.kook;
 
 import java.io.IOException;
 
+import okhttp3.*;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import com.zhanganzhi.chathub.core.Config;
 
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+import com.zhanganzhi.chathub.core.Config;
 
 class KookAPI {
     private static KookAPI instance;

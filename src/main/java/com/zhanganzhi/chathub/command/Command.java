@@ -79,13 +79,13 @@ public final class Command implements SimpleCommand {
         String[] args = invocation.arguments();
         if (args.length <= 1) {
             return Stream.of("list", "msg")
-                .filter(s -> s.startsWith(args.length > 0 ? args[0] : ""))
-                .collect(Collectors.toList());
+                    .filter(s -> s.startsWith(args.length > 0 ? args[0] : ""))
+                    .collect(Collectors.toList());
         } else if (args.length == 2 && args[0].equals("msg")) {
             return proxyServer.getAllPlayers()
-                .stream().map(Player::getUsername)
-                .filter(s -> s.startsWith(args[1]))
-                .collect(Collectors.toList());
+                    .stream().map(Player::getUsername)
+                    .filter(s -> s.startsWith(args[1]))
+                    .collect(Collectors.toList());
         } else {
             return List.of();
         }
