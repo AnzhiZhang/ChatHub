@@ -14,8 +14,6 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.zhanganzhi.chathub.core.Config;
 import com.zhanganzhi.chathub.core.EventHub;
 import com.zhanganzhi.chathub.command.Command;
-import com.zhanganzhi.chathub.receiver.VelocityReceiver;
-import com.zhanganzhi.chathub.receiver.KookReceiver;
 
 @Plugin(
         id = "chathub",
@@ -30,7 +28,6 @@ public class ChatHub {
     private final Logger logger;
     private final Path dataDirectory;
     private EventHub eventHub;
-    private KookReceiver kookReceiver;
 
     @Inject
     public ChatHub(ProxyServer proxyServer, Logger logger, @DataDirectory Path dataDirectory) {
@@ -51,10 +48,6 @@ public class ChatHub {
         return eventHub;
     }
 
-    public KookReceiver getKookReceiver() {
-        return kookReceiver;
-    }
-
     @Subscribe
     public void onInitialize(ProxyInitializeEvent event) {
         // core
@@ -67,21 +60,11 @@ public class ChatHub {
                 new Command(this)
         );
 
-        // velocity receiver
-        proxyServer.getEventManager().register(this, new VelocityReceiver(this));
-
-        // kook receiver
-        if (Config.getInstance().isKookEnabled()) {
-            logger.info("Kook enabled");
-            kookReceiver = new KookReceiver(this);
-            kookReceiver.start();
-        }
+        eventHub.start();
     }
 
     @Subscribe
     public void onProxyShutdown(ProxyShutdownEvent event) {
-        if (Config.getInstance().isKookEnabled()) {
-            kookReceiver.shutdown();
-        }
+        eventHub.shutdown();
     }
 }

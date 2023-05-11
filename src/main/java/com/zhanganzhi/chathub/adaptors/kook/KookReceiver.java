@@ -1,4 +1,4 @@
-package com.zhanganzhi.chathub.receiver;
+package com.zhanganzhi.chathub.adaptors.kook;
 
 import java.io.IOException;
 import java.util.Timer;
@@ -13,8 +13,11 @@ import com.alibaba.fastjson2.JSONObject;
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.Config;
 import com.zhanganzhi.chathub.core.EventHub;
+import com.zhanganzhi.chathub.entity.Platform;
+import com.zhanganzhi.chathub.event.MessageEvent;
 
 public class KookReceiver extends WebSocketListener {
+    private static final Platform PLATFORM = Platform.KOOK;
     private final Logger logger;
     private final EventHub eventHub;
     private final OkHttpClient okHttpClient;
@@ -22,11 +25,17 @@ public class KookReceiver extends WebSocketListener {
     private Timer timer;
     private boolean pingFinished;
     private int sn;
+    private final KookAPI kookAPI = KookAPI.getInstance();
 
     public KookReceiver(ChatHub chatHub) {
-        logger = chatHub.getLogger();
-        eventHub = chatHub.getEventHub();
-        okHttpClient = new OkHttpClient();
+        this(chatHub.getLogger(), chatHub.getEventHub());
+    }
+
+    public KookReceiver(Logger logger, EventHub eventHub) {
+        this.logger = logger;
+        this.eventHub = eventHub;
+        this.okHttpClient = new OkHttpClient();
+        
     }
 
     public void start() {
@@ -34,7 +43,7 @@ public class KookReceiver extends WebSocketListener {
         JSONObject getGatewayResponse = null;
         do {
             try {
-                getGatewayResponse = eventHub.getKookSender().getGateway();
+                getGatewayResponse = kookAPI.getGateway();
             } catch (IOException e) {
                 logger.error("Kook get websocket gateway error, retry in 10s...");
                 sleep(10000);
@@ -89,12 +98,14 @@ public class KookReceiver extends WebSocketListener {
                 // check channel
                 if (eventData.getString("channel_type").equals("GROUP") && eventData.getString("target_id").equals(Config.getInstance().getKookChannelId())) {
                     if (eventData.getString("content").equals("/list")) {
-                        eventHub.getKookSender().sendListMessage();
+                        eventHub.getAdaptor(PLATFORM).sendListMessage("");
                     } else {
-                        eventHub.onKookMessage(
-                                eventData.getJSONObject("extra").getJSONObject("author").getString("nickname"),
-                                eventData.getJSONObject("extra").getJSONObject("kmarkdown").getString("raw_content")
-                        );
+                        eventHub.onUserChat(new MessageEvent(
+                            PLATFORM,
+                            null,
+                            eventData.getJSONObject("extra").getJSONObject("author").getString("nickname"),
+                            eventData.getJSONObject("extra").getJSONObject("kmarkdown").getString("raw_content")
+                        ));
                     }
                 }
             }

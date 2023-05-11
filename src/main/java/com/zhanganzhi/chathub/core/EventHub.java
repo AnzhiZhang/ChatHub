@@ -1,58 +1,53 @@
 package com.zhanganzhi.chathub.core;
 
+import java.util.List;
+
 import com.zhanganzhi.chathub.ChatHub;
-import com.zhanganzhi.chathub.daemon.KookDaemon;
-import com.zhanganzhi.chathub.sender.KookSender;
-import com.zhanganzhi.chathub.sender.VelocitySender;
+import com.zhanganzhi.chathub.adaptors.IAdaptor;
+import com.zhanganzhi.chathub.adaptors.kook.KookAdaptor;
+import com.zhanganzhi.chathub.adaptors.velocity.VelocityAdaptor;
+import com.zhanganzhi.chathub.entity.Platform;
+import com.zhanganzhi.chathub.event.MessageEvent;
+import com.zhanganzhi.chathub.event.ServerChangeEvent;
 
 public class EventHub {
-    private final VelocitySender velocitySender;
-    private final KookSender kookSender;
-    private final KookDaemon kookDaemon;
+    private final List<IAdaptor> adaptors;
 
     public EventHub(ChatHub chatHub) {
-        velocitySender = new VelocitySender(chatHub);
-        kookSender = new KookSender(chatHub);
-        kookDaemon = new KookDaemon(chatHub, kookSender);
-        if( kookDaemon.shouldRun() ) {
-            kookDaemon.start();
-        }
+        adaptors = List.of(
+            new KookAdaptor(chatHub, this), 
+            new VelocityAdaptor(chatHub, this)
+        );
     }
 
-    public KookSender getKookSender() {
-        return kookSender;
+    public IAdaptor getAdaptor(Platform platform) {
+        return adaptors.stream().filter(adaptor -> adaptor.getPlatform() == platform).findFirst().orElse(null);
     }
 
-    public void onMinecraftMessage(String server, String name, String message) {
-        velocitySender.sendChatMessage(server, name, message);
-        if (Config.getInstance().isKookEnabled()) {
-            new Thread(() -> kookSender.sendChatMessage(server, name, message)).start();
-        }
+    public void onUserChat(MessageEvent event) {
+        // ignore messages from same platform, except velocity
+        adaptors.stream().filter(adaptor ->
+            event.platform == Platform.VELOCITY || event.platform != adaptor.getPlatform()
+        ).forEach(adaptor -> adaptor.onUserChat(event));
     }
 
-    public void onMinecraftJoinServer(String server, String name) {
-        velocitySender.sendJoinMessage(server, name);
-        if (Config.getInstance().isKookEnabled()) {
-            new Thread(() -> kookSender.sendJoinMessage(server, name)).start();
-        }
+    public void onJoinServer(ServerChangeEvent event) {
+        adaptors.stream().forEach(adaptor -> adaptor.onJoinServer(event));
     }
 
-    public void onMinecraftLeaveServer(String name) {
-        velocitySender.sendLeaveMessage(name);
-        if (Config.getInstance().isKookEnabled()) {
-            new Thread(() -> kookSender.sendLeaveMessage(name)).start();
-        }
+    public void onLeaveServer(ServerChangeEvent event) {
+        adaptors.stream().forEach(adaptor -> adaptor.onLeaveServer(event));
     }
 
-    public void onMinecraftSwitchServer(String name, String serverFrom, String serverTo) {
-        velocitySender.sendSwitchMessage(name, serverFrom, serverTo);
-        if (Config.getInstance().isKookEnabled()) {
-            new Thread(() -> kookSender.sendSwitchMessage(name, serverFrom, serverTo)).start();
-
-        }
+    public void onSwitchServer(ServerChangeEvent event) {
+        adaptors.stream().forEach(adaptor -> adaptor.onSwitchServer(event));
     }
 
-    public void onKookMessage(String name, String message) {
-        velocitySender.sendChatMessage("kook", name, message);
+	public void shutdown() {
+        adaptors.forEach(adaptor -> adaptor.stop());
+	}
+
+    public void start() {
+        adaptors.forEach(adaptor -> adaptor.start());
     }
 }

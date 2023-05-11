@@ -1,32 +1,29 @@
-package com.zhanganzhi.chathub.daemon;
+package com.zhanganzhi.chathub.adaptors.kook;
 
 
 import org.slf4j.Logger;
 
-import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.Config;
-import com.zhanganzhi.chathub.sender.KookSender;
 
 public class KookDaemon extends Thread {
-    private final ChatHub chatHub;
-    private final KookSender kookSender;
+    private final KookAPI kookAPI = KookAPI.getInstance();
     private final Logger logger;
     private final Config config;
+    private final KookReceiver kookReceiver;
     private boolean flag = true;
 
 
-    public KookDaemon(ChatHub chatHub, KookSender kookSender) {
-        this.kookSender = kookSender;
-        this.logger = chatHub.getLogger();
-        this.config = Config.getInstance();
-        this.chatHub = chatHub;
+    public KookDaemon(Logger logger, Config config, KookReceiver kookReceiver) {
+        this.logger = logger;
+        this.config = config;
+        this.kookReceiver = kookReceiver;
         setDaemon(true);
     }
 
     public void run() {
         int retryCount = 0;
         while (flag) {
-            boolean isBotOnline = kookSender.checkBotOnline();
+            boolean isBotOnline = kookAPI.checkBotOnline();
             if (isBotOnline) {
                 retryCount = 0;
             } else if(retryCount < config.getKookDaemonRetry()) {
@@ -34,7 +31,7 @@ public class KookDaemon extends Thread {
                 retryCount++;
             } else {
                 logger.info("Kook bot is offline, restarting...");
-                chatHub.getKookReceiver().restart();
+                kookReceiver.restart();
             }
 
             try {

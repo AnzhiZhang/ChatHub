@@ -1,22 +1,24 @@
-package com.zhanganzhi.chathub.sender;
+package com.zhanganzhi.chathub.adaptors.kook;
 
 import java.io.IOException;
 
-import okhttp3.*;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import com.velocitypowered.api.proxy.Player;
-import com.velocitypowered.api.proxy.server.RegisteredServer;
-
-import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.Config;
 
-public class KookSender implements ISender {
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+
+class KookAPI {
+    private static KookAPI instance;
     private static final String BASE_URL = "https://www.kookapp.cn";
     private static final MediaType MEDIA_TYPE_JSON = MediaType.get("application/json; charset=utf-8");
     private final Config config = Config.getInstance();
     private final OkHttpClient okHttpClient = new OkHttpClient();
-    private final ChatHub chatHub;
 
     public static class Create {
         public String target_id;
@@ -28,8 +30,11 @@ public class KookSender implements ISender {
         }
     }
 
-    public KookSender(ChatHub chatHub) {
-        this.chatHub = chatHub;
+    public static KookAPI getInstance() {
+        if (instance == null) {
+            instance = new KookAPI();
+        }
+        return instance;
     }
 
     private Request.Builder getRequestBuilder(String path) {
@@ -49,7 +54,7 @@ public class KookSender implements ISender {
         return request(getRequestBuilder("/api/v3/gateway/index?compress=0").build());
     }
 
-    private void sendMessage(String message) {
+    public void sendMessage(String message) {
         Create create = new Create(config.getKookChannelId(), message);
         RequestBody requestBody = RequestBody.create(JSON.toJSONString(create), MEDIA_TYPE_JSON);
         try {
@@ -70,41 +75,5 @@ public class KookSender implements ISender {
             e.printStackTrace();
         }
         return false;
-    }
-
-    @Override
-    public void sendChatMessage(String server, String name, String message) {
-        sendMessage(config.getKookChatMessage(server, name, message));
-    }
-
-    @Override
-    public void sendJoinMessage(String server, String name) {
-        sendMessage(config.getKookJoinMessage(server, name));
-    }
-
-    @Override
-    public void sendLeaveMessage(String name) {
-        sendMessage(config.getKookLeaveMessage(name));
-    }
-
-    @Override
-    public void sendSwitchMessage(String name, String serverFrom, String serverTo) {
-        sendMessage(config.getKookSwitchMessage(name, serverFrom, serverTo));
-    }
-
-    public void sendListMessage() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (RegisteredServer registeredServer : chatHub.getProxyServer().getAllServers()) {
-            if (registeredServer.getPlayersConnected().size() > 0) {
-                stringBuilder.append(config.getKookListMessage(
-                        registeredServer.getServerInfo().getName(),
-                        registeredServer.getPlayersConnected().size(),
-                        registeredServer.getPlayersConnected().stream().map(Player::getUsername).toArray(String[]::new)
-                ));
-                stringBuilder.append("\n");
-            }
-        }
-        String listMessage = stringBuilder.isEmpty() ? config.getKookListEmptyMessage() : stringBuilder.toString();
-        sendMessage(listMessage);
     }
 }
