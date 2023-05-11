@@ -32,12 +32,12 @@ public class KookAdaptor implements IAdaptor {
     @Override
     public void onUserChat(MessageEvent message) {
         String server = message.platform == Platform.VELOCITY ? message.channel : message.platform.name();
-        kookAPI.sendMessage(config.getKookChatMessage(server, message.user, message.content));
+        sendMessage(config.getKookChatMessage(server, message.user, message.content));
     }
 
     @Override
     public void onJoinServer(SwitchServerEvent message) {
-        kookAPI.sendMessage(config.getKookJoinMessage(
+        sendMessage(config.getKookJoinMessage(
             message.server, 
             message.player.getUsername()
         ));
@@ -45,14 +45,14 @@ public class KookAdaptor implements IAdaptor {
 
     @Override
     public void onLeaveServer(SwitchServerEvent message) {
-        kookAPI.sendMessage(config.getKookLeaveMessage(
+        sendMessage(config.getKookLeaveMessage(
             message.player.getUsername()
         ));
     }
 
     @Override
     public void onSwitchServer(SwitchServerEvent message) {
-        kookAPI.sendMessage(config.getKookSwitchMessage(
+        sendMessage(config.getKookSwitchMessage(
             message.player.getUsername(), 
             message.serverPrev, 
             message.server
@@ -73,7 +73,7 @@ public class KookAdaptor implements IAdaptor {
             }
         }
         String listMessage = stringBuilder.isEmpty() ? config.getKookListEmptyMessage() : stringBuilder.toString();
-        kookAPI.sendMessage(listMessage);
+        sendMessage(listMessage);
     }
 
     void sendMessage(String message) {
