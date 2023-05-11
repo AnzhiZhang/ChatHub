@@ -17,6 +17,7 @@ import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.Config;
+import com.zhanganzhi.chathub.entity.Platform;
 
 public final class Command implements SimpleCommand {
     ChatHub chatHub;
@@ -53,7 +54,7 @@ public final class Command implements SimpleCommand {
         } else if (args.length == 1 && args[0].equals("reloadKook")) {
             if (source instanceof ConsoleCommandSource) {
                 if (Config.getInstance().isKookEnabled()) {
-                    chatHub.getKookReceiver().restart();
+                    chatHub.getEventHub().getAdaptor(Platform.KOOK).restart();
                 } else {
                     source.sendMessage(Component.text("Kook is not enabled!").color(NamedTextColor.RED));
                 }
