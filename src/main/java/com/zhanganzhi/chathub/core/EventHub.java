@@ -6,18 +6,14 @@ import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.adaptors.IAdaptor;
 import com.zhanganzhi.chathub.adaptors.kook.KookAdaptor;
 import com.zhanganzhi.chathub.adaptors.velocity.VelocityAdaptor;
-import com.zhanganzhi.chathub.entity.MessageEvent;
 import com.zhanganzhi.chathub.entity.Platform;
-import com.zhanganzhi.chathub.entity.SwitchServerEvent;
+import com.zhanganzhi.chathub.event.MessageEvent;
+import com.zhanganzhi.chathub.event.ServerChangeEvent;
 
 public class EventHub {
     private final List<IAdaptor> adaptors;
-    // private final VelocitySender velocitySender;
-    // private final KookSender kookSender;
 
     public EventHub(ChatHub chatHub) {
-        // velocitySender = new VelocitySender(chatHub);
-        // kookSender = new KookSender(chatHub);
         adaptors = List.of(
             new KookAdaptor(chatHub, this), 
             new VelocityAdaptor(chatHub, this)
@@ -28,23 +24,23 @@ public class EventHub {
         return adaptors.stream().filter(adaptor -> adaptor.getPlatform() == platform).findFirst().orElse(null);
     }
 
-    public void onUserChat(MessageEvent message) {
+    public void onUserChat(MessageEvent event) {
         // ignore messages from same platform, except velocity
         adaptors.stream().filter(adaptor ->
-            message.platform == Platform.VELOCITY || message.platform != adaptor.getPlatform()
-        ).forEach(adaptor -> adaptor.onUserChat(message));
+            event.platform == Platform.VELOCITY || event.platform != adaptor.getPlatform()
+        ).forEach(adaptor -> adaptor.onUserChat(event));
     }
 
-    public void onJoinServer(SwitchServerEvent message) {
-        adaptors.stream().forEach(adaptor -> adaptor.onJoinServer(message));
+    public void onJoinServer(ServerChangeEvent event) {
+        adaptors.stream().forEach(adaptor -> adaptor.onJoinServer(event));
     }
 
-    public void onLeaveServer(SwitchServerEvent message) {
-        adaptors.stream().forEach(adaptor -> adaptor.onLeaveServer(message));
+    public void onLeaveServer(ServerChangeEvent event) {
+        adaptors.stream().forEach(adaptor -> adaptor.onLeaveServer(event));
     }
 
-    public void onSwitchServer(SwitchServerEvent message) {
-        adaptors.stream().forEach(adaptor -> adaptor.onSwitchServer(message));
+    public void onSwitchServer(ServerChangeEvent event) {
+        adaptors.stream().forEach(adaptor -> adaptor.onSwitchServer(event));
     }
 
 	public void shutdown() {

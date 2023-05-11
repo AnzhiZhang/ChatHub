@@ -13,8 +13,8 @@ import com.alibaba.fastjson2.JSONObject;
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.Config;
 import com.zhanganzhi.chathub.core.EventHub;
-import com.zhanganzhi.chathub.entity.MessageEvent;
 import com.zhanganzhi.chathub.entity.Platform;
+import com.zhanganzhi.chathub.event.MessageEvent;
 
 public class KookReceiver extends WebSocketListener {
     private static final Platform PLATFORM = Platform.KOOK;

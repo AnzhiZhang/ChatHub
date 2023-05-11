@@ -6,9 +6,9 @@ import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.adaptors.IAdaptor;
 import com.zhanganzhi.chathub.core.Config;
 import com.zhanganzhi.chathub.core.EventHub;
-import com.zhanganzhi.chathub.entity.MessageEvent;
 import com.zhanganzhi.chathub.entity.Platform;
-import com.zhanganzhi.chathub.entity.SwitchServerEvent;
+import com.zhanganzhi.chathub.event.MessageEvent;
+import com.zhanganzhi.chathub.event.ServerChangeEvent;
 
 public class KookAdaptor implements IAdaptor {
     private final Config config = Config.getInstance();
@@ -30,32 +30,32 @@ public class KookAdaptor implements IAdaptor {
     }
 
     @Override
-    public void onUserChat(MessageEvent message) {
-        String server = message.platform == Platform.VELOCITY ? message.channel : message.platform.name();
-        sendMessage(config.getKookChatMessage(server, message.user, message.content));
+    public void onUserChat(MessageEvent event) {
+        String server = event.platform == Platform.VELOCITY ? event.server : event.platform.name();
+        sendMessage(config.getKookChatMessage(server, event.user, event.content));
     }
 
     @Override
-    public void onJoinServer(SwitchServerEvent message) {
+    public void onJoinServer(ServerChangeEvent event) {
         sendMessage(config.getKookJoinMessage(
-            message.server, 
-            message.player.getUsername()
+            event.server, 
+            event.player.getUsername()
         ));
     }
 
     @Override
-    public void onLeaveServer(SwitchServerEvent message) {
+    public void onLeaveServer(ServerChangeEvent event) {
         sendMessage(config.getKookLeaveMessage(
-            message.player.getUsername()
+            event.player.getUsername()
         ));
     }
 
     @Override
-    public void onSwitchServer(SwitchServerEvent message) {
+    public void onSwitchServer(ServerChangeEvent event) {
         sendMessage(config.getKookSwitchMessage(
-            message.player.getUsername(), 
-            message.serverPrev, 
-            message.server
+            event.player.getUsername(), 
+            event.serverPrev, 
+            event.server
         ));
     }
 

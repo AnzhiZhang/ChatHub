@@ -13,9 +13,9 @@ import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.adaptors.IAdaptor;
 import com.zhanganzhi.chathub.core.Config;
 import com.zhanganzhi.chathub.core.EventHub;
-import com.zhanganzhi.chathub.entity.MessageEvent;
 import com.zhanganzhi.chathub.entity.Platform;
-import com.zhanganzhi.chathub.entity.SwitchServerEvent;
+import com.zhanganzhi.chathub.event.MessageEvent;
+import com.zhanganzhi.chathub.event.ServerChangeEvent;
 
 import net.kyori.adventure.text.Component;
 
@@ -52,31 +52,31 @@ public class VelocityAdaptor implements IAdaptor{
     }
 
     @Override
-    public void onUserChat(MessageEvent message) {
-        Arrays.stream(message.content.split("\n")).forEach(msg -> {
-            Component component = Component.text(config.getMinecraftChatMessage(message.channel, message.user, msg));
+    public void onUserChat(MessageEvent event) {
+        Arrays.stream(event.content.split("\n")).forEach(msg -> {
+            Component component = Component.text(config.getMinecraftChatMessage(event.server, event.user, msg));
             // check complete takeover mode
             if (config.isCompleteTakeoverMode()) {
                 sendMessage(component);
             } else {
-                sendMessage(component, message.channel);
+                sendMessage(component, event.server);
             }
         });  
     }
 
     @Override
-    public void onJoinServer(SwitchServerEvent message) {
-        sendMessage(Component.text(config.getMinecraftJoinMessage(message.server, message.player.getUsername())));
+    public void onJoinServer(ServerChangeEvent event) {
+        sendMessage(Component.text(config.getMinecraftJoinMessage(event.server, event.player.getUsername())));
     }
 
     @Override
-    public void onLeaveServer(SwitchServerEvent message) {
-        sendMessage(Component.text(config.getMinecraftLeaveMessage(message.player.getUsername())));
+    public void onLeaveServer(ServerChangeEvent event) {
+        sendMessage(Component.text(config.getMinecraftLeaveMessage(event.player.getUsername())));
     }
 
     @Override
-    public void onSwitchServer(SwitchServerEvent message) {
-        sendMessage(Component.text(config.getMinecraftSwitchMessage(message.player.getUsername(), message.serverPrev, message.server)));
+    public void onSwitchServer(ServerChangeEvent event) {
+        sendMessage(Component.text(config.getMinecraftSwitchMessage(event.player.getUsername(), event.serverPrev, event.server)));
     }
 
 
@@ -102,7 +102,7 @@ public class VelocityAdaptor implements IAdaptor{
 
     @Subscribe
     public void onServerConnectedEvent(ServerConnectedEvent event) {
-        SwitchServerEvent message = new SwitchServerEvent(event);
+        ServerChangeEvent message = new ServerChangeEvent(event);
         switch (message.type) {
             case JOIN:
                 eventHub.onJoinServer(message);
@@ -118,7 +118,7 @@ public class VelocityAdaptor implements IAdaptor{
 
     @Subscribe
     public void onPlayerDisconnect(DisconnectEvent event) {
-        eventHub.onLeaveServer(new SwitchServerEvent(event));
+        eventHub.onLeaveServer(new ServerChangeEvent(event));
     }
 
     @Override
