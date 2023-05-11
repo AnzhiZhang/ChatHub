@@ -2,7 +2,7 @@ package com.zhanganzhi.chathub.adaptors.velocity;
 
 import java.util.Arrays;
 
-import com.google.common.eventbus.Subscribe;
+import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
@@ -54,13 +54,13 @@ public class VelocityAdaptor implements IAdaptor{
     @Override
     public void onUserChat(MessageEvent event) {
         Arrays.stream(event.content.split("\n")).forEach(msg -> {
-            Component component = Component.text(config.getMinecraftChatMessage(event.server, event.user, msg));
-            // check complete takeover mode
-            if (config.isCompleteTakeoverMode()) {
-                sendMessage(component);
-            } else {
+            Component component = Component.text(config.getMinecraftChatMessage(event.getServerName(), event.user, msg));
+            // check complete takeover mode for message from velocity
+            if(event.platform == Platform.VELOCITY && !config.isCompleteTakeoverMode()) {
                 sendMessage(component, event.server);
+                return;
             }
+            sendMessage(component);
         });  
     }
 

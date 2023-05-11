@@ -31,14 +31,13 @@ public class KookAdaptor implements IAdaptor {
 
     @Override
     public void onUserChat(MessageEvent event) {
-        String server = event.platform == Platform.VELOCITY ? event.server : event.platform.name();
-        sendMessage(config.getKookChatMessage(server, event.user, event.content));
+        sendMessage(config.getKookChatMessage(event.getServerName(), event.user, event.content));
     }
 
     @Override
     public void onJoinServer(ServerChangeEvent event) {
         sendMessage(config.getKookJoinMessage(
-            event.server, 
+            event.server,
             event.player.getUsername()
         ));
     }

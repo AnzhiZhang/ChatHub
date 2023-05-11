@@ -14,4 +14,11 @@ public class MessageEvent {
         this.user = user;
         this.content = content;
     }
+
+    public String getServerName(){
+        if (platform == Platform.VELOCITY){
+            return server;
+        }
+        return platform.getName();
+    }
 }
