@@ -29,7 +29,7 @@ public class VelocityComponent {
     public VelocityComponent replaceServer(String field, String server, String serverText, Boolean clickable) {
         Component serverComponent = Component.text(serverText);
         if (clickable) 
-            serverComponent.clickEvent(ClickEvent.runCommand("/server " + server));
+            serverComponent = serverComponent.clickEvent(ClickEvent.runCommand("/server " + server));
         return replaceComponent(field, serverComponent);
     }
 
@@ -40,7 +40,7 @@ public class VelocityComponent {
     public VelocityComponent replacePlayer(String field, String player, Boolean clickable) {
         Component playerComponent = Component.text(player);
         if(clickable)
-            playerComponent.clickEvent(ClickEvent.suggestCommand("/chathub msg " + player + " "));
+            playerComponent = playerComponent.clickEvent(ClickEvent.suggestCommand("/chathub msg " + player + " "));
         return replaceComponent(field, playerComponent);
     }
 
