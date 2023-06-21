@@ -37,6 +37,16 @@ public class VelocityComponent {
         return replaceServer(field, server, serverText, true);
     }
 
+    public VelocityComponent replacePlayer(String field, String player, Boolean clickable) {
+        Component playerComponent = Component.text(player);
+        if(clickable)
+            playerComponent.clickEvent(ClickEvent.suggestCommand("/chathub msg " + player + " "));
+        return replaceComponent(field, playerComponent);
+    }
+
+    public VelocityComponent replacePlayer(String field, String player) {
+        return replacePlayer(field, player, true);
+    }
     public Component asComponent() {
         return component;
     }

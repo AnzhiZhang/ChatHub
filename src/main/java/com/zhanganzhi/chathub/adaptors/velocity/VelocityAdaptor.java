@@ -60,7 +60,7 @@ public class VelocityAdaptor implements IAdaptor {
             Component component = new VelocityComponent(config.getMinecraftChatTamplate())
                 .replaceServer("server", server, config.getServername(server), isClickable)
                 .replaceServer("plainServer", server, config.getPlainServername(server), isClickable)
-                .replaceString("name", user)
+                .replacePlayer("name", user, isClickable)
                 .replaceString("message", msg)
                 .asComponent();
             // check complete takeover mode for message from velocity
@@ -78,7 +78,7 @@ public class VelocityAdaptor implements IAdaptor {
         Component component = new VelocityComponent(config.getMinecraftJoinTamplate())
             .replaceServer("server", server, config.getServername(server))
             .replaceServer("plainServer", server, config.getPlainServername(server))
-            .replaceString("name", event.player.getUsername())
+            .replacePlayer("name", event.player.getUsername())
             .asComponent();
         sendMessage(component);
     }
@@ -86,7 +86,7 @@ public class VelocityAdaptor implements IAdaptor {
     @Override
     public void onLeaveServer(ServerChangeEvent event) {
         Component component = new VelocityComponent(config.getMinecraftLeaveTamplate())
-            .replaceString("name", event.player.getUsername())
+            .replacePlayer("name", event.player.getUsername())
             .asComponent();
         sendMessage(component);
     }
@@ -100,7 +100,7 @@ public class VelocityAdaptor implements IAdaptor {
             .replaceServer("plainServerFrom", serverFrom, config.getPlainServername(serverFrom))
             .replaceServer("serverTo", serverTo, config.getServername(serverTo))
             .replaceServer("plainServerTo", serverTo, config.getPlainServername(serverTo))
-            .replaceString("name", event.player.getUsername())
+            .replacePlayer("name", event.player.getUsername())
             .asComponent();
         sendMessage(component);
     }
