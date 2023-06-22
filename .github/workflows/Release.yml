@@ -23,21 +23,28 @@ jobs:
         run: mvn --batch-mode --update-snapshots package
 
       - name: Rename artifact
-        run: mv target/*-jar-with-dependencies.jar ChatHub.jar
+        run: mv target/*-jar-with-dependencies.jar ChatHub-${{ github.ref_name }}.jar
       
-      - name: Upload binaries
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ChatHub.jar
-          asset_name: ChatHub-${{ github.ref_name }}.jar
-          overwrite: true
-
       - uses: actions/setup-node@v3
         with:
           node-version: 16.x
 
       - name: Generate changelog
-        run: npx changelogithub
+        run: npx changelogithub --output CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Publish
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          # modrinth-id:  # Need confirm
+          # modrinth-token: $ {{ secrets.MODRINTH_TOKEN }} # need setup
+
+          # curseforge-id: 825508
+          # curseforge-token: $ {{ secrets.CURSEFORGE_TOKEN }} # need setup
+
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+          files: |
+            ChatHub-v*.jar
+          changelog-file: CHANGELOG.md
