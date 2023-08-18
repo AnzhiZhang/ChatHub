@@ -4,7 +4,8 @@
 [简体中文](readme-zh.md)
 
 [![License](https://shields.io/github/license/AnzhiZhang/ChatHub?label=License)](https://github.com/AnzhiZhang/ChatHub/blob/master/LICENSE)
-[![CurseForge](https://cf.way2muchnoise.eu/short_825508_downloads.svg)](https://www.curseforge.com/minecraft/bukkit-plugins/chathub)
+[![Modrith](https://img.shields.io/modrinth/v/H3USaks7?logo=modrinth&label=Modrinth&color=%2300AF5C)](https://modrinth.com/plugin/chathub)
+[![CurseForge](https://img.shields.io/curseforge/v/825508?logo=curseforge&label=CurseForge&color=%23F16436)](https://www.curseforge.com/minecraft/bukkit-plugins/chathub)
 [![Release](https://shields.io/github/v/release/AnzhiZhang/ChatHub?display_name=tag&include_prereleases&label=Release)](https://github.com/AnzhiZhang/ChatHub/releases/latest)
 [![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg)](https://gitmoji.dev/)
 
