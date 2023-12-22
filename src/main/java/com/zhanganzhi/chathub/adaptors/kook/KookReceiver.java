@@ -135,14 +135,13 @@ public class KookReceiver extends WebSocketListener {
         try {
             handleMessage(text);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error occurred while handling Kook message: " + text, e);
         }
     }
 
     @Override
     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, Response response) {
-        t.printStackTrace();
-        logger.error("Kook websocket session disconnected! Reconnecting...");
+        logger.error("Kook websocket session disconnected! Reconnecting...", t);
         restart();
     }
 }

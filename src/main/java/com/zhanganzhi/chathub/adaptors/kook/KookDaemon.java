@@ -34,8 +34,7 @@ public class KookDaemon extends Thread {
 
             try {
                 Thread.sleep(config.getKookDaemonInterval() * 1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (InterruptedException ignored) {
             }
         }
     }
