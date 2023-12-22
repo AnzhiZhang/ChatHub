@@ -41,7 +41,7 @@ Reload Kook connection, only can execute in console.
 
 ### servername
 
-Servers' name, key should corresponding to Velocity's server names. Note that `kook` and `qq` are special names, not MC server.
+Servers' name, key should corresponding to Velocity's server names. Note that `discord`, `kook`, and `qq` are special names, not MC server.
 
 ### minecraft
 
@@ -114,6 +114,64 @@ Default: `当前没有玩家在线`
 
 Message for `list` command when player list is empty.
 
+### discord
+
+This function is double way forwarding, which is Minecraft chat will send to Discord channel, and channel message will send to Minecraft. Use `/list` command can show online player list.
+
+#### enable
+
+Default: `false`
+
+Enable [Discord](https://discord.com/) forwarding.
+
+#### token
+
+Discord bot token.
+
+#### channelId
+
+Channel ID.
+
+### discord.message
+
+Discord message format sages. Placeholders are defined same as Miencraft, all server name will auto translate to plain format, you do not have to use plain placeholders.
+
+#### chat
+
+Default: `[{server}] <{name}>: {message}`
+
+Chat.
+
+#### join
+
+Default: `[+] [{server}] {name}`
+
+Message when player joined the server.
+
+#### leave
+
+Default: `[-] {name}`
+
+Message when player left the server.
+
+#### switch
+
+Default: `<{name}>: [{serverFrom}] ➟ [{serverTo}]`
+
+Message when player switched server.
+
+#### list
+
+Default: `- [{server}] 当前共有{count}名玩家在线: {playerList}`
+
+Message for `/list` command.
+
+#### listEmpty
+
+Default: `当前没有玩家在线`
+
+Message for `/list` command when player list is empty.
+
 ### kook
 
 This function is double way forwarding, which is Minecraft chat will send to Kook channel, and channel message will send to Minecraft. Use `/list` in Kook channel can show online player list.
@@ -132,7 +190,7 @@ Kook bot token.
 
 Channel ID.
 
-### Kook.daemon
+### kook.daemon
 
 Daemon thread configuration for kook bot, to make sure bot is online by requeseting Kook API intervally.
 
@@ -194,13 +252,9 @@ Default: `当前没有玩家在线`
 
 Message for `/list` command when player list is empty.
 
-### discord
-
-> If you have this need, please open an issue.
-
 ### qq
 
-> If you have this need, please open an issue.
+> In case if you need this feature, PR is welcomed.
 
 #### enable
 

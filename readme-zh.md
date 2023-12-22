@@ -40,7 +40,7 @@
 
 ### servername
 
-配置各服务器名称，应当与 Velocity 的名称对应，请注意 `kook` 与 `qq` 为特殊名称，并非 MC 服务器。
+配置各服务器名称，应当与 Velocity 的名称对应，请注意 `discord`、`kook`、`qq` 为特殊名称，并非 MC 服务器。
 
 ### minecraft
 
@@ -113,6 +113,64 @@ MC 消息的格式化文本，占位符含义请参考下表：
 
 使用 `list` 指令且玩家列表为空时显示的消息。
 
+### discord
+
+该功能为双向转发，即 MC 内消息会发送到 Discord 对应频道，频道内消息将被转发到 MC 内。使用 `/list` 指令即可查看在线玩家列表。
+
+#### enable
+
+默认值：`false`
+
+是否启用 [Discord](https://discord.com/) 转发。
+
+#### token
+
+Discord 机器人 token。
+
+#### channelId
+
+目标服务器频道 ID。
+
+### discord.message
+
+Discord 消息的格式化文本。占位符与上文同理，所有的服务器名称会自动转为 plain 格式，您无需使用 plain 格式的占位符。
+
+#### chat
+
+默认值：`[{server}] <{name}>: {message}`
+
+聊天消息。
+
+#### join
+
+默认值：`[+] [{server}] {name}`
+
+玩家加入服务器消息。
+
+#### leave
+
+默认值：`[-] {name}`
+
+玩家离开服务器消息。
+
+#### switch
+
+默认值：`<{name}>: [{serverFrom}] ➟ [{serverTo}]`
+
+玩家切换服务器消息。
+
+#### list
+
+默认值：`- [{server}] 当前共有{count}名玩家在线: {playerList}`
+
+`/list` 指令显示的消息。
+
+#### listEmpty
+
+默认值：`当前没有玩家在线`
+
+使用 `/list` 指令且玩家列表为空时显示的消息。
+
 ### kook
 
 该功能为双向转发，即 MC 内消息会发送到 Kook 对应频道，频道内消息将被转发到 MC 内。在频道内发送 `/list` 即可查看在线玩家列表。
@@ -131,7 +189,7 @@ Kook 机器人 token。
 
 目标服务器频道 ID。
 
-### Kook.daemon
+### kook.daemon
 
 Kook 机器人的守护进程配置，通过定时访问Kook的接口以确保机器人在线。
 
@@ -193,13 +251,9 @@ Kook 消息的格式化文本。占位符与上文同理，所有的服务器名
 
 使用 `/list` 指令且玩家列表为空时显示的消息。
 
-### discord
-
-> 若有此需求，请开启一个 Issue。
-
 ### qq
 
-> 我认为，2023 年了，不会还有人愿意往 QQ 转发消息炸群吧。如有需求请发起 issue，以统计需求情况并酌情考虑功能实现。欢迎 PR。
+> 如需要此功能，欢迎 PR。
 
 #### enable
 
