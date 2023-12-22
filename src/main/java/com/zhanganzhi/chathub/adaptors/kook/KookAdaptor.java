@@ -63,7 +63,7 @@ public class KookAdaptor implements IAdaptor {
     public void sendListMessage(String source) {
         StringBuilder stringBuilder = new StringBuilder();
         for (RegisteredServer registeredServer : chatHub.getProxyServer().getAllServers()) {
-            if (registeredServer.getPlayersConnected().size() > 0) {
+            if (!registeredServer.getPlayersConnected().isEmpty()) {
                 stringBuilder.append(config.getKookListMessage(
                         registeredServer.getServerInfo().getName(),
                         registeredServer.getPlayersConnected().size(),
