@@ -1,6 +1,7 @@
 package com.zhanganzhi.chathub.entity;
 
 public enum Platform {
+    DISCORD("discord"),
     KOOK("kook"),
     VELOCITY("velocity");
 

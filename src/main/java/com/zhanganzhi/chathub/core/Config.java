@@ -95,6 +95,59 @@ public class Config {
         return configToml.getString("minecraft.message.listEmpty");
     }
 
+    public boolean isDiscordEnabled() {
+        return configToml.getBoolean("discord.enable");
+    }
+
+    public String getDiscordToken() {
+        return configToml.getString("discord.token");
+    }
+
+    public String getDiscordChannelId() {
+        return configToml.getString("discord.channelId");
+    }
+
+    public String getDiscordChatMessage(String server, String name, String message) {
+        return configToml
+                .getString("discord.message.chat")
+                .replace("{server}", getPlainServername(server))
+                .replace("{name}", name)
+                .replace("{message}", message);
+    }
+
+    public String getDiscordJoinMessage(String server, String name) {
+        return configToml
+                .getString("discord.message.join")
+                .replace("{server}", getPlainServername(server))
+                .replace("{name}", name);
+    }
+
+    public String getDiscordLeaveMessage(String name) {
+        return configToml
+                .getString("discord.message.leave")
+                .replace("{name}", name);
+    }
+
+    public String getDiscordSwitchMessage(String name, String serverFrom, String serverTo) {
+        return configToml
+                .getString("discord.message.switch")
+                .replace("{name}", name)
+                .replace("{serverFrom}", getPlainServername(serverFrom))
+                .replace("{serverTo}", getPlainServername(serverTo));
+    }
+
+    public String getDiscordListMessage(String server, int count, String[] playerList) {
+        return configToml
+                .getString("discord.message.list")
+                .replace("{server}", getPlainServername(server))
+                .replace("{count}", String.valueOf(count))
+                .replace("{playerList}", String.join(", ", playerList));
+    }
+
+    public String getDiscordListEmptyMessage() {
+        return configToml.getString("discord.message.listEmpty");
+    }
+
     public boolean isKookEnabled() {
         return tempIsKookEnabled;
     }

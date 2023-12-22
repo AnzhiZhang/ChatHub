@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.adaptors.IAdaptor;
+import com.zhanganzhi.chathub.adaptors.discord.DiscordAdaptor;
 import com.zhanganzhi.chathub.adaptors.kook.KookAdaptor;
 import com.zhanganzhi.chathub.adaptors.velocity.VelocityAdaptor;
 import com.zhanganzhi.chathub.entity.Platform;
@@ -15,6 +16,7 @@ public class EventHub {
 
     public EventHub(ChatHub chatHub) {
         adaptors = List.of(
+                new DiscordAdaptor(chatHub),
                 new KookAdaptor(chatHub, this),
                 new VelocityAdaptor(chatHub, this)
         );
