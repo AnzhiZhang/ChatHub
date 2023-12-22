@@ -37,12 +37,22 @@ jobs:
       - name: Publish
         uses: Kir-Antipov/mc-publish@v3.3
         with:
+          version: ChatHub-${{ github.ref_name }}
+
           modrinth-id:  H3USaks7
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
           curseforge-id: 825508
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
           files: |
             ChatHub-v*.jar
           changelog-file: CHANGELOG.md
+
+          loaders: |
+            velocity
+          game-versions: |
+            [1.12,)
+          game-version-filter: releases
