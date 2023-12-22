@@ -60,7 +60,8 @@ public class ChatHub {
                 new Command(this)
         );
 
-        eventHub.start();
+        // init event hub
+        new Thread(() -> eventHub.start()).start();
     }
 
     @Subscribe
