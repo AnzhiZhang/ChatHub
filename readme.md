@@ -118,6 +118,12 @@ Message for `list` command when player list is empty.
 
 This function is double way forwarding, which is Minecraft chat will send to Discord channel, and channel message will send to Minecraft. Use `/list` command can show online player list.
 
+Discord bot requires the following permissions:
+
+- Read Messages/View Channels
+- Send Messages
+- Use Slash Commands
+
 #### enable
 
 Default: `false`

@@ -117,6 +117,12 @@ MC 消息的格式化文本，占位符含义请参考下表：
 
 该功能为双向转发，即 MC 内消息会发送到 Discord 对应频道，频道内消息将被转发到 MC 内。使用 `/list` 指令即可查看在线玩家列表。
 
+Discord 机器人需要以下权限：
+
+- Read Messages/View Channels
+- Send Messages
+- Use Slash Commands
+
 #### enable
 
 默认值：`false`
