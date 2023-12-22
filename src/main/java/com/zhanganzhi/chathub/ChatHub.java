@@ -66,6 +66,10 @@ public class ChatHub {
 
     @Subscribe
     public void onProxyShutdown(ProxyShutdownEvent event) {
-        eventHub.shutdown();
+        try {
+            eventHub.shutdown();
+        } catch (Exception e) {
+            logger.error("ChatHub shutdown error", e);
+        }
     }
 }
