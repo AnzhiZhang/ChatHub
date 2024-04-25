@@ -1,6 +1,6 @@
-package com.zhanganzhi.chathub.event;
+package com.zhanganzhi.chathub.core.events;
 
-import com.zhanganzhi.chathub.entity.Platform;
+import com.zhanganzhi.chathub.platforms.Platform;
 
 public record MessageEvent(
         Platform platform,

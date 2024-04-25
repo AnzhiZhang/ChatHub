@@ -1,8 +1,8 @@
-package com.zhanganzhi.chathub.adaptors;
+package com.zhanganzhi.chathub.core.adaptor;
 
-import com.zhanganzhi.chathub.entity.Platform;
-import com.zhanganzhi.chathub.event.MessageEvent;
-import com.zhanganzhi.chathub.event.ServerChangeEvent;
+import com.zhanganzhi.chathub.core.events.MessageEvent;
+import com.zhanganzhi.chathub.core.events.ServerChangeEvent;
+import com.zhanganzhi.chathub.platforms.Platform;
 
 public interface IAdaptor {
     Platform getPlatform();

@@ -1,4 +1,4 @@
-package com.zhanganzhi.chathub.adaptors.kook;
+package com.zhanganzhi.chathub.platforms.kook;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
@@ -7,8 +7,8 @@ import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.Config;
 import com.zhanganzhi.chathub.core.EventHub;
-import com.zhanganzhi.chathub.entity.Platform;
-import com.zhanganzhi.chathub.event.MessageEvent;
+import com.zhanganzhi.chathub.core.events.MessageEvent;
+import com.zhanganzhi.chathub.platforms.Platform;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;

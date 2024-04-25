@@ -1,12 +1,12 @@
-package com.zhanganzhi.chathub.adaptors.discord;
+package com.zhanganzhi.chathub.platforms.discord;
 
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.Config;
 import com.zhanganzhi.chathub.core.EventHub;
-import com.zhanganzhi.chathub.entity.Platform;
-import com.zhanganzhi.chathub.event.MessageEvent;
+import com.zhanganzhi.chathub.core.events.MessageEvent;
+import com.zhanganzhi.chathub.platforms.Platform;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

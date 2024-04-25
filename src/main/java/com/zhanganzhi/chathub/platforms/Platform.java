@@ -1,4 +1,4 @@
-package com.zhanganzhi.chathub.entity;
+package com.zhanganzhi.chathub.platforms;
 
 public enum Platform {
     DISCORD("discord"),

@@ -1,4 +1,4 @@
-package com.zhanganzhi.chathub.adaptors.velocity;
+package com.zhanganzhi.chathub.platforms.velocity;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;

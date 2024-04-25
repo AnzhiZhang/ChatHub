@@ -1,10 +1,10 @@
-package com.zhanganzhi.chathub.adaptors.kook;
+package com.zhanganzhi.chathub.platforms.kook;
 
 import com.zhanganzhi.chathub.ChatHub;
-import com.zhanganzhi.chathub.adaptors.AbstractAdaptor;
-import com.zhanganzhi.chathub.entity.Platform;
-import com.zhanganzhi.chathub.event.MessageEvent;
-import com.zhanganzhi.chathub.event.ServerChangeEvent;
+import com.zhanganzhi.chathub.core.adaptor.AbstractAdaptor;
+import com.zhanganzhi.chathub.core.events.MessageEvent;
+import com.zhanganzhi.chathub.core.events.ServerChangeEvent;
+import com.zhanganzhi.chathub.platforms.Platform;
 
 public class KookAdaptor extends AbstractAdaptor {
     private final KookAPI kookAPI = KookAPI.getInstance();

@@ -1,4 +1,4 @@
-package com.zhanganzhi.chathub.command;
+package com.zhanganzhi.chathub.platforms.velocity;
 
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
@@ -7,9 +7,8 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.zhanganzhi.chathub.ChatHub;
-import com.zhanganzhi.chathub.adaptors.velocity.VelocityComponent;
 import com.zhanganzhi.chathub.core.Config;
-import com.zhanganzhi.chathub.entity.Platform;
+import com.zhanganzhi.chathub.platforms.Platform;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -19,12 +18,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class Command implements SimpleCommand {
+public final class VelocityCommand implements SimpleCommand {
     private final ChatHub chatHub;
     private final ProxyServer proxyServer;
     private final Config config = Config.getInstance();
 
-    public Command(ChatHub chatHub) {
+    public VelocityCommand(ChatHub chatHub) {
         this.chatHub = chatHub;
         proxyServer = chatHub.getProxyServer();
     }

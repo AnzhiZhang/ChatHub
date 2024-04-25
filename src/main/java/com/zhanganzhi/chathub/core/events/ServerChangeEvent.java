@@ -1,4 +1,4 @@
-package com.zhanganzhi.chathub.event;
+package com.zhanganzhi.chathub.core.events;
 
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;

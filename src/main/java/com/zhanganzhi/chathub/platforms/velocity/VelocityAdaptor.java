@@ -1,4 +1,4 @@
-package com.zhanganzhi.chathub.adaptors.velocity;
+package com.zhanganzhi.chathub.platforms.velocity;
 
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
@@ -8,11 +8,11 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.zhanganzhi.chathub.ChatHub;
-import com.zhanganzhi.chathub.adaptors.AbstractAdaptor;
 import com.zhanganzhi.chathub.core.EventHub;
-import com.zhanganzhi.chathub.entity.Platform;
-import com.zhanganzhi.chathub.event.MessageEvent;
-import com.zhanganzhi.chathub.event.ServerChangeEvent;
+import com.zhanganzhi.chathub.core.adaptor.AbstractAdaptor;
+import com.zhanganzhi.chathub.core.events.MessageEvent;
+import com.zhanganzhi.chathub.core.events.ServerChangeEvent;
+import com.zhanganzhi.chathub.platforms.Platform;
 import net.kyori.adventure.text.Component;
 
 import java.util.Arrays;

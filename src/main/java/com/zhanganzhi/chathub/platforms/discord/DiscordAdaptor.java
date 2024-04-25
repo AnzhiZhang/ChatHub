@@ -1,10 +1,10 @@
-package com.zhanganzhi.chathub.adaptors.discord;
+package com.zhanganzhi.chathub.platforms.discord;
 
 import com.zhanganzhi.chathub.ChatHub;
-import com.zhanganzhi.chathub.adaptors.AbstractAdaptor;
-import com.zhanganzhi.chathub.entity.Platform;
-import com.zhanganzhi.chathub.event.MessageEvent;
-import com.zhanganzhi.chathub.event.ServerChangeEvent;
+import com.zhanganzhi.chathub.core.adaptor.AbstractAdaptor;
+import com.zhanganzhi.chathub.core.events.MessageEvent;
+import com.zhanganzhi.chathub.core.events.ServerChangeEvent;
+import com.zhanganzhi.chathub.platforms.Platform;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;

@@ -1,4 +1,4 @@
-package com.zhanganzhi.chathub.adaptors.kook;
+package com.zhanganzhi.chathub.platforms.kook;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;

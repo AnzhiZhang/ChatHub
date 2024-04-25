@@ -1,13 +1,13 @@
 package com.zhanganzhi.chathub.core;
 
 import com.zhanganzhi.chathub.ChatHub;
-import com.zhanganzhi.chathub.adaptors.IAdaptor;
-import com.zhanganzhi.chathub.adaptors.discord.DiscordAdaptor;
-import com.zhanganzhi.chathub.adaptors.kook.KookAdaptor;
-import com.zhanganzhi.chathub.adaptors.velocity.VelocityAdaptor;
-import com.zhanganzhi.chathub.entity.Platform;
-import com.zhanganzhi.chathub.event.MessageEvent;
-import com.zhanganzhi.chathub.event.ServerChangeEvent;
+import com.zhanganzhi.chathub.core.adaptor.IAdaptor;
+import com.zhanganzhi.chathub.core.events.MessageEvent;
+import com.zhanganzhi.chathub.core.events.ServerChangeEvent;
+import com.zhanganzhi.chathub.platforms.Platform;
+import com.zhanganzhi.chathub.platforms.discord.DiscordAdaptor;
+import com.zhanganzhi.chathub.platforms.kook.KookAdaptor;
+import com.zhanganzhi.chathub.platforms.velocity.VelocityAdaptor;
 
 import java.util.List;
 

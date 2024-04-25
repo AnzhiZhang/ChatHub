@@ -1,8 +1,8 @@
-package com.zhanganzhi.chathub.adaptors;
+package com.zhanganzhi.chathub.core.adaptor;
 
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.Config;
-import com.zhanganzhi.chathub.entity.Platform;
+import com.zhanganzhi.chathub.platforms.Platform;
 
 public abstract class AbstractAdaptor implements IAdaptor {
     protected final Config config = Config.getInstance();
