@@ -1,8 +1,7 @@
 package com.zhanganzhi.chathub.adaptors.kook;
 
-import org.slf4j.Logger;
-
 import com.zhanganzhi.chathub.core.Config;
+import org.slf4j.Logger;
 
 public class KookDaemon extends Thread {
     private final KookAPI kookAPI = KookAPI.getInstance();

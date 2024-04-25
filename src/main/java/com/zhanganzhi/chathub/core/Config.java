@@ -1,12 +1,12 @@
 package com.zhanganzhi.chathub.core;
 
+import com.moandjiezana.toml.Toml;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
-
-import com.moandjiezana.toml.Toml;
 
 public class Config {
     private static final Config config = new Config();

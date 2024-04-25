@@ -2,15 +2,14 @@ package com.zhanganzhi.chathub.adaptors.discord;
 
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.Config;
 import com.zhanganzhi.chathub.core.EventHub;
 import com.zhanganzhi.chathub.entity.Platform;
 import com.zhanganzhi.chathub.event.MessageEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class DiscordReceiver extends ListenerAdapter {
     private static final Platform PLATFORM = Platform.DISCORD;

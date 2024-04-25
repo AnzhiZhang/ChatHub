@@ -1,8 +1,8 @@
 package com.zhanganzhi.chathub.event;
 
-import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
+import com.velocitypowered.api.proxy.Player;
 
 public class ServerChangeEvent {
     public enum SwitchType {

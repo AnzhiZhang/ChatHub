@@ -1,7 +1,5 @@
 package com.zhanganzhi.chathub.core;
 
-import java.util.List;
-
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.adaptors.IAdaptor;
 import com.zhanganzhi.chathub.adaptors.discord.DiscordAdaptor;
@@ -10,6 +8,8 @@ import com.zhanganzhi.chathub.adaptors.velocity.VelocityAdaptor;
 import com.zhanganzhi.chathub.entity.Platform;
 import com.zhanganzhi.chathub.event.MessageEvent;
 import com.zhanganzhi.chathub.event.ServerChangeEvent;
+
+import java.util.List;
 
 public class EventHub {
     private final List<IAdaptor> adaptors;
