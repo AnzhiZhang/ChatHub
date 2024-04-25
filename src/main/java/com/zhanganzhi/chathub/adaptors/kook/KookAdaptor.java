@@ -1,84 +1,20 @@
 package com.zhanganzhi.chathub.adaptors.kook;
 
-import com.velocitypowered.api.proxy.Player;
-import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.zhanganzhi.chathub.ChatHub;
-import com.zhanganzhi.chathub.adaptors.IAdaptor;
-import com.zhanganzhi.chathub.core.Config;
-import com.zhanganzhi.chathub.core.EventHub;
+import com.zhanganzhi.chathub.adaptors.AbstractAdaptor;
 import com.zhanganzhi.chathub.entity.Platform;
 import com.zhanganzhi.chathub.event.MessageEvent;
 import com.zhanganzhi.chathub.event.ServerChangeEvent;
 
-public class KookAdaptor implements IAdaptor {
-    private final Config config = Config.getInstance();
+public class KookAdaptor extends AbstractAdaptor {
     private final KookAPI kookAPI = KookAPI.getInstance();
-    private final ChatHub chatHub;
-    private final static Platform platform = Platform.KOOK;
     private final KookReceiver kookReceiver;
     private final KookDaemon kookDaemon;
 
-    public KookAdaptor(ChatHub chatHub, EventHub eventHub) {
-        this.chatHub = chatHub;
-        this.kookReceiver = new KookReceiver(chatHub.getLogger(), eventHub);
+    public KookAdaptor(ChatHub chatHub) {
+        super(chatHub, Platform.KOOK);
+        this.kookReceiver = new KookReceiver(chatHub);
         this.kookDaemon = new KookDaemon(chatHub.getLogger(), config, kookReceiver);
-    }
-
-    @Override
-    public Platform getPlatform() {
-        return platform;
-    }
-
-    @Override
-    public void onUserChat(MessageEvent event) {
-        sendMessage(config.getKookChatMessage(event.getServerName(), event.user(), event.content()));
-    }
-
-    @Override
-    public void onJoinServer(ServerChangeEvent event) {
-        sendMessage(config.getKookJoinMessage(
-                event.server,
-                event.player.getUsername()
-        ));
-    }
-
-    @Override
-    public void onLeaveServer(ServerChangeEvent event) {
-        sendMessage(config.getKookLeaveMessage(
-                event.player.getUsername()
-        ));
-    }
-
-    @Override
-    public void onSwitchServer(ServerChangeEvent event) {
-        sendMessage(config.getKookSwitchMessage(
-                event.player.getUsername(),
-                event.serverPrev,
-                event.server
-        ));
-    }
-
-    @Override
-    public void sendListMessage(String source) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (RegisteredServer registeredServer : chatHub.getProxyServer().getAllServers()) {
-            if (!registeredServer.getPlayersConnected().isEmpty()) {
-                stringBuilder.append(config.getKookListMessage(
-                        registeredServer.getServerInfo().getName(),
-                        registeredServer.getPlayersConnected().size(),
-                        registeredServer.getPlayersConnected().stream().map(Player::getUsername).toArray(String[]::new)
-                ));
-                stringBuilder.append("\n");
-            }
-        }
-        String listMessage = stringBuilder.isEmpty() ? config.getKookListEmptyMessage() : stringBuilder.toString();
-        sendMessage(listMessage);
-    }
-
-    void sendMessage(String message) {
-        if (config.isKookEnabled()) {
-            new Thread(() -> kookAPI.sendMessage(message)).start();
-        }
     }
 
     @Override
@@ -105,5 +41,41 @@ public class KookAdaptor implements IAdaptor {
         if (config.isKookEnabled()) {
             kookReceiver.restart();
         }
+    }
+
+    @Override
+    public void sendPublicMessage(String message) {
+        if (config.isKookEnabled()) {
+            new Thread(() -> kookAPI.sendMessage(message)).start();
+        }
+    }
+
+    @Override
+    public void onUserChat(MessageEvent event) {
+        sendPublicMessage(config.getKookChatMessage(event.getServerName(), event.user(), event.content()));
+    }
+
+    @Override
+    public void onJoinServer(ServerChangeEvent event) {
+        sendPublicMessage(config.getKookJoinMessage(
+                event.server,
+                event.player.getUsername()
+        ));
+    }
+
+    @Override
+    public void onLeaveServer(ServerChangeEvent event) {
+        sendPublicMessage(config.getKookLeaveMessage(
+                event.player.getUsername()
+        ));
+    }
+
+    @Override
+    public void onSwitchServer(ServerChangeEvent event) {
+        sendPublicMessage(config.getKookSwitchMessage(
+                event.player.getUsername(),
+                event.serverPrev,
+                event.server
+        ));
     }
 }

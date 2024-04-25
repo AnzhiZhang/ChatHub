@@ -5,8 +5,9 @@ import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
+import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.zhanganzhi.chathub.ChatHub;
-import com.zhanganzhi.chathub.adaptors.velocity.VelocityAdaptor;
+import com.zhanganzhi.chathub.adaptors.velocity.VelocityComponent;
 import com.zhanganzhi.chathub.core.Config;
 import com.zhanganzhi.chathub.entity.Platform;
 import net.kyori.adventure.text.Component;
@@ -19,23 +20,48 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class Command implements SimpleCommand {
-    ChatHub chatHub;
-    ProxyServer proxyServer;
+    private final ChatHub chatHub;
+    private final ProxyServer proxyServer;
+    private final Config config = Config.getInstance();
 
     public Command(ChatHub chatHub) {
         this.chatHub = chatHub;
         proxyServer = chatHub.getProxyServer();
     }
 
+    private Component getListMessageComponent() {
+        if (proxyServer.getPlayerCount() == 0) {
+            return Component.text(config.getMinecraftListEmptyMessage());
+        }
+
+        Component result = Component.empty();
+        for (RegisteredServer registeredServer : proxyServer.getAllServers()) {
+            int playerCount = registeredServer.getPlayersConnected().size();
+            if (playerCount > 0) {
+                result = result.append(Component.text("\n"));
+                String template = config.getMinecraftListTamplate();
+                String server = registeredServer.getServerInfo().getName();
+                String[] players = registeredServer.getPlayersConnected()
+                        .stream().map(Player::getUsername).toArray(String[]::new);
+                Component line = new VelocityComponent(template)
+                        .replaceServer("server", server, config.getServername(server))
+                        .replaceServer("plainServer", server, config.getPlainServername(server))
+                        .replaceString("count", String.valueOf(playerCount))
+                        .replaceString("playerList", String.join(", ", players))
+                        .asComponent();
+                result = result.append(line);
+            }
+        }
+        return result;
+    }
+
     @Override
     public void execute(final Invocation invocation) {
         CommandSource source = invocation.source();
         String[] args = invocation.arguments();
-        Config config = Config.getInstance();
 
         if (args.length == 1 && args[0].equals("list")) {
-            VelocityAdaptor adaptor = (VelocityAdaptor) chatHub.getEventHub().getAdaptor(Platform.VELOCITY);
-            source.sendMessage(adaptor.getListComponent());
+            source.sendMessage(getListMessageComponent());
         } else if (args.length == 1 && args[0].equals("reloadKook")) {
             if (source instanceof ConsoleCommandSource) {
                 if (Config.getInstance().isKookEnabled()) {

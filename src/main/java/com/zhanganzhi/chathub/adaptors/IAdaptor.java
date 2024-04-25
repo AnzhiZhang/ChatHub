@@ -7,6 +7,14 @@ import com.zhanganzhi.chathub.event.ServerChangeEvent;
 public interface IAdaptor {
     Platform getPlatform();
 
+    void start();
+
+    void stop();
+
+    void restart();
+
+    void sendPublicMessage(String message);
+
     void onUserChat(MessageEvent event);
 
     void onJoinServer(ServerChangeEvent event);
@@ -14,12 +22,4 @@ public interface IAdaptor {
     void onLeaveServer(ServerChangeEvent event);
 
     void onSwitchServer(ServerChangeEvent event);
-
-    void sendListMessage(String source);
-
-    void start();
-
-    void stop();
-
-    void restart();
 }

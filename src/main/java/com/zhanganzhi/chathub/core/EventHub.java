@@ -17,8 +17,8 @@ public class EventHub {
     public EventHub(ChatHub chatHub) {
         adaptors = List.of(
                 new DiscordAdaptor(chatHub),
-                new KookAdaptor(chatHub, this),
-                new VelocityAdaptor(chatHub, this)
+                new KookAdaptor(chatHub),
+                new VelocityAdaptor(chatHub)
         );
     }
 

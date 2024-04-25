@@ -1,8 +1,7 @@
 package com.zhanganzhi.chathub.adaptors.discord;
 
 import com.zhanganzhi.chathub.ChatHub;
-import com.zhanganzhi.chathub.adaptors.IAdaptor;
-import com.zhanganzhi.chathub.core.Config;
+import com.zhanganzhi.chathub.adaptors.AbstractAdaptor;
 import com.zhanganzhi.chathub.entity.Platform;
 import com.zhanganzhi.chathub.event.MessageEvent;
 import com.zhanganzhi.chathub.event.ServerChangeEvent;
@@ -12,63 +11,12 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
-public class DiscordAdaptor implements IAdaptor {
-    private static final Platform platform = Platform.DISCORD;
-    private final Config config = Config.getInstance();
-    private final ChatHub chatHub;
+public class DiscordAdaptor extends AbstractAdaptor {
     private JDA jda;
     private TextChannel channel;
 
     public DiscordAdaptor(ChatHub chatHub) {
-        this.chatHub = chatHub;
-    }
-
-    @Override
-    public Platform getPlatform() {
-        return platform;
-    }
-
-    @Override
-    public void onUserChat(MessageEvent event) {
-        sendMessage(config.getDiscordChatMessage(
-                event.getServerName(),
-                event.user(),
-                event.content()
-        ));
-    }
-
-    @Override
-    public void onJoinServer(ServerChangeEvent event) {
-        sendMessage(config.getDiscordJoinMessage(
-                event.server,
-                event.player.getUsername()
-        ));
-    }
-
-    @Override
-    public void onLeaveServer(ServerChangeEvent event) {
-        sendMessage(config.getDiscordLeaveMessage(
-                event.player.getUsername()
-        ));
-    }
-
-    @Override
-    public void onSwitchServer(ServerChangeEvent event) {
-        sendMessage(config.getDiscordSwitchMessage(
-                event.player.getUsername(),
-                event.serverPrev,
-                event.server
-        ));
-    }
-
-    @Override
-    public void sendListMessage(String source) {
-    }
-
-    void sendMessage(String message) {
-        if (config.isDiscordEnabled()) {
-            new Thread(() -> channel.sendMessage(message).queue()).start();
-        }
+        super(chatHub, Platform.DISCORD);
     }
 
     @Override
@@ -112,6 +60,42 @@ public class DiscordAdaptor implements IAdaptor {
     }
 
     @Override
-    public void restart() {
+    public void sendPublicMessage(String message) {
+        if (config.isDiscordEnabled()) {
+            new Thread(() -> channel.sendMessage(message).queue()).start();
+        }
+    }
+
+    @Override
+    public void onUserChat(MessageEvent event) {
+        sendPublicMessage(config.getDiscordChatMessage(
+                event.getServerName(),
+                event.user(),
+                event.content()
+        ));
+    }
+
+    @Override
+    public void onJoinServer(ServerChangeEvent event) {
+        sendPublicMessage(config.getDiscordJoinMessage(
+                event.server,
+                event.player.getUsername()
+        ));
+    }
+
+    @Override
+    public void onLeaveServer(ServerChangeEvent event) {
+        sendPublicMessage(config.getDiscordLeaveMessage(
+                event.player.getUsername()
+        ));
+    }
+
+    @Override
+    public void onSwitchServer(ServerChangeEvent event) {
+        sendPublicMessage(config.getDiscordSwitchMessage(
+                event.player.getUsername(),
+                event.serverPrev,
+                event.server
+        ));
     }
 }

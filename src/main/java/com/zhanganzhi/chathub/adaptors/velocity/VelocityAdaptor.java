@@ -8,8 +8,7 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.zhanganzhi.chathub.ChatHub;
-import com.zhanganzhi.chathub.adaptors.IAdaptor;
-import com.zhanganzhi.chathub.core.Config;
+import com.zhanganzhi.chathub.adaptors.AbstractAdaptor;
 import com.zhanganzhi.chathub.core.EventHub;
 import com.zhanganzhi.chathub.entity.Platform;
 import com.zhanganzhi.chathub.event.MessageEvent;
@@ -18,22 +17,14 @@ import net.kyori.adventure.text.Component;
 
 import java.util.Arrays;
 
-public class VelocityAdaptor implements IAdaptor {
-    private static final Platform platform = Platform.VELOCITY;
-    private final ProxyServer proxyServer;
-    private final Config config = Config.getInstance();
+public class VelocityAdaptor extends AbstractAdaptor {
     private final EventHub eventHub;
-    private final ChatHub chatHub;
+    private final ProxyServer proxyServer;
 
-    public VelocityAdaptor(ChatHub chatHub, EventHub eventHub) {
-        this.eventHub = eventHub;
-        this.chatHub = chatHub;
+    public VelocityAdaptor(ChatHub chatHub) {
+        super(chatHub, Platform.VELOCITY);
+        this.eventHub = chatHub.getEventHub();
         proxyServer = chatHub.getProxyServer();
-    }
-
-    @Override
-    public Platform getPlatform() {
-        return platform;
     }
 
     private void sendMessage(Component component, String... ignoredServers) {
@@ -48,6 +39,17 @@ public class VelocityAdaptor implements IAdaptor {
                 player.sendMessage(component);
             }
         }
+    }
+
+    @Override
+    public void start() {
+        proxyServer.getEventManager().register(chatHub, this);
+    }
+
+    @Override
+    public void sendPublicMessage(String message) {
+        Component component = Component.text(message);
+        sendMessage(component);
     }
 
     @Override
@@ -137,51 +139,5 @@ public class VelocityAdaptor implements IAdaptor {
     @Subscribe
     public void onPlayerDisconnect(DisconnectEvent event) {
         eventHub.onLeaveServer(new ServerChangeEvent(event));
-    }
-
-    public Component getListComponent() {
-        if (proxyServer.getPlayerCount() == 0) {
-            return Component.text(config.getMinecraftListEmptyMessage());
-        }
-
-        Component result = Component.empty();
-        for (RegisteredServer registeredServer : proxyServer.getAllServers()) {
-            int playerCount = registeredServer.getPlayersConnected().size();
-            if (playerCount > 0) {
-                result = result.append(Component.text("\n"));
-                String template = config.getMinecraftListTamplate();
-                String server = registeredServer.getServerInfo().getName();
-                String[] players = registeredServer.getPlayersConnected()
-                        .stream().map(Player::getUsername).toArray(String[]::new);
-                Component line = new VelocityComponent(template)
-                        .replaceServer("server", server, config.getServername(server))
-                        .replaceServer("plainServer", server, config.getPlainServername(server))
-                        .replaceString("count", String.valueOf(playerCount))
-                        .replaceString("playerList", String.join(", ", players))
-                        .asComponent();
-                result = result.append(line);
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public void sendListMessage(String source) {
-        proxyServer.getPlayer(source).ifPresent(player -> {
-            player.sendMessage(getListComponent());
-        });
-    }
-
-    @Override
-    public void start() {
-        proxyServer.getEventManager().register(chatHub, this);
-    }
-
-    @Override
-    public void stop() {
-    }
-
-    @Override
-    public void restart() {
     }
 }
