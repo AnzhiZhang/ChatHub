@@ -10,6 +10,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import com.zhanganzhi.chathub.core.Config;
 import com.zhanganzhi.chathub.core.EventHub;
 import com.zhanganzhi.chathub.platforms.velocity.VelocityCommand;
+import lombok.Getter;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
@@ -23,9 +24,12 @@ import java.nio.file.Path;
         authors = {"Andy Zhang", "ZhuRuoLing", "401U"}
 )
 public class ChatHub {
+    @Getter
     private final ProxyServer proxyServer;
+    @Getter
     private final Logger logger;
     private final Path dataDirectory;
+    @Getter
     private EventHub eventHub;
 
     @Inject
@@ -33,18 +37,6 @@ public class ChatHub {
         this.proxyServer = proxyServer;
         this.logger = logger;
         this.dataDirectory = dataDirectory;
-    }
-
-    public ProxyServer getProxyServer() {
-        return proxyServer;
-    }
-
-    public Logger getLogger() {
-        return logger;
-    }
-
-    public EventHub getEventHub() {
-        return eventHub;
     }
 
     @Subscribe
