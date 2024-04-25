@@ -57,20 +57,37 @@ public class Config {
         return getServername(server).replaceAll("§.", "");
     }
 
-    public String getMinecraftChatTamplate() {
-        return configToml.getString("minecraft.message.chat");
+    public String getMinecraftChatMessage(String server, String name, String message) {
+        return configToml
+                .getString("minecraft.message.chat")
+                .replace("{server}", getServername(server))
+                .replace("{plainServer}", getPlainServername(server))
+                .replace("{name}", name)
+                .replace("{message}", message);
     }
 
-    public String getMinecraftJoinTamplate() {
-        return configToml.getString("minecraft.message.join");
+    public String getMinecraftJoinMessage(String server, String name) {
+        return configToml
+                .getString("minecraft.message.join")
+                .replace("{server}", getServername(server))
+                .replace("{plainServer}", getPlainServername(server))
+                .replace("{name}", name);
     }
 
-    public String getMinecraftLeaveTamplate() {
-        return configToml.getString("minecraft.message.leave");
+    public String getMinecraftLeaveMessage(String name) {
+        return configToml
+                .getString("minecraft.message.leave")
+                .replace("{name}", name);
     }
 
-    public String getMinecraftSwitchTamplate() {
-        return configToml.getString("minecraft.message.switch");
+    public String getMinecraftSwitchMessage(String name, String serverFrom, String serverTo) {
+        return configToml
+                .getString("minecraft.message.switch")
+                .replace("{name}", name)
+                .replace("{serverFrom}", getServername(serverFrom))
+                .replace("{plainServerFrom}", getPlainServername(serverFrom))
+                .replace("{serverTo}", getServername(serverTo))
+                .replace("{plainServerTo}", getPlainServername(serverTo));
     }
 
     public String getMinecraftMsgSenderMessage(String target, String message) {
@@ -87,8 +104,13 @@ public class Config {
                 .replace("{message}", message);
     }
 
-    public String getMinecraftListTamplate() {
-        return configToml.getString("minecraft.message.list");
+    public String getMinecraftListMessage(String server, int count, String[] playerList) {
+        return configToml
+                .getString("minecraft.message.list")
+                .replace("{server}", getServername(server))
+                .replace("{plainServer}", getPlainServername(server))
+                .replace("{count}", String.valueOf(count))
+                .replace("{playerList}", String.join(", ", playerList));
     }
 
     public String getMinecraftListEmptyMessage() {

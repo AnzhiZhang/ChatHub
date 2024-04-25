@@ -53,16 +53,8 @@ public class VelocityAdaptor implements IAdaptor {
 
     @Override
     public void onUserChat(MessageEvent event) {
-        String server = event.getServerName();
-        String user = event.user();
-        Boolean isClickable = event.platform() == Platform.VELOCITY;
         Arrays.stream(event.content().split("\n")).forEach(msg -> {
-            Component component = new VelocityComponent(config.getMinecraftChatTamplate())
-                .replaceServer("server", server, config.getServername(server), isClickable)
-                .replaceServer("plainServer", server, config.getPlainServername(server), isClickable)
-                .replaceString("name", user)
-                .replaceString("message", msg)
-                .asComponent();
+            Component component = Component.text(config.getMinecraftChatMessage(event.getServerName(), event.user(), msg));
             // check complete takeover mode for message from velocity
             if (event.platform() == Platform.VELOCITY && !config.isCompleteTakeoverMode()) {
                 sendMessage(component, event.server());
@@ -74,35 +66,17 @@ public class VelocityAdaptor implements IAdaptor {
 
     @Override
     public void onJoinServer(ServerChangeEvent event) {
-        String server = event.server;
-        Component component = new VelocityComponent(config.getMinecraftJoinTamplate())
-            .replaceServer("server", server, config.getServername(server))
-            .replaceServer("plainServer", server, config.getPlainServername(server))
-            .replaceString("name", event.player.getUsername())
-            .asComponent();
-        sendMessage(component);
+        sendMessage(Component.text(config.getMinecraftJoinMessage(event.server, event.player.getUsername())));
     }
 
     @Override
     public void onLeaveServer(ServerChangeEvent event) {
-        Component component = new VelocityComponent(config.getMinecraftLeaveTamplate())
-            .replaceString("name", event.player.getUsername())
-            .asComponent();
-        sendMessage(component);
+        sendMessage(Component.text(config.getMinecraftLeaveMessage(event.player.getUsername())));
     }
 
     @Override
     public void onSwitchServer(ServerChangeEvent event) {
-        String serverFrom = event.serverPrev;
-        String serverTo = event.server;
-        Component component = new VelocityComponent(config.getMinecraftSwitchTamplate())
-            .replaceServer("serverFrom", serverFrom, config.getServername(serverFrom))
-            .replaceServer("plainServerFrom", serverFrom, config.getPlainServername(serverFrom))
-            .replaceServer("serverTo", serverTo, config.getServername(serverTo))
-            .replaceServer("plainServerTo", serverTo, config.getPlainServername(serverTo))
-            .replaceString("name", event.player.getUsername())
-            .asComponent();
-        sendMessage(component);
+        sendMessage(Component.text(config.getMinecraftSwitchMessage(event.player.getUsername(), event.serverPrev, event.server)));
     }
 
     @Subscribe
@@ -140,37 +114,28 @@ public class VelocityAdaptor implements IAdaptor {
         eventHub.onLeaveServer(new ServerChangeEvent(event));
     }
 
-    public Component getListComponent() {
-        if (proxyServer.getPlayerCount() == 0) {
-            return Component.text(config.getMinecraftListEmptyMessage());
-        }
-        
-        Component result = Component.empty();
-        for (RegisteredServer registeredServer : proxyServer.getAllServers()) {
-            int playerCount = registeredServer.getPlayersConnected().size();
-            if (playerCount > 0) {
-                result = result.append(Component.text("\n"));
-                String template = config.getMinecraftListTamplate();
-                String server = registeredServer.getServerInfo().getName();
-                String[] players = registeredServer.getPlayersConnected()
-                    .stream().map(Player::getUsername).toArray(String[]::new);
-                Component line = new VelocityComponent(template)
-                    .replaceServer("server", server, config.getServername(server))
-                    .replaceServer("plainServer", server, config.getPlainServername(server))
-                    .replaceString("count", String.valueOf(playerCount))
-                    .replaceString("playerList", String.join(", ", players))
-                    .asComponent();
-                result = result.append(line);
-            }
-        }
-        return result;
-    }
-
     @Override
     public void sendListMessage(String source) {
-        proxyServer.getPlayer(source).ifPresent(player -> {
-            player.sendMessage(getListComponent());
-        });
+        boolean isListEmpty = true;
+        for (RegisteredServer registeredServer : proxyServer.getAllServers()) {
+            if (registeredServer.getPlayersConnected().size() > 0) {
+                isListEmpty = false;
+                proxyServer.getPlayer(source).ifPresent(
+                        player -> player.sendMessage(
+                                Component.text(config.getMinecraftListMessage(
+                                        registeredServer.getServerInfo().getName(),
+                                        registeredServer.getPlayersConnected().size(),
+                                        registeredServer.getPlayersConnected().stream().map(Player::getUsername).toArray(String[]::new)
+                                ))
+                        )
+                );
+            }
+        }
+        if (isListEmpty) {
+            proxyServer.getPlayer(source).ifPresent(
+                    player -> player.sendMessage(Component.text(config.getMinecraftListEmptyMessage()))
+            );
+        }
     }
 
     @Override

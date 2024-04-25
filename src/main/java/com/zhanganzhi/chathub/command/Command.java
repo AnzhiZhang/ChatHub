@@ -13,8 +13,9 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
+import com.velocitypowered.api.proxy.server.RegisteredServer;
+
 import com.zhanganzhi.chathub.ChatHub;
-import com.zhanganzhi.chathub.adaptors.velocity.VelocityAdaptor;
 import com.zhanganzhi.chathub.core.Config;
 import com.zhanganzhi.chathub.entity.Platform;
 
@@ -34,8 +35,22 @@ public final class Command implements SimpleCommand {
         Config config = Config.getInstance();
 
         if (args.length == 1 && args[0].equals("list")) {
-            VelocityAdaptor adaptor = (VelocityAdaptor) chatHub.getEventHub().getAdaptor(Platform.VELOCITY);
-            source.sendMessage(adaptor.getListComponent());
+            boolean isListEmpty = true;
+            for (RegisteredServer registeredServer : proxyServer.getAllServers()) {
+                if (registeredServer.getPlayersConnected().size() > 0) {
+                    isListEmpty = false;
+                    source.sendMessage(Component.text(
+                            config.getMinecraftListMessage(
+                                    registeredServer.getServerInfo().getName(),
+                                    registeredServer.getPlayersConnected().size(),
+                                    registeredServer.getPlayersConnected().stream().map(Player::getUsername).toArray(String[]::new)
+                            )
+                    ));
+                }
+            }
+            if (isListEmpty) {
+                source.sendMessage(Component.text(config.getMinecraftListEmptyMessage()));
+            }
         } else if (args.length == 1 && args[0].equals("reloadKook")) {
             if (source instanceof ConsoleCommandSource) {
                 if (Config.getInstance().isKookEnabled()) {
