@@ -1,5 +1,8 @@
 package com.zhanganzhi.chathub.platforms;
 
+import lombok.Getter;
+
+@Getter
 public enum Platform {
     DISCORD("discord"),
     KOOK("kook"),
@@ -9,9 +12,5 @@ public enum Platform {
 
     Platform(String name) {
         this.name = name;
-    }
-
-    public String getName() {
-        return name;
     }
 }
