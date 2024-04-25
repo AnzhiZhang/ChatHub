@@ -19,13 +19,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class VelocityCommand implements SimpleCommand {
+    private final Config config = Config.getInstance();
     private final ChatHub chatHub;
     private final ProxyServer proxyServer;
-    private final Config config = Config.getInstance();
 
     public VelocityCommand(ChatHub chatHub) {
         this.chatHub = chatHub;
-        proxyServer = chatHub.getProxyServer();
+        this.proxyServer = chatHub.getProxyServer();
     }
 
     private Component getListMessageComponent() {
