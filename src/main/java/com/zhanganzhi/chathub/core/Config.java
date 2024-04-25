@@ -30,7 +30,10 @@ public class Config {
         File configFile = new File(dataDirectory.toAbsolutePath().toString(), "config.toml");
         if (!configFile.exists()) {
             try {
-                Files.copy(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("config.toml")), configFile.toPath());
+                Files.copy(
+                        Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("config.toml")),
+                        configFile.toPath()
+                );
             } catch (IOException e) {
                 e.printStackTrace();
             }
