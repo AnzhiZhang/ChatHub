@@ -24,7 +24,7 @@ public class VelocityAdaptor extends AbstractAdaptor {
     public VelocityAdaptor(ChatHub chatHub) {
         super(chatHub, Platform.VELOCITY);
         this.eventHub = chatHub.getEventHub();
-        proxyServer = chatHub.getProxyServer();
+        this.proxyServer = chatHub.getProxyServer();
     }
 
     private void sendMessage(Component component, String... ignoredServers) {
