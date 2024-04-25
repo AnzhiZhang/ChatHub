@@ -58,7 +58,7 @@ public class VelocityAdaptor extends AbstractAdaptor {
         String user = event.user();
         Boolean isClickable = event.platform() == Platform.VELOCITY;
         Arrays.stream(event.content().split("\n")).forEach(msg -> {
-            Component component = new VelocityComponent(config.getMinecraftChatTamplate())
+            Component component = new VelocityComponent(config.getMinecraftChatMessage())
                     .replaceServer("server", server, config.getServername(server), isClickable)
                     .replaceServer("plainServer", server, config.getPlainServername(server), isClickable)
                     .replacePlayer("name", user, isClickable)
@@ -76,7 +76,7 @@ public class VelocityAdaptor extends AbstractAdaptor {
     @Override
     public void onJoinServer(ServerChangeEvent event) {
         String server = event.server;
-        Component component = new VelocityComponent(config.getMinecraftJoinTamplate())
+        Component component = new VelocityComponent(config.getMinecraftJoinMessage())
                 .replaceServer("server", server, config.getServername(server))
                 .replaceServer("plainServer", server, config.getPlainServername(server))
                 .replacePlayer("name", event.player.getUsername())
@@ -86,7 +86,7 @@ public class VelocityAdaptor extends AbstractAdaptor {
 
     @Override
     public void onLeaveServer(ServerChangeEvent event) {
-        Component component = new VelocityComponent(config.getMinecraftLeaveTamplate())
+        Component component = new VelocityComponent(config.getMinecraftLeaveMessage())
                 .replacePlayer("name", event.player.getUsername())
                 .asComponent();
         sendMessage(component);
@@ -96,7 +96,7 @@ public class VelocityAdaptor extends AbstractAdaptor {
     public void onSwitchServer(ServerChangeEvent event) {
         String serverFrom = event.serverPrev;
         String serverTo = event.server;
-        Component component = new VelocityComponent(config.getMinecraftSwitchTamplate())
+        Component component = new VelocityComponent(config.getMinecraftSwitchMessage())
                 .replaceServer("serverFrom", serverFrom, config.getServername(serverFrom))
                 .replaceServer("plainServerFrom", serverFrom, config.getPlainServername(serverFrom))
                 .replaceServer("serverTo", serverTo, config.getServername(serverTo))

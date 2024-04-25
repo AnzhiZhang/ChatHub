@@ -60,19 +60,19 @@ public class Config {
         return getServername(server).replaceAll("§.", "");
     }
 
-    public String getMinecraftChatTamplate() {
+    public String getMinecraftChatMessage() {
         return configToml.getString("minecraft.message.chat");
     }
 
-    public String getMinecraftJoinTamplate() {
+    public String getMinecraftJoinMessage() {
         return configToml.getString("minecraft.message.join");
     }
 
-    public String getMinecraftLeaveTamplate() {
+    public String getMinecraftLeaveMessage() {
         return configToml.getString("minecraft.message.leave");
     }
 
-    public String getMinecraftSwitchTamplate() {
+    public String getMinecraftSwitchMessage() {
         return configToml.getString("minecraft.message.switch");
     }
 
@@ -90,7 +90,7 @@ public class Config {
                 .replace("{message}", message);
     }
 
-    public String getMinecraftListTamplate() {
+    public String getMinecraftListMessage() {
         return configToml.getString("minecraft.message.list");
     }
 

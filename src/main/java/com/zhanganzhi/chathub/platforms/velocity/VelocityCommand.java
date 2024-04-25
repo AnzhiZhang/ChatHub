@@ -38,7 +38,7 @@ public final class VelocityCommand implements SimpleCommand {
             int playerCount = registeredServer.getPlayersConnected().size();
             if (playerCount > 0) {
                 result = result.append(Component.text("\n"));
-                String template = config.getMinecraftListTamplate();
+                String template = config.getMinecraftListMessage();
                 String server = registeredServer.getServerInfo().getName();
                 String[] players = registeredServer.getPlayersConnected()
                         .stream().map(Player::getUsername).toArray(String[]::new);
