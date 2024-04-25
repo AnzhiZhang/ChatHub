@@ -6,12 +6,12 @@ import com.zhanganzhi.chathub.platforms.Platform;
 
 public abstract class AbstractAdaptor implements IAdaptor {
     protected final Config config = Config.getInstance();
-    protected final Platform platform;
     protected final ChatHub chatHub;
+    protected final Platform platform;
 
     protected AbstractAdaptor(ChatHub chatHub, Platform platform) {
-        this.platform = platform;
         this.chatHub = chatHub;
+        this.platform = platform;
     }
 
     @Override
