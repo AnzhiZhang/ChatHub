@@ -1,8 +1,8 @@
 package com.zhanganzhi.chathub.platforms.discord;
 
 import com.zhanganzhi.chathub.ChatHub;
-import com.zhanganzhi.chathub.core.config.Config;
 import com.zhanganzhi.chathub.core.EventHub;
+import com.zhanganzhi.chathub.core.config.Config;
 import com.zhanganzhi.chathub.core.events.MessageEvent;
 import com.zhanganzhi.chathub.platforms.Platform;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
