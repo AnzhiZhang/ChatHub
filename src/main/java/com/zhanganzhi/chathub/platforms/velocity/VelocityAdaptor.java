@@ -58,11 +58,8 @@ public class VelocityAdaptor extends AbstractAdaptor<VelocityFormatter> {
 
     @Override
     public void onUserChat(MessageEvent event) {
-        String server = event.getServerName();
-        String user = event.user();
-        Boolean isClickable = event.platform() == Platform.VELOCITY;
         for (String line : event.content().split("\n")) {
-            Component component = Component.text(formatter.formatUserChat(server, user, line));
+            Component component = Component.text(formatter.formatUserChat(event.getServerName(), event.user(), line));
             // check complete takeover mode for message from velocity
             if (event.platform() == Platform.VELOCITY && !config.isCompleteTakeoverMode()) {
                 sendMessage(component, event.server());
