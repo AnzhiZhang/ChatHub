@@ -6,7 +6,9 @@
 
     <groupId>com.zhanganzhi.chathub</groupId>
     <artifactId>ChatHub</artifactId>
+    <!-- x-release-please-start-version -->
     <version>1.5.0</version>
+    <!-- x-release-please-end -->
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

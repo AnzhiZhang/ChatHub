@@ -1,0 +1,15 @@
+{
+  "release-type": "simple",
+  "bump-minor-pre-major": true,
+  "bump-patch-for-minor-pre-major": true,
+  "include-component-in-tag": false,
+  "pull-request-title-pattern": "chore${scope}: 🔖 release${component} ${version}",
+  "packages": {
+    ".": {
+      "extra-files": [
+        "pom.xml",
+        "src/main/java/com/zhanganzhi/chathub/ChatHub.java"
+      ]
+    }
+  }
+}

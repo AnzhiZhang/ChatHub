@@ -18,7 +18,9 @@ import java.nio.file.Path;
 @Plugin(
         id = "chathub",
         name = "ChatHub",
+        // x-release-please-start-version
         version = "1.5.0",
+        // x-release-please-end
         url = "https://github.com/AnzhiZhang/ChatHub",
         description = "Chat hub for servers under velocity proxy",
         authors = {"Andy Zhang", "ZhuRuoLing", "401U"}
