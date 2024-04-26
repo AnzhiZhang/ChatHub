@@ -29,11 +29,17 @@ jobs:
     if: ${{ needs.release-please.outputs.release_created == 'true' }}
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Parse Version
+        id: version
+        run: echo "version=$(echo "${{ needs.release-please.outputs.tag_name }}" | cut -c 2-)" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-java@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
@@ -42,19 +48,16 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots package
 
-      - name: Parse Version
-        id: version
-        run: echo "version=$(echo "${{ needs.release-please.outputs.tag_name }}" | cut -c 2-)" >> "$GITHUB_OUTPUT"
-
       - name: Rename artifact
         run: mv target/*-jar-with-dependencies.jar ChatHub-${{ steps.version.outputs.version }}.jar
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 16.x
+          node-version: 20
 
-      - name: Generate changelog
-        run: npx changelogithub --output CHANGELOG.md
+      - name: Generate Latest Changelog
+        run: npx changelogithub --output LATEST_CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
@@ -69,11 +72,9 @@ jobs:
           curseforge-id: 825508
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
 
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
           files: |
-            ChatHub-v*.jar
-          changelog-file: CHANGELOG.md
+            ChatHub-${{ steps.version.outputs.version }}.jar
+          changelog-file: LATEST_CHANGELOG.md
 
           loaders: |
             velocity
