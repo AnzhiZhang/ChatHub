@@ -1,6 +1,6 @@
 package com.zhanganzhi.chathub.platforms.kook;
 
-import com.zhanganzhi.chathub.core.Config;
+import com.zhanganzhi.chathub.core.config.Config;
 import org.slf4j.Logger;
 
 public class KookDaemon extends Thread {

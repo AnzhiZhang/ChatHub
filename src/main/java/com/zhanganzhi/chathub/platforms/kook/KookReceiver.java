@@ -3,7 +3,7 @@ package com.zhanganzhi.chathub.platforms.kook;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.zhanganzhi.chathub.ChatHub;
-import com.zhanganzhi.chathub.core.Config;
+import com.zhanganzhi.chathub.core.config.Config;
 import com.zhanganzhi.chathub.core.EventHub;
 import com.zhanganzhi.chathub.core.adaptor.IAdaptor;
 import com.zhanganzhi.chathub.core.events.MessageEvent;

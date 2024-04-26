@@ -3,7 +3,7 @@ package com.zhanganzhi.chathub.core.formatter;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
-import com.zhanganzhi.chathub.core.Config;
+import com.zhanganzhi.chathub.core.config.Config;
 import com.zhanganzhi.chathub.core.config.MessageType;
 import com.zhanganzhi.chathub.platforms.Platform;
 

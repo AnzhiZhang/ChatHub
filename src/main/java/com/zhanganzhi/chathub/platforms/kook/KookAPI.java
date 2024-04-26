@@ -2,7 +2,7 @@ package com.zhanganzhi.chathub.platforms.kook;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import com.zhanganzhi.chathub.core.Config;
+import com.zhanganzhi.chathub.core.config.Config;
 import okhttp3.*;
 
 import java.io.IOException;

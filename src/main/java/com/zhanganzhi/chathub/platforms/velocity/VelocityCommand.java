@@ -6,7 +6,7 @@ import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.zhanganzhi.chathub.ChatHub;
-import com.zhanganzhi.chathub.core.Config;
+import com.zhanganzhi.chathub.core.config.Config;
 import com.zhanganzhi.chathub.core.EventHub;
 import com.zhanganzhi.chathub.core.adaptor.IAdaptor;
 import com.zhanganzhi.chathub.platforms.Platform;

@@ -1,7 +1,6 @@
-package com.zhanganzhi.chathub.core;
+package com.zhanganzhi.chathub.core.config;
 
 import com.moandjiezana.toml.Toml;
-import com.zhanganzhi.chathub.core.config.MessageType;
 import com.zhanganzhi.chathub.platforms.Platform;
 
 import java.io.File;
