@@ -73,8 +73,7 @@ public final class VelocityCommand implements SimpleCommand {
         } else if (args.length == 2 && args[0].equals("msg")) {
             return proxyServer.getAllPlayers()
                     .stream().map(Player::getUsername)
-                    .map(String::toLowerCase)
-                    .filter(s -> s.startsWith(args[1].toLowerCase()))
+                    .filter(s -> s.toLowerCase().startsWith(args[1].toLowerCase()))
                     .collect(Collectors.toList());
         } else {
             return List.of();
