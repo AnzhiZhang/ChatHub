@@ -14,14 +14,10 @@ class KookAPI {
     private final Config config = Config.getInstance();
     private final OkHttpClient okHttpClient = new OkHttpClient();
 
-    public static class Create {
-        public String target_id;
-        public String content;
-
-        public Create(String targetId, String content) {
-            this.target_id = targetId;
-            this.content = content;
-        }
+    public record Create(
+            String target_id,
+            String content
+    ) {
     }
 
     public static KookAPI getInstance() {
@@ -38,10 +34,11 @@ class KookAPI {
     }
 
     private JSONObject request(Request request) throws IOException {
-        Response response = okHttpClient.newCall(request).execute();
-        ResponseBody responseBody = response.body();
-        assert responseBody != null;
-        return JSON.parseObject(responseBody.string());
+        try (Response response = okHttpClient.newCall(request).execute()) {
+            ResponseBody responseBody = response.body();
+            assert responseBody != null;
+            return JSON.parseObject(responseBody.string());
+        }
     }
 
     public JSONObject getGateway() throws IOException {

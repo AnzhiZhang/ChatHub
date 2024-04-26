@@ -4,15 +4,14 @@ import com.zhanganzhi.chathub.core.config.Config;
 import org.slf4j.Logger;
 
 public class KookDaemon extends Thread {
+    private final Config config = Config.getInstance();
     private final KookAPI kookAPI = KookAPI.getInstance();
     private final Logger logger;
-    private final Config config;
     private final KookReceiver kookReceiver;
     private boolean flag = true;
 
-    public KookDaemon(Logger logger, Config config, KookReceiver kookReceiver) {
+    public KookDaemon(Logger logger, KookReceiver kookReceiver) {
         this.logger = logger;
-        this.config = config;
         this.kookReceiver = kookReceiver;
         setDaemon(true);
     }
@@ -36,10 +35,6 @@ public class KookDaemon extends Thread {
             } catch (InterruptedException ignored) {
             }
         }
-    }
-
-    public boolean shouldRun() {
-        return config.isKookEnabled() && config.getKookDaemonEnabled();
     }
 
     public void shutdown() {

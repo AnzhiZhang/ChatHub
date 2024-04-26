@@ -12,7 +12,7 @@ public class KookAdaptor extends AbstractAdaptor<KookFormatter> {
     public KookAdaptor(ChatHub chatHub) {
         super(chatHub, Platform.KOOK, new KookFormatter());
         this.kookReceiver = new KookReceiver(chatHub);
-        this.kookDaemon = new KookDaemon(chatHub.getLogger(), config, kookReceiver);
+        this.kookDaemon = new KookDaemon(chatHub.getLogger(), kookReceiver);
     }
 
     @Override

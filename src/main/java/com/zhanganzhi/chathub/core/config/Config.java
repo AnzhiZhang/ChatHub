@@ -24,7 +24,10 @@ public class Config {
     public void loadConfig(Path dataDirectory) {
         // check data directory
         if (!dataDirectory.toFile().exists()) {
-            dataDirectory.toFile().mkdir();
+            boolean mkdirResult = dataDirectory.toFile().mkdir();
+            if (!mkdirResult) {
+                throw new RuntimeException("Failed to create data directory");
+            }
         }
 
         // check file exists
