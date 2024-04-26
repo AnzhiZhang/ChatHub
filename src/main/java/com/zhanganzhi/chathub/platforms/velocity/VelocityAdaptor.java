@@ -16,21 +16,26 @@ import com.zhanganzhi.chathub.platforms.Platform;
 import net.kyori.adventure.text.Component;
 
 import java.util.Arrays;
+import java.util.List;
 
-public class VelocityAdaptor extends AbstractAdaptor {
-    private final EventHub eventHub;
-    private final ProxyServer proxyServer;
-
+public class VelocityAdaptor extends AbstractAdaptor<VelocityFormatter> {
     public VelocityAdaptor(ChatHub chatHub) {
-        super(chatHub, Platform.VELOCITY);
-        this.eventHub = chatHub.getEventHub();
-        this.proxyServer = chatHub.getProxyServer();
+        super(chatHub, Platform.VELOCITY, new VelocityFormatter());
+    }
+
+    private EventHub getEventHub() {
+        return chatHub.getEventHub();
+    }
+
+    private ProxyServer getProxyServer() {
+        return chatHub.getProxyServer();
     }
 
     private void sendMessage(Component component, String... ignoredServers) {
-        for (RegisteredServer registeredServer : proxyServer.getAllServers()) {
+        List<String> ignoredServerList = Arrays.asList(ignoredServers);
+        for (RegisteredServer registeredServer : getProxyServer().getAllServers()) {
             // ignore server
-            if (Arrays.asList(ignoredServers).contains(registeredServer.getServerInfo().getName())) {
+            if (ignoredServerList.contains(registeredServer.getServerInfo().getName())) {
                 continue;
             }
 
@@ -43,13 +48,12 @@ public class VelocityAdaptor extends AbstractAdaptor {
 
     @Override
     public void start() {
-        proxyServer.getEventManager().register(chatHub, this);
+        getProxyServer().getEventManager().register(chatHub, this);
     }
 
     @Override
     public void sendPublicMessage(String message) {
-        Component component = Component.text(message);
-        sendMessage(component);
+        sendMessage(Component.text(message));
     }
 
     @Override
@@ -57,53 +61,30 @@ public class VelocityAdaptor extends AbstractAdaptor {
         String server = event.getServerName();
         String user = event.user();
         Boolean isClickable = event.platform() == Platform.VELOCITY;
-        Arrays.stream(event.content().split("\n")).forEach(msg -> {
-            Component component = new VelocityComponent(config.getMinecraftChatMessage())
-                    .replaceServer("server", server, config.getServername(server), isClickable)
-                    .replaceServer("plainServer", server, config.getPlainServername(server), isClickable)
-                    .replacePlayer("name", user, isClickable)
-                    .replaceString("message", msg)
-                    .asComponent();
+        for (String line : event.content().split("\n")) {
+            Component component = Component.text(formatter.formatUserChat(server, user, line));
             // check complete takeover mode for message from velocity
             if (event.platform() == Platform.VELOCITY && !config.isCompleteTakeoverMode()) {
                 sendMessage(component, event.server());
-                return;
+            } else {
+                sendMessage(component);
             }
-            sendMessage(component);
-        });
+        }
     }
 
     @Override
     public void onJoinServer(ServerChangeEvent event) {
-        String server = event.server;
-        Component component = new VelocityComponent(config.getMinecraftJoinMessage())
-                .replaceServer("server", server, config.getServername(server))
-                .replaceServer("plainServer", server, config.getPlainServername(server))
-                .replacePlayer("name", event.player.getUsername())
-                .asComponent();
-        sendMessage(component);
+        sendPublicMessage(formatter.formatJoinServer(event.server, event.player.getUsername()));
     }
 
     @Override
     public void onLeaveServer(ServerChangeEvent event) {
-        Component component = new VelocityComponent(config.getMinecraftLeaveMessage())
-                .replacePlayer("name", event.player.getUsername())
-                .asComponent();
-        sendMessage(component);
+        sendPublicMessage(formatter.formatLeaveServer(event.player.getUsername()));
     }
 
     @Override
     public void onSwitchServer(ServerChangeEvent event) {
-        String serverFrom = event.serverPrev;
-        String serverTo = event.server;
-        Component component = new VelocityComponent(config.getMinecraftSwitchMessage())
-                .replaceServer("serverFrom", serverFrom, config.getServername(serverFrom))
-                .replaceServer("plainServerFrom", serverFrom, config.getPlainServername(serverFrom))
-                .replaceServer("serverTo", serverTo, config.getServername(serverTo))
-                .replaceServer("plainServerTo", serverTo, config.getPlainServername(serverTo))
-                .replacePlayer("name", event.player.getUsername())
-                .asComponent();
-        sendMessage(component);
+        sendPublicMessage(formatter.formatSwitchServer(event.player.getUsername(), event.serverPrev, event.server));
     }
 
     @Subscribe
@@ -111,7 +92,7 @@ public class VelocityAdaptor extends AbstractAdaptor {
         Player player = event.getPlayer();
         player.getCurrentServer().ifPresent(
                 serverConnection -> {
-                    eventHub.onUserChat(new MessageEvent(
+                    getEventHub().onUserChat(new MessageEvent(
                             platform,
                             serverConnection.getServerInfo().getName(),
                             player.getUsername(),
@@ -130,14 +111,14 @@ public class VelocityAdaptor extends AbstractAdaptor {
     public void onServerConnectedEvent(ServerConnectedEvent event) {
         ServerChangeEvent message = new ServerChangeEvent(event);
         switch (message.type) {
-            case JOIN -> eventHub.onJoinServer(message);
-            case LEAVE -> eventHub.onLeaveServer(message);
-            case SWITCH -> eventHub.onSwitchServer(message);
+            case JOIN -> getEventHub().onJoinServer(message);
+            case LEAVE -> getEventHub().onLeaveServer(message);
+            case SWITCH -> getEventHub().onSwitchServer(message);
         }
     }
 
     @Subscribe
     public void onPlayerDisconnect(DisconnectEvent event) {
-        eventHub.onLeaveServer(new ServerChangeEvent(event));
+        getEventHub().onLeaveServer(new ServerChangeEvent(event));
     }
 }

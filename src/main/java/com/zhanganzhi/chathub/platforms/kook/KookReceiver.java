@@ -2,11 +2,10 @@ package com.zhanganzhi.chathub.platforms.kook;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import com.velocitypowered.api.proxy.Player;
-import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.Config;
 import com.zhanganzhi.chathub.core.EventHub;
+import com.zhanganzhi.chathub.core.adaptor.IAdaptor;
 import com.zhanganzhi.chathub.core.events.MessageEvent;
 import com.zhanganzhi.chathub.platforms.Platform;
 import okhttp3.*;
@@ -19,10 +18,8 @@ import java.util.TimerTask;
 
 public class KookReceiver extends WebSocketListener {
     private static final Platform PLATFORM = Platform.KOOK;
-    private final Config config = Config.getInstance();
     private final ChatHub chatHub;
     private final Logger logger;
-    private final EventHub eventHub;
     private final OkHttpClient okHttpClient;
     private WebSocket websocket;
     private Timer timer;
@@ -33,8 +30,11 @@ public class KookReceiver extends WebSocketListener {
     public KookReceiver(ChatHub chatHub) {
         this.chatHub = chatHub;
         this.logger = chatHub.getLogger();
-        this.eventHub = chatHub.getEventHub();
         this.okHttpClient = new OkHttpClient();
+    }
+
+    private EventHub getEventHub() {
+        return chatHub.getEventHub();
     }
 
     public void start() {
@@ -76,21 +76,6 @@ public class KookReceiver extends WebSocketListener {
         }
     }
 
-    private String getListMessage() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (RegisteredServer registeredServer : chatHub.getProxyServer().getAllServers()) {
-            if (!registeredServer.getPlayersConnected().isEmpty()) {
-                stringBuilder.append(config.getKookListMessage(
-                        registeredServer.getServerInfo().getName(),
-                        registeredServer.getPlayersConnected().size(),
-                        registeredServer.getPlayersConnected().stream().map(Player::getUsername).toArray(String[]::new)
-                ));
-                stringBuilder.append("\n");
-            }
-        }
-        return stringBuilder.isEmpty() ? config.getKookListEmptyMessage() : stringBuilder.toString();
-    }
-
     private void handleMessage(String text) {
         JSONObject signaling = JSON.parseObject(text);
         // 信令
@@ -112,9 +97,10 @@ public class KookReceiver extends WebSocketListener {
                 // check channel
                 if (eventData.getString("channel_type").equals("GROUP") && eventData.getString("target_id").equals(Config.getInstance().getKookChannelId())) {
                     if (eventData.getString("content").equals("/list")) {
-                        eventHub.getAdaptor(Platform.KOOK).sendPublicMessage(getListMessage());
+                        IAdaptor<?> kookAdaptor = getEventHub().getAdaptor(PLATFORM);
+                        kookAdaptor.sendPublicMessage(kookAdaptor.getFormatter().formatListAll(chatHub.getProxyServer()));
                     } else {
-                        eventHub.onUserChat(new MessageEvent(
+                        getEventHub().onUserChat(new MessageEvent(
                                 PLATFORM,
                                 null,
                                 eventData.getJSONObject("extra").getJSONObject("author").getString("nickname"),

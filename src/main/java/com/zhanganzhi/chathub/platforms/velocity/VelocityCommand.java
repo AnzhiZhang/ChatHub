@@ -5,9 +5,10 @@ import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
-import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.Config;
+import com.zhanganzhi.chathub.core.EventHub;
+import com.zhanganzhi.chathub.core.adaptor.IAdaptor;
 import com.zhanganzhi.chathub.platforms.Platform;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -19,48 +20,26 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class VelocityCommand implements SimpleCommand {
-    private final Config config = Config.getInstance();
     private final ChatHub chatHub;
     private final ProxyServer proxyServer;
+    private final EventHub eventHub;
 
     public VelocityCommand(ChatHub chatHub) {
         this.chatHub = chatHub;
         this.proxyServer = chatHub.getProxyServer();
-    }
-
-    private Component getListMessageComponent() {
-        if (proxyServer.getPlayerCount() == 0) {
-            return Component.text(config.getMinecraftListEmptyMessage());
-        }
-
-        Component result = Component.empty();
-        for (RegisteredServer registeredServer : proxyServer.getAllServers()) {
-            int playerCount = registeredServer.getPlayersConnected().size();
-            if (playerCount > 0) {
-                result = result.append(Component.text("\n"));
-                String template = config.getMinecraftListMessage();
-                String server = registeredServer.getServerInfo().getName();
-                String[] players = registeredServer.getPlayersConnected()
-                        .stream().map(Player::getUsername).toArray(String[]::new);
-                Component line = new VelocityComponent(template)
-                        .replaceServer("server", server, config.getServername(server))
-                        .replaceServer("plainServer", server, config.getPlainServername(server))
-                        .replaceString("count", String.valueOf(playerCount))
-                        .replaceString("playerList", String.join(", ", players))
-                        .asComponent();
-                result = result.append(line);
-            }
-        }
-        return result;
+        this.eventHub = chatHub.getEventHub();
     }
 
     @Override
     public void execute(final Invocation invocation) {
         CommandSource source = invocation.source();
         String[] args = invocation.arguments();
+        IAdaptor<?> velocityAdaptor = eventHub.getAdaptor(Platform.VELOCITY);
 
         if (args.length == 1 && args[0].equals("list")) {
-            source.sendMessage(getListMessageComponent());
+            for (String line : velocityAdaptor.getFormatter().formatListAll(proxyServer).split("\n")) {
+                source.sendMessage(Component.text(line));
+            }
         } else if (args.length == 1 && args[0].equals("reloadKook")) {
             if (source instanceof ConsoleCommandSource) {
                 if (Config.getInstance().isKookEnabled()) {
@@ -76,8 +55,8 @@ public final class VelocityCommand implements SimpleCommand {
             if (optionalPlayer.isPresent()) {
                 String senderName = source instanceof Player ? ((Player) source).getUsername() : "Server";
                 String message = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
-                source.sendMessage(Component.text(config.getMinecraftMsgSenderMessage(args[1], message)));
-                optionalPlayer.get().sendMessage(Component.text(config.getMinecraftMsgTargetMessage(senderName, message)));
+                source.sendMessage(Component.text(velocityAdaptor.getFormatter().formatMsgSender(args[1], message)));
+                optionalPlayer.get().sendMessage(Component.text(velocityAdaptor.getFormatter().formatMsgTarget(senderName, message)));
             } else {
                 source.sendMessage(Component.text("Player \"" + args[1] + "\" does not online!"));
             }

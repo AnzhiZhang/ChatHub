@@ -4,6 +4,7 @@ import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.adaptor.IAdaptor;
 import com.zhanganzhi.chathub.core.events.MessageEvent;
 import com.zhanganzhi.chathub.core.events.ServerChangeEvent;
+import com.zhanganzhi.chathub.core.formatter.IFormatter;
 import com.zhanganzhi.chathub.platforms.Platform;
 import com.zhanganzhi.chathub.platforms.discord.DiscordAdaptor;
 import com.zhanganzhi.chathub.platforms.kook.KookAdaptor;
@@ -12,7 +13,7 @@ import com.zhanganzhi.chathub.platforms.velocity.VelocityAdaptor;
 import java.util.List;
 
 public class EventHub {
-    private final List<IAdaptor> adaptors;
+    private final List<IAdaptor<? extends IFormatter>> adaptors;
 
     public EventHub(ChatHub chatHub) {
         adaptors = List.of(
@@ -22,7 +23,7 @@ public class EventHub {
         );
     }
 
-    public IAdaptor getAdaptor(Platform platform) {
+    public IAdaptor<? extends IFormatter> getAdaptor(Platform platform) {
         return adaptors.stream().filter(adaptor -> adaptor.getPlatform() == platform).findFirst().orElse(null);
     }
 

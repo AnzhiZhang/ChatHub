@@ -2,8 +2,6 @@ package com.zhanganzhi.chathub.platforms.discord;
 
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.adaptor.AbstractAdaptor;
-import com.zhanganzhi.chathub.core.events.MessageEvent;
-import com.zhanganzhi.chathub.core.events.ServerChangeEvent;
 import com.zhanganzhi.chathub.platforms.Platform;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -11,12 +9,12 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
-public class DiscordAdaptor extends AbstractAdaptor {
+public class DiscordAdaptor extends AbstractAdaptor<DiscordFormatter> {
     private JDA jda;
     private TextChannel channel;
 
     public DiscordAdaptor(ChatHub chatHub) {
-        super(chatHub, Platform.DISCORD);
+        super(chatHub, Platform.DISCORD, new DiscordFormatter());
     }
 
     @Override
@@ -64,38 +62,5 @@ public class DiscordAdaptor extends AbstractAdaptor {
         if (config.isDiscordEnabled()) {
             new Thread(() -> channel.sendMessage(message).queue()).start();
         }
-    }
-
-    @Override
-    public void onUserChat(MessageEvent event) {
-        sendPublicMessage(config.getDiscordChatMessage(
-                event.getServerName(),
-                event.user(),
-                event.content()
-        ));
-    }
-
-    @Override
-    public void onJoinServer(ServerChangeEvent event) {
-        sendPublicMessage(config.getDiscordJoinMessage(
-                event.server,
-                event.player.getUsername()
-        ));
-    }
-
-    @Override
-    public void onLeaveServer(ServerChangeEvent event) {
-        sendPublicMessage(config.getDiscordLeaveMessage(
-                event.player.getUsername()
-        ));
-    }
-
-    @Override
-    public void onSwitchServer(ServerChangeEvent event) {
-        sendPublicMessage(config.getDiscordSwitchMessage(
-                event.player.getUsername(),
-                event.serverPrev,
-                event.server
-        ));
     }
 }

@@ -2,10 +2,13 @@ package com.zhanganzhi.chathub.core.adaptor;
 
 import com.zhanganzhi.chathub.core.events.MessageEvent;
 import com.zhanganzhi.chathub.core.events.ServerChangeEvent;
+import com.zhanganzhi.chathub.core.formatter.IFormatter;
 import com.zhanganzhi.chathub.platforms.Platform;
 
-public interface IAdaptor {
+public interface IAdaptor<T extends IFormatter> {
     Platform getPlatform();
+
+    T getFormatter();
 
     void start();
 
