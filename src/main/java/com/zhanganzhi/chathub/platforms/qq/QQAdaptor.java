@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
-    private final QQAPI qqApi = QQAPI.getInstance(chatHub.getLogger());
+    private final QQAPI qqAPI = QQAPI.getInstance(chatHub.getLogger());
     private boolean listenerStop = false;
     private Thread eventListener;
 
@@ -24,7 +24,7 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
 
     @Override
     public void sendPublicMessage(String message) {
-        new Thread(() -> qqApi.sendMessage(message, config.getQQGroupId())).start();
+        new Thread(() -> qqAPI.sendMessage(message, config.getQQGroupId())).start();
     }
 
     @Override
@@ -37,7 +37,7 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
         }
 
         // close ws server
-        qqApi.stop();
+        qqAPI.stop();
     }
 
     public void startEventListener() {
@@ -60,7 +60,7 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
 
     public void eventConsume() {
         QQEvent curEvent;
-        while ((curEvent = qqApi.getQqEventQueue().poll()) != null) {
+        while ((curEvent = qqAPI.getQqEventQueue().poll()) != null) {
             if (
                     "message".equals(curEvent.getPostType())
                             && "group".equals(curEvent.getMessageType())
