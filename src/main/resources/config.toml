@@ -52,7 +52,7 @@ listEmpty = '当前没有玩家在线'
 
 [qq]
 enable = false
-forwardGroupIds = []
+groups = []
 
 [qq.api]
 wsReversePort = 9001
