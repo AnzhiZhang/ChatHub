@@ -62,7 +62,7 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
 
     public void eventConsume() {
         QQEvent curEvent;
-        while ((curEvent = QQEventQueue.poll()) != null) {
+        while ((curEvent = qqApi.getQqEventQueue().poll()) != null) {
             if (
                     "message".equals(curEvent.getPostType())
                             && "group".equals(curEvent.getMessageType())
