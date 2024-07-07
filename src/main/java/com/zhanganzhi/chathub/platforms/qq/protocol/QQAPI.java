@@ -37,11 +37,11 @@ public class QQAPI {
         this.wsServer.stop();
     }
 
-    public void sendMessage(String message, Long targetId) {
+    public void sendMessage(String message, String targetId) {
         wsServer.sendMessage(genSendReq(message, targetId));
     }
 
-    private String genSendReq(String message, Long targetId) {
+    private String genSendReq(String message, String targetId) {
         JSONObject req = new JSONObject();
         req.put("action", "send_msg");
         JSONObject params = new JSONObject();

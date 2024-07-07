@@ -26,8 +26,7 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
     @Override
     public void sendPublicMessage(String message) {
         if (config.isQQEnabled()) {
-            List<Long> forwardGroups = config.getQQGroups();
-            forwardGroups.forEach(groupId -> new Thread(() -> qqApi.sendMessage(message, groupId)).start());
+            new Thread(() -> qqApi.sendMessage(message, config.getQQGroupId())).start();
         }
     }
 
