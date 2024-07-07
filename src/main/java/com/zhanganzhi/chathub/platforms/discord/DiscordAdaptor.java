@@ -19,48 +19,44 @@ public class DiscordAdaptor extends AbstractAdaptor<DiscordFormatter> {
 
     @Override
     public void start() {
-        if (config.isDiscordEnabled()) {
-            // logger
-            chatHub.getLogger().info("Discord enabled");
+        // logger
+        chatHub.getLogger().info("Discord enabled");
 
-            // build jda
-            jda = JDABuilder.createLight(config.getDiscordToken())
-                    .enableIntents(
-                            GatewayIntent.MESSAGE_CONTENT
-                    )
-                    .addEventListeners(new DiscordReceiver(chatHub))
-                    .build();
+        // build jda
+        jda = JDABuilder.createLight(config.getDiscordToken())
+                .enableIntents(
+                        GatewayIntent.MESSAGE_CONTENT
+                )
+                .addEventListeners(new DiscordReceiver(chatHub))
+                .build();
 
-            // commands
-            jda.updateCommands().addCommands(
-                    Commands
-                            .slash("list", "List online players")
-                            .setGuildOnly(true)
-            ).queue();
+        // commands
+        jda.updateCommands().addCommands(
+                Commands
+                        .slash("list", "List online players")
+                        .setGuildOnly(true)
+        ).queue();
 
-            // await jda ready
-            try {
-                jda.awaitReady();
-            } catch (InterruptedException e) {
-                chatHub.getLogger().error("Discord jda failed to start: " + e.getMessage());
-            }
-
-            // get channel
-            channel = jda.getTextChannelById(config.getDiscordChannelId());
+        // await jda ready
+        try {
+            jda.awaitReady();
+        } catch (InterruptedException e) {
+            chatHub.getLogger().error("Discord jda failed to start: " + e.getMessage());
         }
+
+        // get channel
+        channel = jda.getTextChannelById(config.getDiscordChannelId());
     }
 
     @Override
     public void stop() {
-        if (config.isDiscordEnabled() && jda != null) {
+        if (jda != null) {
             jda.shutdownNow();
         }
     }
 
     @Override
     public void sendPublicMessage(String message) {
-        if (config.isDiscordEnabled()) {
-            new Thread(() -> channel.sendMessage(message).queue()).start();
-        }
+        new Thread(() -> channel.sendMessage(message).queue()).start();
     }
 }

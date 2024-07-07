@@ -17,34 +17,26 @@ public class KookAdaptor extends AbstractAdaptor<KookFormatter> {
 
     @Override
     public void start() {
-        if (config.isKookEnabled()) {
-            chatHub.getLogger().info("Kook enabled");
-            kookReceiver.start();
-            if (config.getKookDaemonEnabled())
-                kookDaemon.start();
-        }
+        chatHub.getLogger().info("Kook enabled");
+        kookReceiver.start();
+        if (config.getKookDaemonEnabled())
+            kookDaemon.start();
     }
 
     @Override
     public void stop() {
-        if (config.isKookEnabled()) {
-            kookReceiver.shutdown();
-            if (config.getKookDaemonEnabled())
-                kookDaemon.shutdown();
-        }
+        kookReceiver.shutdown();
+        if (config.getKookDaemonEnabled())
+            kookDaemon.shutdown();
     }
 
     @Override
     public void restart() {
-        if (config.isKookEnabled()) {
-            kookReceiver.restart();
-        }
+        kookReceiver.restart();
     }
 
     @Override
     public void sendPublicMessage(String message) {
-        if (config.isKookEnabled()) {
-            new Thread(() -> kookAPI.sendMessage(message)).start();
-        }
+        new Thread(() -> kookAPI.sendMessage(message)).start();
     }
 }
