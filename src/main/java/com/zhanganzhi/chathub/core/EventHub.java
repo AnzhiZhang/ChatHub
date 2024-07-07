@@ -9,6 +9,7 @@ import com.zhanganzhi.chathub.core.formatter.IFormatter;
 import com.zhanganzhi.chathub.platforms.Platform;
 import com.zhanganzhi.chathub.platforms.discord.DiscordAdaptor;
 import com.zhanganzhi.chathub.platforms.kook.KookAdaptor;
+import com.zhanganzhi.chathub.platforms.qq.QQAdaptor;
 import com.zhanganzhi.chathub.platforms.velocity.VelocityAdaptor;
 
 import java.util.ArrayList;
@@ -33,6 +34,11 @@ public class EventHub {
         // kook
         if (config.isKookEnabled()) {
             adaptors.add(new KookAdaptor(chatHub));
+        }
+
+        // qq
+        if (config.isQQEnabled()) {
+            adaptors.add(new QQAdaptor(chatHub));
         }
     }
 
