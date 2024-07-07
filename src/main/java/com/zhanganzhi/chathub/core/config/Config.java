@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 
 public class Config {
@@ -104,5 +105,29 @@ public class Config {
 
     public Long getKookDaemonRetry() {
         return configToml.getLong("kook.daemon.retry");
+    }
+
+    public boolean isQQEnabled() {
+        return configToml.getBoolean("qq.enable");
+    }
+
+    public String getQQWsReversePath() {
+        return configToml.getString("qq.api.wsReversePath");
+    }
+
+    public Long getQQWsReversePort() {
+        return configToml.getLong("qq.api.wsReversePort");
+    }
+
+    public String getQQHost() {
+        return configToml.getString("qq.api.host");
+    }
+
+    public List<Long> getListenedGroupIds() {
+        return configToml.getList("qq.listenedGroupIds");
+    }
+
+    public List<Long> getForwardGroupIds() {
+        return configToml.getList("qq.forwardGroupIds");
     }
 }

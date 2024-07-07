@@ -4,7 +4,7 @@ survival = '§2§l生存服'
 creative = '§6§l创造服'
 discord = '§a§lDiscord'
 kook = '§a§lKook'
-qq = '§a§l群聊天'
+qq = '§a§lQQ群聊天'
 
 [minecraft]
 completeTakeoverMode = false
@@ -52,3 +52,18 @@ listEmpty = '当前没有玩家在线'
 
 [qq]
 enable = false
+listenGroupIds = []
+forwardGroupIds = []
+
+[qq.api]
+wsReversePort = 9001
+host = '0.0.0.0'
+wsReversePath = '/ws/'
+
+[qq.message]
+chat = '[{server}] <{name}>: {message}'
+join = '[+] [{server}] {name}'
+leave = '[-] {name}'
+switch = '<{name}>: [{serverFrom}] ➟ [{serverTo}]'
+list = '- [{server}] 当前共有{count}名玩家在线: {playerList}'
+listEmpty = '当前没有玩家在线'

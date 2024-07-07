@@ -8,6 +8,7 @@ import com.zhanganzhi.chathub.core.formatter.IFormatter;
 import com.zhanganzhi.chathub.platforms.Platform;
 import com.zhanganzhi.chathub.platforms.discord.DiscordAdaptor;
 import com.zhanganzhi.chathub.platforms.kook.KookAdaptor;
+import com.zhanganzhi.chathub.platforms.qq.QQAdaptor;
 import com.zhanganzhi.chathub.platforms.velocity.VelocityAdaptor;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class EventHub {
         adaptors = List.of(
                 new DiscordAdaptor(chatHub),
                 new KookAdaptor(chatHub),
+                new QQAdaptor(chatHub),
                 new VelocityAdaptor(chatHub)
         );
     }
