@@ -111,16 +111,16 @@ public class Config {
         return configToml.getBoolean("qq.enable");
     }
 
-    public String getQQWsReversePath() {
-        return configToml.getString("qq.api.wsReversePath");
+    public String getQQHost() {
+        return configToml.getString("qq.api.host");
     }
 
     public Long getQQWsReversePort() {
         return configToml.getLong("qq.api.wsReversePort");
     }
 
-    public String getQQHost() {
-        return configToml.getString("qq.api.host");
+    public String getQQWsReversePath() {
+        return configToml.getString("qq.api.wsReversePath");
     }
 
     public List<Long> getListenedGroupIds() {
