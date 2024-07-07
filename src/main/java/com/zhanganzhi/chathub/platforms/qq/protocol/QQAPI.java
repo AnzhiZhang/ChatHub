@@ -8,14 +8,16 @@ import org.slf4j.Logger;
 
 @Getter
 public class QQAPI {
-
-    private QQAPI() {}
-
     private static volatile QQAPI instance;
     private final Config config = Config.getInstance();
-    private final QQWsServer wsServer = new QQWsServer(config.getQQHost(),
+    private final QQWsServer wsServer = new QQWsServer(
+            config.getQQHost(),
             Integer.valueOf(config.getQQWsReversePort().toString()),
-            config.getQQWsReversePath());
+            config.getQQWsReversePath()
+    );
+
+    private QQAPI() {
+    }
 
     public static QQAPI getInstance(Logger logger) {
         if (instance == null) {

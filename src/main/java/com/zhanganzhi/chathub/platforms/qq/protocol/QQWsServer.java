@@ -5,7 +5,6 @@ import com.alibaba.fastjson2.JSONReader;
 import com.zhanganzhi.chathub.platforms.qq.QQEventQueue;
 import com.zhanganzhi.chathub.platforms.qq.dto.QQEvent;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -18,6 +17,7 @@ import java.util.List;
 public class QQWsServer extends WebSocketServer {
     private final List<WebSocket> clients;
     private final String validResourcePath;
+
     @Setter
     private Logger logger;
 
@@ -30,7 +30,7 @@ public class QQWsServer extends WebSocketServer {
     @Override
     public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
         logger.info("=== qq ws server opened at [{}], path:[{}] ===", webSocket.getLocalSocketAddress(), clientHandshake.getResourceDescriptor());
-        if(StringUtils.equals(clientHandshake.getResourceDescriptor(), validResourcePath)) {
+        if (validResourcePath.equals(clientHandshake.getResourceDescriptor())) {
             clients.add(webSocket);
         }
     }
@@ -44,7 +44,7 @@ public class QQWsServer extends WebSocketServer {
     public void onMessage(WebSocket webSocket, String msg) {
         logger.debug("=== qq ws server received [{}] ===", msg);
         QQEvent event = JSON.parseObject(msg, QQEvent.class, JSONReader.Feature.SupportSmartMatch);
-        logger.debug("parsed event:[{}]",event);
+        logger.debug("parsed event:[{}]", event);
         QQEventQueue.push(event);
     }
 
@@ -60,7 +60,7 @@ public class QQWsServer extends WebSocketServer {
 
     public void sendMessage(String message) {
         logger.debug("=== qq ws server send message to clients ===");
-        for(WebSocket client : clients) {
+        for (WebSocket client : clients) {
             client.send(message);
         }
     }

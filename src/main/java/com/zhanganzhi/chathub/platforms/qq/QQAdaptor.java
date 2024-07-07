@@ -34,10 +34,12 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
     @Override
     public void stop() {
         listenerStop = true;
+
         // interrupt listener, clear event queue
         if (eventListener != null) {
             eventListener.interrupt();
         }
+
         // close ws server
         qqApi.stop();
     }
@@ -63,9 +65,11 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
     public void eventConsume() {
         QQEvent curEvent;
         while ((curEvent = QQEventQueue.poll()) != null) {
-            if ("message".equals(curEvent.getPostType())
-                    && "group".equals(curEvent.getMessageType())
-                    && "array".equals(curEvent.getMessageFormat())) {
+            if (
+                    "message".equals(curEvent.getPostType())
+                            && "group".equals(curEvent.getMessageType())
+                            && "array".equals(curEvent.getMessageFormat())
+            ) {
                 JSONArray message = curEvent.getMessage();
                 List<String> messages = new ArrayList<>();
                 for (int i = 0; i < message.size(); i++) {
