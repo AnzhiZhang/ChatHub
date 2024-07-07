@@ -55,8 +55,8 @@ enable = false
 groupId = ''
 
 [qq.api]
-wsReversePort = 9001
 host = '0.0.0.0'
+wsReversePort = 9001
 wsReversePath = '/ws/'
 
 [qq.message]
