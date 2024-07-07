@@ -5,7 +5,6 @@ import com.alibaba.fastjson2.JSONReader;
 import com.zhanganzhi.chathub.platforms.qq.QQEventQueue;
 import com.zhanganzhi.chathub.platforms.qq.dto.QQEvent;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -14,6 +13,7 @@ import org.slf4j.Logger;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class QQWsServer extends WebSocketServer {
     private final List<WebSocket> clients;
@@ -30,7 +30,7 @@ public class QQWsServer extends WebSocketServer {
     @Override
     public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
         logger.info("=== qq ws server opened at [{}], path:[{}] ===", webSocket.getLocalSocketAddress(), clientHandshake.getResourceDescriptor());
-        if(StringUtils.equals(clientHandshake.getResourceDescriptor(), validResourcePath)) {
+        if(Objects.equals(clientHandshake.getResourceDescriptor(), validResourcePath)) {
             clients.add(webSocket);
         }
     }

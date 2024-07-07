@@ -9,6 +9,7 @@ public class QQEvent {
     private Long selfId;
     private Long messageId;
     private Long realId;
+    private Long groupId;
     private Long time;
     private String postType;
     private String metaEventType;

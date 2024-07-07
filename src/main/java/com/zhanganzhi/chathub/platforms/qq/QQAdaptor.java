@@ -8,9 +8,6 @@ import com.zhanganzhi.chathub.core.events.MessageEvent;
 import com.zhanganzhi.chathub.platforms.Platform;
 import com.zhanganzhi.chathub.platforms.qq.dto.QQEvent;
 import com.zhanganzhi.chathub.platforms.qq.protocol.QQAPI;
-import org.apache.commons.lang3.ThreadUtils;
-
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +46,7 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
             while (!listenerStop) {
                 eventConsume();
                 try {
-                    ThreadUtils.sleep(Duration.ofSeconds(2));
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     if (listenerStop) {
                         // clear other event
@@ -67,7 +64,8 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
         while ((curEvent = QQEventQueue.poll()) != null) {
             if ("message".equals(curEvent.getPostType())
                     && "group".equals(curEvent.getMessageType())
-                    && "array".equals(curEvent.getMessageFormat())){
+                    && "array".equals(curEvent.getMessageFormat())
+                    && config.getListenedGroupIds().contains(curEvent.getGroupId())){
                 JSONArray message = curEvent.getMessage();
                 List<String> messages = new ArrayList<>();
                 for(int i = 0; i < message.size(); i++) {
