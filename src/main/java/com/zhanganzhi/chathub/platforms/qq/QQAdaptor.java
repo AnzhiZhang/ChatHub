@@ -17,7 +17,6 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
     private boolean listenerStop = false;
     private Thread eventListener;
 
-
     public QQAdaptor(ChatHub chatHub) {
         super(chatHub, Platform.QQ, new QQFormatter());
         startEventListener();
