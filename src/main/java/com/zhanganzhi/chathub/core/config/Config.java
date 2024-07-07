@@ -123,10 +123,6 @@ public class Config {
         return configToml.getString("qq.api.wsReversePath");
     }
 
-    public List<Long> getListenedGroupIds() {
-        return configToml.getList("qq.listenedGroupIds");
-    }
-
     public List<Long> getForwardGroupIds() {
         return configToml.getList("qq.forwardGroupIds");
     }
