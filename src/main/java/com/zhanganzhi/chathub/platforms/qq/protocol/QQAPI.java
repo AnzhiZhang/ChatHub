@@ -21,7 +21,7 @@ public class QQAPI {
         qqEventQueue = new ConcurrentLinkedDeque<>();
         wsServer = new QQWsServer(
                 config.getQQHost(),
-                Integer.valueOf(config.getQQWsReversePort().toString()),
+                config.getQQWsReversePort().intValue(),
                 config.getQQWsReversePath(),
                 qqEventQueue
         );
