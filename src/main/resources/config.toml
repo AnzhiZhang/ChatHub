@@ -4,7 +4,7 @@ survival = '§2§l生存服'
 creative = '§6§l创造服'
 discord = '§a§lDiscord'
 kook = '§a§lKook'
-qq = '§a§lQQ群聊天'
+qq = '§a§lQQ群聊'
 
 [minecraft]
 completeTakeoverMode = false
