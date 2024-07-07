@@ -29,7 +29,7 @@ public class QQWsServer extends WebSocketServer {
 
     @Override
     public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
-        logger.info("=== qq ws server opened at [{}], path:[{}] ===", webSocket.getLocalSocketAddress(), clientHandshake.getResourceDescriptor());
+        logger.info("QQ WebSocket server opened at [{}], path:[{}]", webSocket.getLocalSocketAddress(), clientHandshake.getResourceDescriptor());
         if (validResourcePath.equals(clientHandshake.getResourceDescriptor())) {
             clients.add(webSocket);
         }
@@ -37,12 +37,12 @@ public class QQWsServer extends WebSocketServer {
 
     @Override
     public void onClose(WebSocket webSocket, int i, String s, boolean b) {
-        logger.info("=== qq ws server closed ===");
+        logger.info("QQ WebSocket server closed");
     }
 
     @Override
     public void onMessage(WebSocket webSocket, String msg) {
-        logger.debug("=== qq ws server received [{}] ===", msg);
+        logger.debug("QQ WebSocket server received [{}]", msg);
         QQEvent event = JSON.parseObject(msg, QQEvent.class, JSONReader.Feature.SupportSmartMatch);
         logger.debug("parsed event:[{}]", event);
         QQEventQueue.push(event);
@@ -50,16 +50,16 @@ public class QQWsServer extends WebSocketServer {
 
     @Override
     public void onError(WebSocket webSocket, Exception e) {
-        logger.error("=== qq ws server error ===", e);
+        logger.error("QQ WebSocket server error", e);
     }
 
     @Override
     public void onStart() {
-        logger.info("=== qq ws server started ===");
+        logger.info("QQ ws server started");
     }
 
     public void sendMessage(String message) {
-        logger.debug("=== qq ws server send message to clients ===");
+        logger.debug("QQ ws server send message to clients");
         for (WebSocket client : clients) {
             client.send(message);
         }
