@@ -260,10 +260,40 @@ Message for `/list` command when player list is empty.
 
 ### qq
 
-> In case if you need this feature, PR is welcomed.
-
 #### enable
 
 Default: `false`
 
 Enable [QQ](https://im.qq.com/index) forwaring.
+
+#### groupId
+
+Default: `0`
+
+The messages from the group will be synchronized to ChatHub and
+chatHub will forward all public messages to the group.
+
+### qq.api
+
+#### wsReversePort
+
+Default: `9001`
+
+OneBot server’s reverse webSocket port
+
+#### host
+
+Default: `0.0.0.0`
+
+OneBot server’s reverse webSocket host
+
+#### wsReversePath
+
+Default: `/ws/`
+
+Websocket resource location. 
+
+> Here is a demo for one bot ws reverse path configuration: `ws://127.0.0.1:9001/ws/`
+
+> [!NOTE]
+> The `list` command is not currently supported

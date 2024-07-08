@@ -259,10 +259,39 @@ Kook 消息的格式化文本。占位符与上文同理，所有的服务器名
 
 ### qq
 
-> 如需要此功能，欢迎 PR。
-
 #### enable
 
 默认值：`false`
 
 是否启用 [QQ](https://im.qq.com/index) 转发。
+
+#### groupId
+
+默认值: `0`
+
+该功能为双向转发，即 MC 内消息会发送到指定QQ群，QQ群内消息将被转发到 MC 内。
+
+### qq.api
+
+#### wsReversePort
+
+Default: `9001`
+
+OneBot配置的反向websocket服务端口
+
+#### host
+
+Default: `0.0.0.0`
+
+OneBot配置的反向websocket服务host地址
+
+#### wsReversePath
+
+Default: `/ws/`
+
+websocket资源路径
+
+> 这里是一个OneBot的反向websocket配置示例: `ws://127.0.0.1:9001/ws/`
+
+> [!NOTE]
+> `list`指令暂未支持

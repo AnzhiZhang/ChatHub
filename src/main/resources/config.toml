@@ -52,7 +52,7 @@ listEmpty = '当前没有玩家在线'
 
 [qq]
 enable = false
-groupId = ''
+groupId = 0
 
 [qq.api]
 host = '0.0.0.0'
