@@ -119,10 +119,10 @@ public class Config {
     }
 
     public String getQQWsReversePath() {
-        return configToml.getString("qq.api.wsReversePath");
+        return configToml.getString("qq.api.wsReversePath", "");
     }
 
-    public String getQQGroupId() {
-        return configToml.getString("qq.groupId");
+    public Long getQQGroupId() {
+        return configToml.getLong("qq.groupId");
     }
 }

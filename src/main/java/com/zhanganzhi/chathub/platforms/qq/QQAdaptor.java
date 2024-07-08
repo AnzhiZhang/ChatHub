@@ -29,12 +29,10 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
     @Override
     public void stop() {
         listenerStop = true;
-
         // interrupt listener, clear event queue
         if (eventListener != null) {
             eventListener.interrupt();
         }
-
         // close ws server
         qqAPI.stop();
     }
