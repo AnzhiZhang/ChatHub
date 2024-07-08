@@ -105,4 +105,24 @@ public class Config {
     public Long getKookDaemonRetry() {
         return configToml.getLong("kook.daemon.retry");
     }
+
+    public boolean isQQEnabled() {
+        return configToml.getBoolean("qq.enable");
+    }
+
+    public String getQQGroupId() {
+        return configToml.getString("qq.groupId");
+    }
+
+    public String getQQHost() {
+        return configToml.getString("qq.api.host");
+    }
+
+    public Long getQQWsReversePort() {
+        return configToml.getLong("qq.api.wsReversePort");
+    }
+
+    public String getQQWsReversePath() {
+        return configToml.getString("qq.api.wsReversePath", "");
+    }
 }

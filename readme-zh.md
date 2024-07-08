@@ -4,6 +4,7 @@
 [English](readme.md)
 
 [![License](https://shields.io/github/license/AnzhiZhang/ChatHub?label=License)](https://github.com/AnzhiZhang/ChatHub/blob/master/LICENSE)
+[![Modrith](https://img.shields.io/modrinth/v/H3USaks7?logo=modrinth&label=Modrinth&color=%2300AF5C)](https://modrinth.com/plugin/chathub)
 [![CurseForge](https://cf.way2muchnoise.eu/short_825508_downloads.svg)](https://www.curseforge.com/minecraft/bukkit-plugins/chathub)
 [![Release](https://shields.io/github/v/release/AnzhiZhang/ChatHub?display_name=tag&include_prereleases&label=Release)](https://github.com/AnzhiZhang/ChatHub/releases/latest)
 [![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg)](https://gitmoji.dev/)
@@ -259,10 +260,79 @@ Kook 消息的格式化文本。占位符与上文同理，所有的服务器名
 
 ### qq
 
-> 如需要此功能，欢迎 PR。
+> [!NOTE]
+> `list` 指令暂未支持
+
+该功能为双向转发，即 MC 内消息会发送到指定 QQ 群，QQ 群内消息将被转发到 MC 内。
 
 #### enable
 
 默认值：`false`
 
 是否启用 [QQ](https://im.qq.com/index) 转发。
+
+#### groupId
+
+QQ 群 ID。
+
+### qq.api
+
+#### host
+
+Default: `0.0.0.0`
+
+OneBot 配置的反向 WebSocket 服务地址
+
+#### wsReversePort
+
+Default: `9001`
+
+OneBot 配置的反向 WebSocket 服务端口
+
+#### wsReversePath
+
+Default: `/ws/`
+
+websocket资源路径
+
+> 这里是一个 OneBot 的反向 WebSocket 配置示例: `ws://127.0.0.1:9001/ws/`
+
+### qq.message
+
+QQ 消息的格式化文本。占位符与上文同理，所有的服务器名称会自动转为 plain 格式，您无需使用 plain 格式的占位符。
+
+#### chat
+
+默认值：`[{server}] <{name}>: {message}`
+
+聊天消息。
+
+#### join
+
+默认值：`[+] [{server}] {name}`
+
+玩家加入服务器消息。
+
+#### leave
+
+默认值：`[-] {name}`
+
+玩家离开服务器消息。
+
+#### switch
+
+默认值：`<{name}>: [{serverFrom}] ➟ [{serverTo}]`
+
+玩家切换服务器消息。
+
+#### list
+
+默认值：`- [{server}] 当前共有{count}名玩家在线: {playerList}`
+
+`/list` 指令显示的消息。
+
+#### listEmpty
+
+默认值：`当前没有玩家在线`
+
+使用 `/list` 指令且玩家列表为空时显示的消息。

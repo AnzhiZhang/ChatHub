@@ -260,10 +260,79 @@ Message for `/list` command when player list is empty.
 
 ### qq
 
-> In case if you need this feature, PR is welcomed.
+> [!NOTE]
+> The `list` command is not currently available.
+
+The messages from the group will be synchronized to ChatHub and chatHub will forward all public messages to the group.
 
 #### enable
 
 Default: `false`
 
 Enable [QQ](https://im.qq.com/index) forwaring.
+
+#### groupId
+
+Group ID.
+
+### qq.api
+
+#### host
+
+Default: `0.0.0.0`
+
+OneBot server’s reverse webSocket host
+
+#### wsReversePort
+
+Default: `9001`
+
+OneBot server’s reverse webSocket port
+
+#### wsReversePath
+
+Default: `/ws/`
+
+Websocket resource location. 
+
+> Here is a demo for one bot ws reverse path configuration: `ws://127.0.0.1:9001/ws/`
+
+### qq.message
+
+QQ message format sages. Placeholders are defined same as Miencraft, all server name will auto translate to plain format, you do not have to use plain placeholders.
+
+#### chat
+
+Default: `[{server}] <{name}>: {message}`
+
+Chat.
+
+#### join
+
+Default: `[+] [{server}] {name}`
+
+Message when player joined the server.
+
+#### leave
+
+Default: `[-] {name}`
+
+Message when player left the server.
+
+#### switch
+
+Default: `<{name}>: [{serverFrom}] ➟ [{serverTo}]`
+
+Message when player switched server.
+
+#### list
+
+Default: `- [{server}] 当前共有{count}名玩家在线: {playerList}`
+
+Message for `/list` command.
+
+#### listEmpty
+
+Default: `当前没有玩家在线`
+
+Message for `/list` command when player list is empty.

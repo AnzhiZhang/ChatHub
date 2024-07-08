@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum Platform {
     DISCORD("discord"),
     KOOK("kook"),
+    QQ("qq"),
     VELOCITY("velocity", "minecraft");
 
     private final String name;
