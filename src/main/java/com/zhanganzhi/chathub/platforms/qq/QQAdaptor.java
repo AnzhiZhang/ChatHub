@@ -13,23 +13,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
-    private final QQAPI qqAPI = QQAPI.getInstance(chatHub.getLogger());
-    private boolean listenerStop = false;
-    private Thread eventListener;
+    private final QQAPI qqAPI;
+    private final Thread eventListener;
+    private boolean listenerStopFlag = false;
 
     public QQAdaptor(ChatHub chatHub) {
         super(chatHub, Platform.QQ, new QQFormatter());
-        startEventListener();
+        qqAPI = new QQAPI(chatHub);
+        eventListener = new Thread(this::eventListener, "qq-event-listener");
     }
 
     @Override
-    public void sendPublicMessage(String message) {
-        new Thread(() -> qqAPI.sendMessage(message, config.getQQGroupId())).start();
+    public void start() {
+        chatHub.getLogger().info("QQ enabled");
+        qqAPI.start();
+        eventListener.start();
     }
 
     @Override
     public void stop() {
-        listenerStop = true;
+        // stop listener
+        listenerStopFlag = true;
 
         // interrupt listener, clear event queue
         if (eventListener != null) {
@@ -40,25 +44,27 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
         qqAPI.stop();
     }
 
-    public void startEventListener() {
-        eventListener = new Thread(() -> {
-            while (!listenerStop) {
-                eventConsume();
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    if (listenerStop) {
-                        // clear other event
-                        eventConsume();
-                        break;
-                    }
-                }
-            }
-        }, "qq-event-listener");
-        eventListener.start();
+    @Override
+    public void sendPublicMessage(String message) {
+        new Thread(() -> qqAPI.sendMessage(message, config.getQQGroupId())).start();
     }
 
-    public void eventConsume() {
+    public void eventListener() {
+        while (!listenerStopFlag) {
+            consumeEvent();
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                if (listenerStopFlag) {
+                    // clear other event
+                    consumeEvent();
+                    break;
+                }
+            }
+        }
+    }
+
+    public void consumeEvent() {
         QQEvent curEvent;
         while ((curEvent = qqAPI.getQqEventQueue().poll()) != null) {
             if (

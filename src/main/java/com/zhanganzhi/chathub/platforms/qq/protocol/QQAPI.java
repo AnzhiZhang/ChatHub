@@ -1,11 +1,11 @@
 package com.zhanganzhi.chathub.platforms.qq.protocol;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.config.Config;
 import com.zhanganzhi.chathub.platforms.qq.dto.QQEvent;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -17,7 +17,7 @@ public class QQAPI {
     private final Queue<QQEvent> qqEventQueue;
     private final QQWsServer wsServer;
 
-    private QQAPI() {
+    public QQAPI(ChatHub chatHub) {
         qqEventQueue = new ConcurrentLinkedDeque<>();
         wsServer = new QQWsServer(
                 config.getQQHost(),
@@ -25,24 +25,16 @@ public class QQAPI {
                 config.getQQWsReversePath(),
                 qqEventQueue
         );
+        wsServer.setLogger(chatHub.getLogger());
     }
 
-    public static QQAPI getInstance(Logger logger) {
-        if (instance == null) {
-            synchronized (QQAPI.class) {
-                if (instance == null) {
-                    instance = new QQAPI();
-                    instance.wsServer.setLogger(logger);
-                    new Thread(() -> instance.getWsServer().start(), "qq-ws-server").start();
-                }
-            }
-        }
-        return instance;
+    public void start() {
+        new Thread(wsServer::start, "qq-ws-server").start();
     }
 
     @SneakyThrows
     public void stop() {
-        this.wsServer.stop();
+        wsServer.stop();
     }
 
     public void sendMessage(String message, String targetId) {
