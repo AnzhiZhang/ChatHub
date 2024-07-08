@@ -75,6 +75,7 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
             ) {
                 JSONArray message = curEvent.getMessage();
                 List<String> messages = new ArrayList<>();
+                chatHub.getLogger().info("Event:{}",curEvent);
                 for (int i = 0; i < message.size(); i++) {
                     JSONObject part = message.getJSONObject(i);
                     if (part.getString("type").equals("text")) {

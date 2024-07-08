@@ -6,16 +6,17 @@ import com.zhanganzhi.chathub.core.config.Config;
 import com.zhanganzhi.chathub.platforms.qq.dto.QQEvent;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.slf4j.Logger;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 @Getter
 public class QQAPI {
-    private static volatile QQAPI instance;
     private final Config config = Config.getInstance();
     private final Queue<QQEvent> qqEventQueue;
     private final QQWsServer wsServer;
+    private final Logger logger;
 
     public QQAPI(ChatHub chatHub) {
         qqEventQueue = new ConcurrentLinkedDeque<>();
@@ -25,11 +26,12 @@ public class QQAPI {
                 config.getQQWsReversePath(),
                 qqEventQueue
         );
+        logger = chatHub.getLogger();
         wsServer.setLogger(chatHub.getLogger());
     }
 
     public void start() {
-        new Thread(wsServer::start, "qq-ws-server").start();
+        wsServer.start();
     }
 
     @SneakyThrows
