@@ -8,6 +8,7 @@ import com.zhanganzhi.chathub.core.events.MessageEvent;
 import com.zhanganzhi.chathub.platforms.Platform;
 import com.zhanganzhi.chathub.platforms.qq.dto.QQEvent;
 import com.zhanganzhi.chathub.platforms.qq.protocol.QQAPI;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +63,7 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
                     "message".equals(curEvent.getPostType())
                             && "group".equals(curEvent.getMessageType())
                             && "array".equals(curEvent.getMessageFormat())
-                    && config.getQQGroupId().equals(curEvent.getGroupId())
+                            && config.getQQGroupId().equals(curEvent.getGroupId().toString())
             ) {
                 JSONArray message = curEvent.getMessage();
                 List<String> messages = new ArrayList<>();

@@ -122,7 +122,7 @@ public class Config {
         return configToml.getString("qq.api.wsReversePath", "");
     }
 
-    public Long getQQGroupId() {
-        return configToml.getLong("qq.groupId");
+    public String getQQGroupId() {
+        return configToml.getString("qq.groupId");
     }
 }
