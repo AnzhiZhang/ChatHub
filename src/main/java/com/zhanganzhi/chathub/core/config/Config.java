@@ -110,6 +110,10 @@ public class Config {
         return configToml.getBoolean("qq.enable");
     }
 
+    public String getQQGroupId() {
+        return configToml.getString("qq.groupId");
+    }
+
     public String getQQHost() {
         return configToml.getString("qq.api.host");
     }
@@ -120,9 +124,5 @@ public class Config {
 
     public String getQQWsReversePath() {
         return configToml.getString("qq.api.wsReversePath", "");
-    }
-
-    public String getQQGroupId() {
-        return configToml.getString("qq.groupId");
     }
 }
