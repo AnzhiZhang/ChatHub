@@ -19,7 +19,7 @@ import java.nio.file.Path;
         id = "chathub",
         name = "ChatHub",
         // x-release-please-start-version
-        version = "1.5.1",
+        version = "1.6.0",
         // x-release-please-end
         url = "https://github.com/AnzhiZhang/ChatHub",
         description = "Chat hub for servers under velocity proxy",
