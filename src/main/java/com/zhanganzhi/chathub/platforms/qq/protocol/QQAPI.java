@@ -16,7 +16,6 @@ public class QQAPI {
     private final Config config = Config.getInstance();
     private final Queue<QQEvent> qqEventQueue;
     private final QQWsServer wsServer;
-    private final Logger logger;
 
     public QQAPI(ChatHub chatHub) {
         qqEventQueue = new ConcurrentLinkedDeque<>();
@@ -26,7 +25,6 @@ public class QQAPI {
                 config.getQQWsReversePath(),
                 qqEventQueue
         );
-        logger = chatHub.getLogger();
         wsServer.setLogger(chatHub.getLogger());
     }
 
