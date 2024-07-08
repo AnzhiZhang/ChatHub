@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.0](https://github.com/AnzhiZhang/ChatHub/compare/v1.5.1...v1.6.0) (2024-07-08)
+
+
+### Features
+
+* ✨ add qq platform ([#26](https://github.com/AnzhiZhang/ChatHub/issues/26)) ([3a664ea](https://github.com/AnzhiZhang/ChatHub/commit/3a664ea8e72af2fe4a1dabe9e4650ab743c1f1a8))
+* 🔒️ only introduce adaptors when config set to enabled ([5ad0012](https://github.com/AnzhiZhang/ChatHub/commit/5ad0012a2933927c5e5541af3d86b07c8468efd2))
+
 ## [1.5.1](https://github.com/AnzhiZhang/ChatHub/compare/v1.5.0...v1.5.1) (2024-04-26)
 
 
