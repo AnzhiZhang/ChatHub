@@ -2,20 +2,30 @@ package com.zhanganzhi.chathub.platforms.qq.protocol;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.zhanganzhi.chathub.core.config.Config;
+import com.zhanganzhi.chathub.platforms.qq.dto.QQEvent;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
+
 @Getter
 public class QQAPI {
-
-    private QQAPI() {}
-
     private static volatile QQAPI instance;
     private final Config config = Config.getInstance();
-    private final QQWsServer wsServer = new QQWsServer(config.getQQHost(),
-            Integer.valueOf(config.getQQWsReversePort().toString()),
-            config.getQQWsReversePath());
+    private final Queue<QQEvent> qqEventQueue;
+    private final QQWsServer wsServer;
+
+    private QQAPI() {
+        qqEventQueue = new ConcurrentLinkedDeque<>();
+        wsServer = new QQWsServer(
+                config.getQQHost(),
+                config.getQQWsReversePort().intValue(),
+                config.getQQWsReversePath(),
+                qqEventQueue
+        );
+    }
 
     public static QQAPI getInstance(Logger logger) {
         if (instance == null) {
@@ -35,11 +45,11 @@ public class QQAPI {
         this.wsServer.stop();
     }
 
-    public void sendMessage(String message, Long targetId) {
+    public void sendMessage(String message, String targetId) {
         wsServer.sendMessage(genSendReq(message, targetId));
     }
 
-    private String genSendReq(String message, Long targetId) {
+    private String genSendReq(String message, String targetId) {
         JSONObject req = new JSONObject();
         req.put("action", "send_msg");
         JSONObject params = new JSONObject();

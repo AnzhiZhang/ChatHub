@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Objects;
 
 public class Config {
@@ -123,11 +122,7 @@ public class Config {
         return configToml.getString("qq.api.wsReversePath");
     }
 
-    public List<Long> getListenedGroupIds() {
-        return configToml.getList("qq.listenedGroupIds");
-    }
-
-    public List<Long> getForwardGroupIds() {
-        return configToml.getList("qq.forwardGroupIds");
+    public String getQQGroupId() {
+        return configToml.getString("qq.groupId");
     }
 }

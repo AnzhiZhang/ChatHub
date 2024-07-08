@@ -4,7 +4,7 @@ survival = '§2§l生存服'
 creative = '§6§l创造服'
 discord = '§a§lDiscord'
 kook = '§a§lKook'
-qq = '§a§lQQ群聊'
+qq = '§a§lQQ'
 
 [minecraft]
 completeTakeoverMode = false
@@ -52,12 +52,11 @@ listEmpty = '当前没有玩家在线'
 
 [qq]
 enable = false
-listenGroupIds = []
-forwardGroupIds = []
+groupId = ''
 
 [qq.api]
-wsReversePort = 9001
 host = '0.0.0.0'
+wsReversePort = 9001
 wsReversePath = '/ws/'
 
 [qq.message]

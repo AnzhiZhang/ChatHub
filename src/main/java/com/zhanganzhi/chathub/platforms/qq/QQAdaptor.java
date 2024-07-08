@@ -12,10 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
-    private final QQAPI qqApi = QQAPI.getInstance(chatHub.getLogger());
+    private final QQAPI qqAPI = QQAPI.getInstance(chatHub.getLogger());
     private boolean listenerStop = false;
     private Thread eventListener;
-
 
     public QQAdaptor(ChatHub chatHub) {
         super(chatHub, Platform.QQ, new QQFormatter());
@@ -24,21 +23,20 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
 
     @Override
     public void sendPublicMessage(String message) {
-        if (config.isQQEnabled()) {
-            List<Long> forwardGroups = config.getForwardGroupIds();
-            forwardGroups.forEach(groupId -> new Thread(() -> qqApi.sendMessage(message, groupId)).start());
-        }
+        new Thread(() -> qqAPI.sendMessage(message, config.getQQGroupId())).start();
     }
 
     @Override
     public void stop() {
         listenerStop = true;
+
         // interrupt listener, clear event queue
         if (eventListener != null) {
             eventListener.interrupt();
         }
+
         // close ws server
-        qqApi.stop();
+        qqAPI.stop();
     }
 
     public void startEventListener() {
@@ -60,17 +58,19 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
     }
 
     public void eventConsume() {
-        QQEvent curEvent = null;
-        while ((curEvent = QQEventQueue.poll()) != null) {
-            if ("message".equals(curEvent.getPostType())
-                    && "group".equals(curEvent.getMessageType())
-                    && "array".equals(curEvent.getMessageFormat())
-                    && config.getListenedGroupIds().contains(curEvent.getGroupId())){
+        QQEvent curEvent;
+        while ((curEvent = qqAPI.getQqEventQueue().poll()) != null) {
+            if (
+                    "message".equals(curEvent.getPostType())
+                            && "group".equals(curEvent.getMessageType())
+                            && "array".equals(curEvent.getMessageFormat())
+                    && config.getQQGroupId().equals(curEvent.getGroupId())
+            ) {
                 JSONArray message = curEvent.getMessage();
                 List<String> messages = new ArrayList<>();
-                for(int i = 0; i < message.size(); i++) {
+                for (int i = 0; i < message.size(); i++) {
                     JSONObject part = message.getJSONObject(i);
-                    if(part.getString("type").equals("text")) {
+                    if (part.getString("type").equals("text")) {
                         messages.add(part.getJSONObject("data").getString("text"));
                     }
                 }

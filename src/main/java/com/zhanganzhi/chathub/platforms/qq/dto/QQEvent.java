@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class QQEvent {
-
     private Long selfId;
     private Long messageId;
     private Long realId;
@@ -19,5 +18,4 @@ public class QQEvent {
     private String subType;
     private JSONArray message;
     private String messageFormat;
-
 }

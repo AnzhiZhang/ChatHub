@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class Sender {
-
     private Long userId;
     private String nickname;
     private String card;
