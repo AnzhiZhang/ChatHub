@@ -75,16 +75,25 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
             ) {
                 JSONArray message = curEvent.getMessage();
                 List<String> messages = new ArrayList<>();
-                for (int i = 0; i < message.size(); i++) {
-                    JSONObject part = message.getJSONObject(i);
-                    if (part.getString("type").equals("text")) {
-                        messages.add(part.getJSONObject("data").getString("text"));
+                if(message.size() == 1){
+                    if(message.getJSONObject(0).getString("type").equals("text")
+                            && "/list".equals(message.getJSONObject(0).getJSONObject("data").getString("text"))) {
+                        sendPublicMessage(getFormatter().formatListAll(chatHub.getProxyServer()));
                     }
+                }else {
+                    for (int i = 0; i < message.size(); i++) {
+                        JSONObject part = message.getJSONObject(i);
+                        if (part.getString("type").equals("text")) {
+                            messages.add(part.getJSONObject("data").getString("text"));
+                        } else if (part.getString("type").equals("image")) {
+                            messages.add("[图片]");
+                        }
+                    }
+                    String content = String.join(" ", messages);
+                    chatHub.getEventHub().onUserChat(new MessageEvent(
+                            Platform.QQ, null, curEvent.getSender().getNickname(), content
+                    ));
                 }
-                String content = String.join(" ", messages);
-                chatHub.getEventHub().onUserChat(new MessageEvent(
-                        Platform.QQ, null, curEvent.getSender().getNickname(), content
-                ));
             }
         }
     }
