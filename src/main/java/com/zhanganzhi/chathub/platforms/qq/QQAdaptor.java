@@ -74,14 +74,20 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
                             && config.getQQGroupId().equals(curEvent.getGroupId().toString())
             ) {
                 JSONArray message = curEvent.getMessage();
-                List<String> messages = new ArrayList<>();
+
+                // list command
                 if (message.size() == 1) {
-                    if (message.getJSONObject(0).getString("type").equals("text")
-                            && "/list".equals(message.getJSONObject(0).getJSONObject("data").getString("text"))) {
+                    if (
+                            "text".equals(message.getJSONObject(0).getString("type")) &&
+                                    "/list".equals(message.getJSONObject(0).getJSONObject("data").getString("text"))
+                    ) {
                         sendPublicMessage(getFormatter().formatListAll(chatHub.getProxyServer()));
                         return;
                     }
                 }
+
+                // chat
+                List<String> messages = new ArrayList<>();
                 for (int i = 0; i < message.size(); i++) {
                     JSONObject part = message.getJSONObject(i);
                     if (part.getString("type").equals("text")) {
