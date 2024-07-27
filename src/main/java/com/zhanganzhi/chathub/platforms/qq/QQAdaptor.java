@@ -74,11 +74,26 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
                             && config.getQQGroupId().equals(curEvent.getGroupId().toString())
             ) {
                 JSONArray message = curEvent.getMessage();
+
+                // list command
+                if (message.size() == 1) {
+                    if (
+                            "text".equals(message.getJSONObject(0).getString("type")) &&
+                                    "/list".equals(message.getJSONObject(0).getJSONObject("data").getString("text"))
+                    ) {
+                        sendPublicMessage(getFormatter().formatListAll(chatHub.getProxyServer()));
+                        return;
+                    }
+                }
+
+                // chat
                 List<String> messages = new ArrayList<>();
                 for (int i = 0; i < message.size(); i++) {
                     JSONObject part = message.getJSONObject(i);
                     if (part.getString("type").equals("text")) {
                         messages.add(part.getJSONObject("data").getString("text"));
+                    } else if (part.getString("type").equals("image")) {
+                        messages.add("[图片]");
                     }
                 }
                 String content = String.join(" ", messages);

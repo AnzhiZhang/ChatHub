@@ -260,9 +260,6 @@ Message for `/list` command when player list is empty.
 
 ### qq
 
-> [!NOTE]
-> The `list` command is not currently available.
-
 The messages from the group will be synchronized to ChatHub and chatHub will forward all public messages to the group.
 
 #### enable

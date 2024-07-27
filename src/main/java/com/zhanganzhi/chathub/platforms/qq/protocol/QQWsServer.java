@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 
@@ -31,7 +32,7 @@ public class QQWsServer extends WebSocketServer {
 
     @Override
     public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
-        logger.info("QQ WebSocket server opened at [{}], path:[{}]", webSocket.getLocalSocketAddress(), clientHandshake.getResourceDescriptor());
+        logger.info("QQ WebSocket connection opened at [{}], path:[{}]", webSocket.getLocalSocketAddress(), clientHandshake.getResourceDescriptor());
         if (validResourcePath.equals(clientHandshake.getResourceDescriptor())) {
             clients.add(webSocket);
         }
@@ -39,7 +40,7 @@ public class QQWsServer extends WebSocketServer {
 
     @Override
     public void onClose(WebSocket webSocket, int i, String s, boolean b) {
-        logger.info("QQ WebSocket server closed");
+        logger.info("QQ WebSocket connection closed");
     }
 
     @Override
@@ -52,7 +53,7 @@ public class QQWsServer extends WebSocketServer {
 
     @Override
     public void onError(WebSocket webSocket, Exception e) {
-        logger.error("QQ WebSocket server error", e);
+        logger.error("QQ WebSocket connection error", e);
     }
 
     @Override
@@ -62,8 +63,18 @@ public class QQWsServer extends WebSocketServer {
 
     public void sendMessage(String message) {
         logger.debug("QQ WebSocket server send message to clients");
-        for (WebSocket client : clients) {
-            client.send(message);
+        Iterator<WebSocket> iter = clients.iterator();
+        while (iter.hasNext()) {
+            WebSocket webSocket = iter.next();
+            try {
+                webSocket.send(message);
+            } catch (Exception e) {
+                if (!webSocket.isClosed()) {
+                    logger.error("QQ WebSocket connection closed!error: {}", e.getMessage());
+                    webSocket.close();
+                }
+                iter.remove();
+            }
         }
     }
 }

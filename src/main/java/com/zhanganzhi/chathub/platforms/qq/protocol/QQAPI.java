@@ -6,7 +6,6 @@ import com.zhanganzhi.chathub.core.config.Config;
 import com.zhanganzhi.chathub.platforms.qq.dto.QQEvent;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
