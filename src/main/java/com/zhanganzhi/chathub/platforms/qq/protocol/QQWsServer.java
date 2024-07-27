@@ -45,7 +45,7 @@ public class QQWsServer extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket webSocket, String msg) {
-        logger.debug("QQ WebSocket server received [{}]", msg);
+        logger.info("QQ WebSocket server received [{}]", msg);
         QQEvent event = JSON.parseObject(msg, QQEvent.class, JSONReader.Feature.SupportSmartMatch);
         logger.debug("parsed event:[{}]", event);
         qqEventDeque.add(event);
