@@ -37,11 +37,7 @@ public class QQAPI {
     }
 
     public void sendMessage(String message, String targetId) {
-        try {
-            wsServer.sendMessage(genSendReq(message, targetId));
-        }catch (Exception e){
-            System.out.println(message);
-        }
+        wsServer.sendMessage(genSendReq(message, targetId));
     }
 
     private String genSendReq(String message, String targetId) {
