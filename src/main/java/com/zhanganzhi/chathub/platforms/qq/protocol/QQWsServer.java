@@ -3,7 +3,6 @@ package com.zhanganzhi.chathub.platforms.qq.protocol;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONReader;
 import com.zhanganzhi.chathub.platforms.qq.dto.QQEvent;
-import lombok.Getter;
 import lombok.Setter;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -22,7 +21,6 @@ public class QQWsServer extends WebSocketServer {
     private final Queue<QQEvent> qqEventDeque;
 
     @Setter
-    @Getter
     private Logger logger;
 
     public QQWsServer(String host, Integer port, String validResourcePath, Queue<QQEvent> qqEventDeque) {
