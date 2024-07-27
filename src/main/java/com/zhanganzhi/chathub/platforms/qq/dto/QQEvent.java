@@ -16,6 +16,6 @@ public class QQEvent {
     private Sender sender;
     private String rawMessage;
     private String subType;
-    private JSONArray message;
+    private Object message;
     private String messageFormat;
 }

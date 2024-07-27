@@ -1,5 +1,6 @@
 package com.zhanganzhi.chathub.platforms.qq;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.zhanganzhi.chathub.ChatHub;
@@ -46,6 +47,7 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
 
     @Override
     public void sendPublicMessage(String message) {
+        System.out.println(message);
         new Thread(() -> qqAPI.sendMessage(message, config.getQQGroupId())).start();
     }
 
@@ -73,27 +75,27 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
                             && "array".equals(curEvent.getMessageFormat())
                             && config.getQQGroupId().equals(curEvent.getGroupId().toString())
             ) {
-                JSONArray message = curEvent.getMessage();
+                JSONArray message = (JSONArray) curEvent.getMessage();
                 List<String> messages = new ArrayList<>();
-                if(message.size() == 1){
-                    if(message.getJSONObject(0).getString("type").equals("text")
+                if (message.size() == 1) {
+                    if (message.getJSONObject(0).getString("type").equals("text")
                             && "/list".equals(message.getJSONObject(0).getJSONObject("data").getString("text"))) {
                         sendPublicMessage(getFormatter().formatListAll(chatHub.getProxyServer()));
+                        return;
                     }
-                }else {
-                    for (int i = 0; i < message.size(); i++) {
-                        JSONObject part = message.getJSONObject(i);
-                        if (part.getString("type").equals("text")) {
-                            messages.add(part.getJSONObject("data").getString("text"));
-                        } else if (part.getString("type").equals("image")) {
-                            messages.add("[图片]");
-                        }
-                    }
-                    String content = String.join(" ", messages);
-                    chatHub.getEventHub().onUserChat(new MessageEvent(
-                            Platform.QQ, null, curEvent.getSender().getNickname(), content
-                    ));
                 }
+                for (int i = 0; i < message.size(); i++) {
+                    JSONObject part = message.getJSONObject(i);
+                    if (part.getString("type").equals("text")) {
+                        messages.add(part.getJSONObject("data").getString("text"));
+                    } else if (part.getString("type").equals("image")) {
+                        messages.add("[图片]");
+                    }
+                }
+                String content = String.join(" ", messages);
+                chatHub.getEventHub().onUserChat(new MessageEvent(
+                        Platform.QQ, null, curEvent.getSender().getNickname(), content
+                ));
             }
         }
     }
