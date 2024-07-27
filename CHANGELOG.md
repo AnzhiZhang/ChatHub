@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/AnzhiZhang/ChatHub/compare/v1.6.0...v1.7.0) (2024-07-27)
+
+
+### Features
+
+* ✨ QQ `list` command  support ([#29](https://github.com/AnzhiZhang/ChatHub/issues/29)) ([71397aa](https://github.com/AnzhiZhang/ChatHub/commit/71397aa0083bd9df92820ac63442e1092e102bef))
+
 ## [1.6.0](https://github.com/AnzhiZhang/ChatHub/compare/v1.5.1...v1.6.0) (2024-07-08)
 
 
