@@ -1,6 +1,5 @@
 package com.zhanganzhi.chathub.platforms.qq;
 
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.zhanganzhi.chathub.ChatHub;
@@ -46,7 +45,7 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
     }
 
     @Override
-    public void sendPublicMessage(String message){
+    public void sendPublicMessage(String message) {
         new Thread(() -> qqAPI.sendMessage(message, config.getQQGroupId())).start();
     }
 

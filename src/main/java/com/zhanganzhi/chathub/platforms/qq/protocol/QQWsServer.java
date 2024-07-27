@@ -4,7 +4,6 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONReader;
 import com.zhanganzhi.chathub.platforms.qq.dto.QQEvent;
 import lombok.Setter;
-import net.dv8tion.jda.api.events.ExceptionEvent;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -69,8 +68,8 @@ public class QQWsServer extends WebSocketServer {
             WebSocket webSocket = iter.next();
             try {
                 webSocket.send(message);
-            }catch (Exception e) {
-                if(!webSocket.isClosed()) {
+            } catch (Exception e) {
+                if (!webSocket.isClosed()) {
                     logger.error("QQ WebSocket connection closed!error: {}", e.getMessage());
                     webSocket.close();
                 }
