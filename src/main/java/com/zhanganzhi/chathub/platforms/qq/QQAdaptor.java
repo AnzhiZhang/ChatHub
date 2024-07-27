@@ -46,8 +46,7 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
     }
 
     @Override
-    public void sendPublicMessage(String message) {
-        System.out.println(message);
+    public void sendPublicMessage(String message){
         new Thread(() -> qqAPI.sendMessage(message, config.getQQGroupId())).start();
     }
 
@@ -75,7 +74,7 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
                             && "array".equals(curEvent.getMessageFormat())
                             && config.getQQGroupId().equals(curEvent.getGroupId().toString())
             ) {
-                JSONArray message = (JSONArray) curEvent.getMessage();
+                JSONArray message = curEvent.getMessage();
                 List<String> messages = new ArrayList<>();
                 if (message.size() == 1) {
                     if (message.getJSONObject(0).getString("type").equals("text")

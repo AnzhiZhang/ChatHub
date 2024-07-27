@@ -3,6 +3,7 @@ package com.zhanganzhi.chathub.platforms.qq.protocol;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONReader;
 import com.zhanganzhi.chathub.platforms.qq.dto.QQEvent;
+import lombok.Getter;
 import lombok.Setter;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -20,6 +21,7 @@ public class QQWsServer extends WebSocketServer {
     private final Queue<QQEvent> qqEventDeque;
 
     @Setter
+    @Getter
     private Logger logger;
 
     public QQWsServer(String host, Integer port, String validResourcePath, Queue<QQEvent> qqEventDeque) {
@@ -44,7 +46,7 @@ public class QQWsServer extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket webSocket, String msg) {
-        logger.info("QQ WebSocket server received [{}]", msg);
+        logger.debug("QQ WebSocket server received [{}]", msg);
         QQEvent event = JSON.parseObject(msg, QQEvent.class, JSONReader.Feature.SupportSmartMatch);
         logger.debug("parsed event:[{}]", event);
         qqEventDeque.add(event);

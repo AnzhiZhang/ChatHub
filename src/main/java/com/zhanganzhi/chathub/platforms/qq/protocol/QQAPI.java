@@ -6,7 +6,6 @@ import com.zhanganzhi.chathub.core.config.Config;
 import com.zhanganzhi.chathub.platforms.qq.dto.QQEvent;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -38,11 +37,7 @@ public class QQAPI {
     }
 
     public void sendMessage(String message, String targetId) {
-        try {
-            wsServer.sendMessage(genSendReq(message, targetId));
-        }catch (Exception e){
-            System.out.println(message);
-        }
+        wsServer.sendMessage(genSendReq(message, targetId));
     }
 
     private String genSendReq(String message, String targetId) {
