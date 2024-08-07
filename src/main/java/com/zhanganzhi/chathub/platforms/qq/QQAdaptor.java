@@ -2,6 +2,7 @@ package com.zhanganzhi.chathub.platforms.qq;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.google.common.base.Strings;
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.adaptor.AbstractAdaptor;
 import com.zhanganzhi.chathub.core.events.MessageEvent;
@@ -97,8 +98,9 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
                     }
                 }
                 String content = String.join(" ", messages);
+                String sender = Strings.isNullOrEmpty(curEvent.getSender().getCard()) ? curEvent.getSender().getNickname() : curEvent.getSender().getCard();
                 chatHub.getEventHub().onUserChat(new MessageEvent(
-                        Platform.QQ, null, curEvent.getSender().getNickname(), content
+                        Platform.QQ, null, sender, content
                 ));
             }
         }
