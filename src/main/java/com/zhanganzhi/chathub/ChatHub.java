@@ -51,18 +51,16 @@ public class ChatHub {
         // core
         Config config = Config.getInstance();
         config.loadConfig(dataDirectory);
+        threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(
+                config.getCoreThreadPoolSize(),
+                new ThreadFactoryBuilder().setNameFormat("chathub-tasks-%d").build()
+        );
         eventHub = new EventHub(this);
 
         // command
         proxyServer.getCommandManager().register(
                 proxyServer.getCommandManager().metaBuilder("chathub").plugin(this).build(),
                 new VelocityCommand(this)
-        );
-
-        // thread pool
-        threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(
-                config.getCoreThreadPoolSize(),
-                new ThreadFactoryBuilder().setNameFormat("chathub-tasks-%d").build()
         );
 
         // init event hub
