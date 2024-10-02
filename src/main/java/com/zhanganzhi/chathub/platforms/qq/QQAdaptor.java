@@ -96,9 +96,14 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
                         messages.add("[图片]");
                     }
                 }
+                String senderCard = curEvent.getSender().getCard();
+                String senderName = senderCard.isEmpty() ? curEvent.getSender().getNickname() : senderCard;
                 String content = String.join(" ", messages);
                 chatHub.getEventHub().onUserChat(new MessageEvent(
-                        Platform.QQ, null, curEvent.getSender().getNickname(), content
+                        platform,
+                        null,
+                        senderName,
+                        content
                 ));
             }
         }
