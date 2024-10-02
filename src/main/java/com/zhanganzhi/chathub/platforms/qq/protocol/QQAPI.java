@@ -42,7 +42,7 @@ public class QQAPI {
 
     private String genSendReq(String message, String targetId) {
         JSONObject req = new JSONObject();
-        req.put("action", "send_msg");
+        req.put("action", "send_group_msg");
         JSONObject params = new JSONObject();
         params.put("group_id", targetId);
         params.put("message", message);
