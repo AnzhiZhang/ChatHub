@@ -46,7 +46,7 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
 
     @Override
     public void sendPublicMessage(String message) {
-        new Thread(() -> qqAPI.sendMessage(message, config.getQQGroupId())).start();
+        chatHub.getThreadPoolExecutor().submit(() -> qqAPI.sendMessage(message, config.getQQGroupId()));
     }
 
     public void eventListener() {

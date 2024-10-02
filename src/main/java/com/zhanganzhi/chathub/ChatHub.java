@@ -1,5 +1,6 @@
 package com.zhanganzhi.chathub;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -14,6 +15,8 @@ import lombok.Getter;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Plugin(
         id = "chathub",
@@ -32,6 +35,8 @@ public class ChatHub {
     private final Logger logger;
     private final Path dataDirectory;
     @Getter
+    private ThreadPoolExecutor threadPoolExecutor;
+    @Getter
     private EventHub eventHub;
 
     @Inject
@@ -44,13 +49,20 @@ public class ChatHub {
     @Subscribe
     public void onInitialize(ProxyInitializeEvent event) {
         // core
-        Config.getInstance().loadConfig(dataDirectory);
+        Config config = Config.getInstance();
+        config.loadConfig(dataDirectory);
         eventHub = new EventHub(this);
 
         // command
         proxyServer.getCommandManager().register(
                 proxyServer.getCommandManager().metaBuilder("chathub").plugin(this).build(),
                 new VelocityCommand(this)
+        );
+
+        // thread pool
+        threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(
+                config.getCoreThreadPoolSize(),
+                new ThreadFactoryBuilder().setNameFormat("chathub-tasks-%d").build()
         );
 
         // init event hub

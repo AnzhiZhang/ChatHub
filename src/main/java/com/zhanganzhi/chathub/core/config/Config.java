@@ -51,6 +51,10 @@ public class Config {
         this.tempIsKookEnabled = isKookEnabled;
     }
 
+    public int getCoreThreadPoolSize() {
+        return configToml.getLong("core.threadPoolSize").intValue();
+    }
+
     public String getServername(String server) {
         String servername = configToml.getString("servername." + server);
         return servername != null ? servername : server;

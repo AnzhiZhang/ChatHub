@@ -37,6 +37,6 @@ public class KookAdaptor extends AbstractAdaptor<KookFormatter> {
 
     @Override
     public void sendPublicMessage(String message) {
-        new Thread(() -> kookAPI.sendMessage(message)).start();
+        chatHub.getThreadPoolExecutor().submit(() -> kookAPI.sendMessage(message));
     }
 }

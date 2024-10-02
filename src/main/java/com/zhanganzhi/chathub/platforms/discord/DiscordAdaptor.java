@@ -57,6 +57,6 @@ public class DiscordAdaptor extends AbstractAdaptor<DiscordFormatter> {
 
     @Override
     public void sendPublicMessage(String message) {
-        new Thread(() -> channel.sendMessage(message).queue()).start();
+        chatHub.getThreadPoolExecutor().submit(() -> channel.sendMessage(message).queue());
     }
 }

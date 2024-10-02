@@ -1,3 +1,6 @@
+[core]
+threadPoolSize = 4
+
 [servername]
 lobby = '§f§l大厅服'
 survival = '§2§l生存服'
