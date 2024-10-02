@@ -32,15 +32,29 @@ public class QQWsServer extends WebSocketServer {
 
     @Override
     public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
-        logger.info("QQ WebSocket connection opened at [{}], path:[{}]", webSocket.getLocalSocketAddress(), clientHandshake.getResourceDescriptor());
-        if (validResourcePath.equals(clientHandshake.getResourceDescriptor())) {
+        InetSocketAddress remoteSocketAddress = webSocket.getRemoteSocketAddress();
+        String resourceDescriptor = webSocket.getResourceDescriptor();
+        if (validResourcePath.equals(resourceDescriptor)) {
             clients.add(webSocket);
+            logger.info(
+                    "QQ WebSocket client at [{}] connection established with path [{}]",
+                    remoteSocketAddress,
+                    resourceDescriptor
+            );
+        } else {
+            webSocket.close();
+            logger.warn(
+                    "QQ WebSocket client at [{}] connection established with invalid path [{}], connection closed",
+                    remoteSocketAddress,
+                    resourceDescriptor
+            );
         }
     }
 
     @Override
     public void onClose(WebSocket webSocket, int i, String s, boolean b) {
-        logger.info("QQ WebSocket connection closed");
+        logger.info("QQ WebSocket client at [{}] connection closed", webSocket.getRemoteSocketAddress());
+        clients.remove(webSocket);
     }
 
     @Override
