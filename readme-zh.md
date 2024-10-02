@@ -262,6 +262,8 @@ Kook 消息的格式化文本。占位符与上文同理，所有的服务器名
 
 该功能为双向转发，即 MC 内消息会发送到指定 QQ 群，QQ 群内消息将被转发到 MC 内。
 
+目前仅支持反向 WebSocket，消息格式仅支持 [array](https://github.com/botuniverse/onebot-11/tree/master/message#readme)。
+
 #### enable
 
 默认值：`false`

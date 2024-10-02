@@ -298,6 +298,8 @@ Websocket resource location.
 
 QQ message format sages. Placeholders are defined same as Miencraft, all server name will auto translate to plain format, you do not have to use plain placeholders.
 
+Note that only reverse WebSocket is supported, and message format only supports [array](https://github.com/botuniverse/onebot-11/tree/master/message#readme).
+
 #### chat
 
 Default: `[{server}] <{name}>: {message}`
