@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1](https://github.com/AnzhiZhang/ChatHub/compare/v1.8.0...v1.8.1) (2024-10-02)
+
+
+### Performance Improvements
+
+* 🧵 use thread pool to init EventHub ([aabd8b9](https://github.com/AnzhiZhang/ChatHub/commit/aabd8b96189f402447c9d2fe5e1da9baa8f881aa))
+
 ## [1.8.0](https://github.com/AnzhiZhang/ChatHub/compare/v1.7.0...v1.8.0) (2024-10-02)
 
 
