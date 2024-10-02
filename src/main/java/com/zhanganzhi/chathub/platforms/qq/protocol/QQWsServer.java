@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 
@@ -77,17 +76,15 @@ public class QQWsServer extends WebSocketServer {
 
     public void sendMessage(String message) {
         logger.debug("QQ WebSocket server send message to clients");
-        Iterator<WebSocket> iter = clients.iterator();
-        while (iter.hasNext()) {
-            WebSocket webSocket = iter.next();
+        for (WebSocket webSocket : clients) {
             try {
                 webSocket.send(message);
             } catch (Exception e) {
+                logger.error("QQ WebSocket server send message error", e);
                 if (!webSocket.isClosed()) {
-                    logger.error("QQ WebSocket connection closed!error: {}", e.getMessage());
                     webSocket.close();
                 }
-                iter.remove();
+                clients.remove(webSocket);
             }
         }
     }
