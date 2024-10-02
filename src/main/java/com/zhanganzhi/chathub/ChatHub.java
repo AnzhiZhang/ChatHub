@@ -54,7 +54,7 @@ public class ChatHub {
         );
 
         // init event hub
-        new Thread(() -> eventHub.start()).start();
+        new Thread(() -> eventHub.start(), "chathub-event-hub-start-event").start();
     }
 
     @Subscribe

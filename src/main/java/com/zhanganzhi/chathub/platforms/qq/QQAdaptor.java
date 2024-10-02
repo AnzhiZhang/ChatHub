@@ -20,7 +20,7 @@ public class QQAdaptor extends AbstractAdaptor<QQFormatter> {
     public QQAdaptor(ChatHub chatHub) {
         super(chatHub, Platform.QQ, new QQFormatter());
         qqAPI = new QQAPI(chatHub);
-        eventListener = new Thread(this::eventListener, "qq-event-listener");
+        eventListener = new Thread(this::eventListener, "chathub-qq-event-listener");
     }
 
     @Override
