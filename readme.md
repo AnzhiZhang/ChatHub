@@ -262,6 +262,8 @@ Message for `/list` command when player list is empty.
 
 The messages from the group will be synchronized to ChatHub and chatHub will forward all public messages to the group.
 
+Note that only reverse WebSocket is supported, and message format only supports [array](https://github.com/botuniverse/onebot-11/tree/master/message#readme).
+
 #### enable
 
 Default: `false`
@@ -297,8 +299,6 @@ Websocket resource location.
 ### qq.message
 
 QQ message format sages. Placeholders are defined same as Miencraft, all server name will auto translate to plain format, you do not have to use plain placeholders.
-
-Note that only reverse WebSocket is supported, and message format only supports [array](https://github.com/botuniverse/onebot-11/tree/master/message#readme).
 
 #### chat
 
