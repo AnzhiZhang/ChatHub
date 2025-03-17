@@ -1,5 +1,6 @@
 package com.zhanganzhi.chathub.platforms.discord;
 
+import com.neovisionaries.ws.client.WebSocketFactory;
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.adaptor.AbstractAdaptor;
 import com.zhanganzhi.chathub.platforms.Platform;
@@ -8,6 +9,11 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.internal.utils.IOUtil;
+import okhttp3.OkHttpClient;
+
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 
 public class DiscordAdaptor extends AbstractAdaptor<DiscordFormatter> {
     private JDA jda;
@@ -23,19 +29,38 @@ public class DiscordAdaptor extends AbstractAdaptor<DiscordFormatter> {
         chatHub.getLogger().info("Discord enabled");
 
         // build jda
-        jda = JDABuilder.createLight(config.getDiscordToken())
-                .enableIntents(
-                        GatewayIntent.MESSAGE_CONTENT
-                )
-                .addEventListeners(new DiscordReceiver(chatHub))
-                .build();
+        JDABuilder builder = JDABuilder.createLight(config.getDiscordToken())
+            .enableIntents(
+                GatewayIntent.MESSAGE_CONTENT
+            )
+            .addEventListeners(new DiscordReceiver(chatHub));
+
+        if (config.isDiscordProxyEnabled()) {
+            chatHub.getLogger().info("Discord proxy enabled");
+            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(config.getDiscordProxyHost(), config.getDiscordProxyPort()));
+
+            OkHttpClient.Builder clientBuilder = IOUtil.newHttpClientBuilder().proxy(proxy);
+
+            WebSocketFactory factory = new WebSocketFactory();
+            factory.getProxySettings()
+                .setHost(config.getDiscordProxyHost())
+                .setPort(config.getDiscordProxyPort());
+
+            builder.setHttpClientBuilder(clientBuilder);
+            builder.setWebsocketFactory(factory);
+        }
+
+        jda = builder.build();
 
         // commands
         jda.updateCommands().addCommands(
-                Commands
-                        .slash("list", "List online players")
-                        .setGuildOnly(true)
-        ).queue();
+            Commands
+                .slash("list", "List online players")
+                .setGuildOnly(true)
+        ).queue(
+            success -> chatHub.getLogger().info("Slash command registered successfully!"),
+            failure -> chatHub.getLogger().error("Slash command failed, {}", failure.getMessage())
+        );
 
         // await jda ready
         try {
