@@ -86,6 +86,18 @@ public class Config {
         return configToml.getString("discord.channelId");
     }
 
+    public boolean isDiscordProxyEnabled() {
+        return configToml.getBoolean("discord.proxy.enable");
+    }
+
+    public String getDiscordProxyHost() {
+        return configToml.getString("discord.proxy.proxyHost");
+    }
+
+    public int getDiscordProxyPort() {
+        return configToml.getLong("discord.proxy.proxyPort").intValue();
+    }
+
     public boolean isKookEnabled() {
         return tempIsKookEnabled;
     }

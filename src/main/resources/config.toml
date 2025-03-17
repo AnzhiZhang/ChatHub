@@ -35,6 +35,11 @@ switch = '<{name}>: [{serverFrom}] ➟ [{serverTo}]'
 list = '- [{server}] 当前共有{count}名玩家在线: {playerList}'
 listEmpty = '当前没有玩家在线'
 
+[discord.proxy]
+enable = false
+proxyHost = '127.0.0.1'
+proxyPort = 1080
+
 [kook]
 enable = false
 token = ''

@@ -1,5 +1,6 @@
 package com.zhanganzhi.chathub.platforms.discord;
 
+import com.neovisionaries.ws.client.WebSocketFactory;
 import com.zhanganzhi.chathub.ChatHub;
 import com.zhanganzhi.chathub.core.adaptor.AbstractAdaptor;
 import com.zhanganzhi.chathub.platforms.Platform;
@@ -8,6 +9,11 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.internal.utils.IOUtil;
+import okhttp3.OkHttpClient;
+
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 
 public class DiscordAdaptor extends AbstractAdaptor<DiscordFormatter> {
     private JDA jda;
@@ -22,13 +28,33 @@ public class DiscordAdaptor extends AbstractAdaptor<DiscordFormatter> {
         // logger
         chatHub.getLogger().info("Discord enabled");
 
-        // build jda
-        jda = JDABuilder.createLight(config.getDiscordToken())
+        // init jda builder
+        JDABuilder jdaBuilder = JDABuilder
+                .createLight(config.getDiscordToken())
                 .enableIntents(
                         GatewayIntent.MESSAGE_CONTENT
                 )
-                .addEventListeners(new DiscordReceiver(chatHub))
-                .build();
+                .addEventListeners(new DiscordReceiver(chatHub));
+
+        // apply proxy
+        if (config.isDiscordProxyEnabled()) {
+            chatHub.getLogger().info("Discord proxy enabled");
+
+            // client
+            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(config.getDiscordProxyHost(), config.getDiscordProxyPort()));
+            OkHttpClient.Builder clientBuilder = IOUtil.newHttpClientBuilder().proxy(proxy);
+            jdaBuilder.setHttpClientBuilder(clientBuilder);
+
+            // websocket
+            WebSocketFactory factory = new WebSocketFactory();
+            factory.getProxySettings()
+                    .setHost(config.getDiscordProxyHost())
+                    .setPort(config.getDiscordProxyPort());
+            jdaBuilder.setWebsocketFactory(factory);
+        }
+
+        // build jda
+        jda = jdaBuilder.build();
 
         // commands
         jda.updateCommands().addCommands(
