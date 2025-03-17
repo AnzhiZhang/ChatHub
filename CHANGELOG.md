@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/AnzhiZhang/ChatHub/compare/v1.8.1...v1.9.0) (2025-03-17)
+
+
+### Features
+
+* add discord proxy support ([#36](https://github.com/AnzhiZhang/ChatHub/issues/36)) ([e6a98f1](https://github.com/AnzhiZhang/ChatHub/commit/e6a98f144d5926f03710c3c0c8c8351485de5775))
+
 ## [1.8.1](https://github.com/AnzhiZhang/ChatHub/compare/v1.8.0...v1.8.1) (2024-10-02)
 
 
