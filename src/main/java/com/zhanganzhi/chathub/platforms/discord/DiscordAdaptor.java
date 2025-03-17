@@ -28,39 +28,40 @@ public class DiscordAdaptor extends AbstractAdaptor<DiscordFormatter> {
         // logger
         chatHub.getLogger().info("Discord enabled");
 
-        // build jda
-        JDABuilder builder = JDABuilder.createLight(config.getDiscordToken())
-            .enableIntents(
-                GatewayIntent.MESSAGE_CONTENT
-            )
-            .addEventListeners(new DiscordReceiver(chatHub));
+        // init jda builder
+        JDABuilder jdaBuilder = JDABuilder
+                .createLight(config.getDiscordToken())
+                .enableIntents(
+                        GatewayIntent.MESSAGE_CONTENT
+                )
+                .addEventListeners(new DiscordReceiver(chatHub));
 
+        // apply proxy
         if (config.isDiscordProxyEnabled()) {
             chatHub.getLogger().info("Discord proxy enabled");
+
+            // client
             Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(config.getDiscordProxyHost(), config.getDiscordProxyPort()));
-
             OkHttpClient.Builder clientBuilder = IOUtil.newHttpClientBuilder().proxy(proxy);
+            jdaBuilder.setHttpClientBuilder(clientBuilder);
 
+            // websocket
             WebSocketFactory factory = new WebSocketFactory();
             factory.getProxySettings()
-                .setHost(config.getDiscordProxyHost())
-                .setPort(config.getDiscordProxyPort());
-
-            builder.setHttpClientBuilder(clientBuilder);
-            builder.setWebsocketFactory(factory);
+                    .setHost(config.getDiscordProxyHost())
+                    .setPort(config.getDiscordProxyPort());
+            jdaBuilder.setWebsocketFactory(factory);
         }
 
-        jda = builder.build();
+        // build jda
+        jda = jdaBuilder.build();
 
         // commands
         jda.updateCommands().addCommands(
-            Commands
-                .slash("list", "List online players")
-                .setGuildOnly(true)
-        ).queue(
-            success -> chatHub.getLogger().info("Slash command registered successfully!"),
-            failure -> chatHub.getLogger().error("Slash command failed, {}", failure.getMessage())
-        );
+                Commands
+                        .slash("list", "List online players")
+                        .setGuildOnly(true)
+        ).queue();
 
         // await jda ready
         try {
