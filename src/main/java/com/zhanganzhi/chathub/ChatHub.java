@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadPoolExecutor;
         id = "chathub",
         name = "ChatHub",
         // x-release-please-start-version
-        version = "1.8.1",
+        version = "1.9.0",
         // x-release-please-end
         url = "https://github.com/AnzhiZhang/ChatHub",
         description = "Chat hub for servers under velocity proxy",
