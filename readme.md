@@ -178,6 +178,24 @@ Default: `当前没有玩家在线`
 
 Message for `/list` command when player list is empty.
 
+### discord.proxy
+
+Proxy configuration for Discord bot.
+
+#### enable
+
+Default: `false`
+
+Enable discord proxy.
+
+#### proxyHost
+
+Proxy host.
+
+#### proxyPort
+
+Proxy port.
+
 ### kook
 
 This function is double way forwarding, which is Minecraft chat will send to Kook channel, and channel message will send to Minecraft. Use `/list` in Kook channel can show online player list.
@@ -335,3 +353,13 @@ Message for `/list` command.
 Default: `当前没有玩家在线`
 
 Message for `/list` command when player list is empty.
+
+## License
+
+Copyright © 2021 Andy Zhang and contributors
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
